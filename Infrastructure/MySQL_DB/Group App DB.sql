@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS `event`;
 CREATE TABLE `event` (
   `EventID` int(11) NOT NULL AUTO_INCREMENT,
   `DateAndTime` datetime NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `eventName` varchar(255) NOT NULL,
   `LeaderID` int(11) NOT NULL,
   `Location` varchar(255) NOT NULL,
   `Description` text,
@@ -109,9 +109,12 @@ CREATE TABLE `membership` (
   `MemberID` int(11) NOT NULL AUTO_INCREMENT,
   `UserPrivileges` tinyint(1) NOT NULL,
   `UserID` int(11) NOT NULL,
+  `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`MemberID`),
   KEY `UserID` (`UserID`),
-  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
+  KEY `GroupID` (`GroupID`),
+  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
+  CONSTRAINT `membership_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -269,4 +272,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-22 13:31:13
+-- Dump completed on 2019-02-22 13:58:12
