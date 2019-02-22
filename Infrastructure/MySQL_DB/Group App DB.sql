@@ -191,6 +191,7 @@ DROP TABLE IF EXISTS `record`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `record` (
   `GroupID` int(11) NOT NULL AUTO_INCREMENT,
+  `GroupName` varchar(255) NOT NULL,
   `LeaderID` int(11) NOT NULL,
   `GroupDescription` text,
   PRIMARY KEY (`GroupID`),
@@ -272,4 +273,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-22 13:58:12
+-- Dump completed on 2019-02-22 14:16:18
