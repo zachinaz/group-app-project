@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.14, for Win64 (x86_64)
 --
--- Host: localhost    Database: groupapp
+-- Host: localhost    Database: app_db
 -- ------------------------------------------------------
 -- Server version	8.0.14
 
@@ -112,10 +112,13 @@ CREATE TABLE `membership` (
   `MemberID` int(11) NOT NULL,
   `UserPrivileges` tinyint(1) NOT NULL,
   `UserID` int(11) NOT NULL,
+  `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`MemberID`),
   UNIQUE KEY `MemberID` (`MemberID`),
   KEY `UserID` (`UserID`),
-  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
+  KEY `GroupID` (`GroupID`),
+  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
+  CONSTRAINT `membership_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -201,7 +204,7 @@ CREATE TABLE `record` (
   PRIMARY KEY (`GroupID`),
   UNIQUE KEY `GroupID` (`GroupID`),
   KEY `LeaderID` (`LeaderID`),
-  CONSTRAINT `record_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`)
+  CONSTRAINT `record_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -281,4 +284,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-21 11:29:42
+-- Dump completed on 2019-02-22 11:39:36
