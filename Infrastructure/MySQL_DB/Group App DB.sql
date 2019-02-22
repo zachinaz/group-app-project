@@ -23,12 +23,11 @@ DROP TABLE IF EXISTS `announcement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `announcement` (
-  `AnnouncementID` int(11) NOT NULL,
+  `AnnouncementID` int(11) NOT NULL AUTO_INCREMENT,
   `LeaderID` int(11) NOT NULL,
   `DateAndTime` datetime NOT NULL,
   `content` longtext,
   PRIMARY KEY (`AnnouncementID`),
-  UNIQUE KEY `AnnouncementID` (`AnnouncementID`),
   KEY `LeaderID` (`LeaderID`),
   CONSTRAINT `announcement_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -51,12 +50,11 @@ DROP TABLE IF EXISTS `comment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `comment` (
-  `CommentID` int(11) NOT NULL,
+  `CommentID` int(11) NOT NULL AUTO_INCREMENT,
   `MemberID` int(11) NOT NULL,
   `DateAndTime` datetime NOT NULL,
   `content` text,
   PRIMARY KEY (`CommentID`),
-  UNIQUE KEY `CommentID` (`CommentID`),
   KEY `MemberID` (`MemberID`),
   CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`MemberID`) REFERENCES `membership` (`MemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -79,14 +77,13 @@ DROP TABLE IF EXISTS `event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `event` (
-  `EventID` int(11) NOT NULL,
+  `EventID` int(11) NOT NULL AUTO_INCREMENT,
   `DateAndTime` datetime NOT NULL,
   `name` varchar(255) NOT NULL,
   `LeaderID` int(11) NOT NULL,
   `Location` varchar(255) NOT NULL,
   `Description` text,
   PRIMARY KEY (`EventID`),
-  UNIQUE KEY `EventID` (`EventID`),
   KEY `LeaderID` (`LeaderID`),
   CONSTRAINT `event_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -109,16 +106,12 @@ DROP TABLE IF EXISTS `membership`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `membership` (
-  `MemberID` int(11) NOT NULL,
+  `MemberID` int(11) NOT NULL AUTO_INCREMENT,
   `UserPrivileges` tinyint(1) NOT NULL,
   `UserID` int(11) NOT NULL,
-  `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`MemberID`),
-  UNIQUE KEY `MemberID` (`MemberID`),
   KEY `UserID` (`UserID`),
-  KEY `GroupID` (`GroupID`),
-  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
-  CONSTRAINT `membership_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
+  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -139,13 +132,12 @@ DROP TABLE IF EXISTS `poll repository`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `poll repository` (
-  `PollID` int(11) NOT NULL,
+  `PollID` int(11) NOT NULL AUTO_INCREMENT,
   `LeaderID` int(11) NOT NULL,
   `question` varchar(255) NOT NULL,
   `ResponseOptions` int(11) DEFAULT NULL,
   `PollDescription` text,
   PRIMARY KEY (`PollID`),
-  UNIQUE KEY `PollID` (`PollID`),
   KEY `LeaderID` (`LeaderID`),
   CONSTRAINT `poll repository_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -168,12 +160,11 @@ DROP TABLE IF EXISTS `poll response`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `poll response` (
-  `ResponseID` int(11) NOT NULL,
+  `ResponseID` int(11) NOT NULL AUTO_INCREMENT,
   `memberID` int(11) NOT NULL,
   `userResponse` int(11) NOT NULL,
   `DateAndTime` datetime NOT NULL,
   PRIMARY KEY (`ResponseID`),
-  UNIQUE KEY `ResponseID` (`ResponseID`),
   KEY `memberID` (`memberID`),
   CONSTRAINT `poll response_ibfk_1` FOREIGN KEY (`memberID`) REFERENCES `membership` (`MemberID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -196,13 +187,10 @@ DROP TABLE IF EXISTS `record`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `record` (
-  `GroupID` int(11) NOT NULL,
+  `GroupID` int(11) NOT NULL AUTO_INCREMENT,
   `LeaderID` int(11) NOT NULL,
-  `GroupName` varchar(255) NOT NULL,
-  `LeaderName` varchar(255) DEFAULT NULL,
   `GroupDescription` text,
   PRIMARY KEY (`GroupID`),
-  UNIQUE KEY `GroupID` (`GroupID`),
   KEY `LeaderID` (`LeaderID`),
   CONSTRAINT `record_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -225,12 +213,10 @@ DROP TABLE IF EXISTS `request`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `request` (
-  `RequestID` int(11) NOT NULL,
+  `RequestID` int(11) NOT NULL AUTO_INCREMENT,
   `GroupID` int(11) NOT NULL,
-  `GroupName` varchar(255) NOT NULL,
   `UserID` int(11) NOT NULL,
   PRIMARY KEY (`RequestID`),
-  UNIQUE KEY `RequestID` (`RequestID`),
   KEY `UserID` (`UserID`),
   CONSTRAINT `request_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -253,7 +239,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `user` (
-  `UserID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `FirstName` varchar(255) NOT NULL,
   `LastName` varchar(255) NOT NULL,
   `EmailAddress` varchar(255) NOT NULL,
@@ -261,7 +247,6 @@ CREATE TABLE `user` (
   `RegistrationDate` date NOT NULL,
   `ProfilePicURL` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`UserID`),
-  UNIQUE KEY `UserID` (`UserID`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -284,4 +269,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-22 11:39:36
+-- Dump completed on 2019-02-22 13:31:13
