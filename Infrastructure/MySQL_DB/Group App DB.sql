@@ -27,9 +27,12 @@ CREATE TABLE `announcement` (
   `LeaderID` int(11) NOT NULL,
   `DateAndTime` datetime NOT NULL,
   `content` longtext,
+  `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`AnnouncementID`),
   KEY `LeaderID` (`LeaderID`),
-  CONSTRAINT `announcement_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`)
+  KEY `GroupID` (`GroupID`),
+  CONSTRAINT `announcement_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`),
+  CONSTRAINT `announcement_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -281,4 +284,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-25 19:20:28
+-- Dump completed on 2019-02-25 19:54:30
