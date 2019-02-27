@@ -29,11 +29,11 @@ CREATE TABLE `announcement` (
   `content` longtext,
   `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`AnnouncementID`),
-  KEY `LeaderID` (`LeaderID`),
   KEY `GroupID` (`GroupID`),
-  CONSTRAINT `announcement_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`),
-  CONSTRAINT `announcement_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `LeaderID` (`LeaderID`),
+  CONSTRAINT `announcement_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`),
+  CONSTRAINT `announcement_ibfk_3` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `announcement` (
 
 LOCK TABLES `announcement` WRITE;
 /*!40000 ALTER TABLE `announcement` DISABLE KEYS */;
+INSERT INTO `announcement` VALUES (1,2,'2019-02-24 13:15:00','Announcement content for Zach\'s Group',1),(2,3,'2019-02-24 13:15:00','Announcement content for Zach\'s Group',3);
 /*!40000 ALTER TABLE `announcement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +122,7 @@ CREATE TABLE `membership` (
   KEY `GroupID` (`GroupID`),
   CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
   CONSTRAINT `membership_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,7 +131,7 @@ CREATE TABLE `membership` (
 
 LOCK TABLES `membership` WRITE;
 /*!40000 ALTER TABLE `membership` DISABLE KEYS */;
-INSERT INTO `membership` VALUES (13,1,8,6),(14,0,7,6),(15,1,7,7),(16,0,9,7),(17,1,9,8),(18,0,7,8),(19,0,8,8),(20,0,9,6),(21,0,9,6);
+INSERT INTO `membership` VALUES (1,1,2,1),(2,0,1,1),(3,1,1,2),(4,0,3,2),(5,1,3,3),(6,0,1,3),(7,0,2,3),(8,0,3,1);
 /*!40000 ALTER TABLE `membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -204,7 +205,7 @@ CREATE TABLE `record` (
   PRIMARY KEY (`GroupID`),
   KEY `LeaderID` (`LeaderID`),
   CONSTRAINT `record_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +214,7 @@ CREATE TABLE `record` (
 
 LOCK TABLES `record` WRITE;
 /*!40000 ALTER TABLE `record` DISABLE KEYS */;
-INSERT INTO `record` VALUES (6,'Zach\'s Group',8,'Optional description for Zach\'s Group'),(7,'Stephen\'s Group',7,'Optional description for Stephen\'s Group'),(8,'Hannah\'s Group',9,'Optional description for Hannah\'s group');
+INSERT INTO `record` VALUES (1,'Zach\'s Group',2,'Optional description for Zach\'s Group'),(2,'Stephen\'s Group',1,'Optional description for Stephen\'s Group'),(3,'Hannah\'s Group',3,'Optional description for Hannah\'s group');
 /*!40000 ALTER TABLE `record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,7 +263,7 @@ CREATE TABLE `user` (
   `ProfilePicURL` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -271,7 +272,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (7,'Stephen','Styffe','stephen.e.styffe@biola.edu','b@dp@$$w0rd','2019-02-22',NULL),(8,'Zach','Chester','zach.chester@biola.edu','h0rr1bl3p@$$w0rd','2019-02-18',NULL),(9,'Hannah','Kim','hannah.kim002@biola.edu','r1d1cul0u$p@$$w0rd','2019-02-23',NULL);
+INSERT INTO `user` VALUES (1,'Stephen','Styffe','stephen.e.styffe@biola.edu','b@dp@$$w0rd','2019-02-22',NULL),(2,'Zach','Chester','zach.chester@biola.edu','h0rr1bl3p@$$w0rd','2019-02-18',NULL),(3,'Hannah','Kim','hannah.kim002@biola.edu','r1d1cul0u$p@$$w0rd','2019-02-23',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -284,4 +285,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-25 19:54:30
+-- Dump completed on 2019-02-26 17:57:21
