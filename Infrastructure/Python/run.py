@@ -124,7 +124,7 @@ def login():
 #END OF --/api/user/login--
 
 #--/api/group--
-@app.route('/api/group', methods=['GET', 'POST', 'DELETE'])
+@app.route('/api/group', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def group():
     resp = {}
     status = 404
@@ -163,9 +163,47 @@ def group():
             name = json_data.get("name")
             description = json_data.get("description")
             color = json_data.get("color")
-            #SQL INSERT user_id, name, description, color
+            #SQL INSERT user_id (leader_id), name, description, color
             group_id = "3"
             resp = {"request_type":"POST", "message": f"Group {group_id} Successfully Created", "group_id": f"{group_id}"}
+            status = 200
+
+    #--PUT--
+    # @json: {group_id, name, description, color}
+    if request.method == 'PUT':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            group_id = json_data.get("group_id")
+            if "name" in json_data:
+                name = json_data.get("name")
+            if "description" in json_data:
+                description = json_data.get("description")
+            if "color" in json_data:
+                color = json_data.get("color")
+            #SQL UPDATE name, description, color
+            resp = {"request_type":"PUT","message":f"Group {group_id} Successfully Updated"}
+            status = 200
+
+    #--DELETE--
+    # @json:
+    if request.method == 'DELETE':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            group_id = json_data.get("group_id")
+            #SQL DELETE GROUP on group_id
+            resp = {"request_type":"DELETE","message":f"Group {group_id} Successfully Deleted"}
             status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
