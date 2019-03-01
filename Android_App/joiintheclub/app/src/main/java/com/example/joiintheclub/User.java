@@ -18,6 +18,7 @@ public class User {
         String email,
         String pwd)
     {
+
         return true;
     }
     private void get() {
@@ -29,6 +30,7 @@ public class User {
 
     public boolean login() {
         //fix later
+
         return false;
     }
     public boolean logout() {
@@ -36,5 +38,16 @@ public class User {
         return false;
     }
 
+    public boolean createGroup()
+    {
+       /*
+        private String groupName;
+        private int groupID;
+        private int numOfPeople;
+        Date DateCreated;
+        */
+
+       return false;
+    }
 
 }
