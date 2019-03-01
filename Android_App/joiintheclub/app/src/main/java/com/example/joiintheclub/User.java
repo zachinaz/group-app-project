@@ -1,5 +1,7 @@
 package com.example.joiintheclub;
 
+import java.util.LinkedHashMap;
+
 public class User {
 
 
@@ -8,18 +10,42 @@ public class User {
     private String email;
     private String pwd;
 
+
     //private String profilePicURL;
     //private int userID;
-    //private boolean isActive;
+    private static boolean isActive;
+    public LinkedHashMap dict;
 
-
-    public boolean createUser(String firstName,
-        String lastName,
-        String email,
-        String pwd)
+    public static boolean createUser(String firstName,
+                              String lastName,
+                              String email,
+                              String pwd,
+                              LinkedHashMap dict)
     {
+       //????? dict = <firstName,lastName>;
 
-        return true;
+        //Request info from requester to see if already exists
+        Requester.requester("/user", "GET", dict);
+            //if it returns something, then it already exists ???
+
+        //If it already exists
+        if (isActive)
+        {
+            return false;
+        }
+        //If it doesn't exist yet
+        else
+        {
+            //Create it here
+            //  ...
+            //maybe this
+               Requester.requester("/user", "POST",
+                       dict);
+
+            return true;
+        }
+
+
     }
     private void get() {
 
@@ -28,17 +54,17 @@ public class User {
 
     }
 
-    public boolean login() {
+    public static boolean login() {
         //fix later
 
         return false;
     }
-    public boolean logout() {
+    public static boolean logout() {
         //fix later
         return false;
     }
 
-    public boolean createGroup()
+    public static boolean createGroup()
     {
        /*
         private String groupName;
@@ -46,6 +72,9 @@ public class User {
         private int numOfPeople;
         Date DateCreated;
         */
+
+
+
 
        return false;
     }
