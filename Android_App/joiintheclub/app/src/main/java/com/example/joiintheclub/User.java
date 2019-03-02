@@ -3,6 +3,7 @@ package com.example.joiintheclub;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
@@ -93,19 +94,83 @@ public class User {
         return false;
     }
 
-    public static boolean createGroup()
+    public static boolean createGroup(
+            /*
+            String firstName,
+            String lastName,
+            String GroupName
+            */
+    )
     {
+        /*
+        //idea1
+        //User sends createGroup requests to requester
+        //  Sends GroupName
+        //  program sends Date
+
+        //if it does not already exist, it becomes verified
+
+        //Create new JSON object to pass and receive from Requester.requester
+        JSONObject userGroupRequestGET = new JSONObject();
+        AtomicReference<JSONObject> userGroupResponseGET =
+                new AtomicReference<>(new JSONObject());
+        JSONObject userGroupRequestPOST = new JSONObject();
+        AtomicReference<JSONObject> userGroupResponsePOST =
+                new AtomicReference<>(new JSONObject());
+
+        //Request info from requester to see if already exists
+        userGroupResponseGET.set(Requester.requester("/group", "GET",
+                userGroupRequestGET));
+
+        //If the group already exists
+
+        //if (...)
+        {
+            return false;
+        }
+
+        //If it does not exist yet
+        else
+        {
+
+          //  try {
+                //Populate object with keys and values
+                //Keys (in_python), Values (inJava)
+
+                //below lines have errors when uncommented
+                //  put - unhandled exception JSON
+                /*
+                userGroupRequestPOST.put("first_name", firstName);
+                userGroupRequestPOST.put("last_name", lastName);
+                userGroupRequestPOST.put("group_name", GroupName);
+                */
+            //should I use something other than e
+            //} catch (JSONException e) {
+                //Prints error message to console via stacktrace
+             //   e.printStackTrace();
+           // }
+        /*
+            userGroupResponsePOST.set(Requester.requester("/group", "POST",
+                    userGroupRequestPOST));
+            try {
+                //Searches for "group_id" as key in responsePOST
+                Object GroupID = userGroupResponsePOST.get().get("group_id");
+            } catch (JSONException e) { //catch needed since userGroupResopnsePOST.get can throw exception JSONException
+                //Prints error message to console via stacktrace
+                e.printStackTrace();
+            }
+          */
+            return true;
+        //}
        /*
-        private String groupName;
-        private int groupID;
-        private int numOfPeople;
+      private String GroupName;
+        public static int GroupID;
+        private int NumOfPeople;
+        private boolean verified;
         Date DateCreated;
         */
 
 
-
-
-       return false;
     }
 
 }
