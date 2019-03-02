@@ -33,7 +33,7 @@ CREATE TABLE `announcement` (
   KEY `LeaderID` (`LeaderID`),
   CONSTRAINT `announcement_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`),
   CONSTRAINT `announcement_ibfk_3` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,6 @@ CREATE TABLE `announcement` (
 
 LOCK TABLES `announcement` WRITE;
 /*!40000 ALTER TABLE `announcement` DISABLE KEYS */;
-INSERT INTO `announcement` VALUES (1,2,'2019-02-24 13:15:00','Announcement content for Zach\'s Group',1),(2,3,'2019-02-24 13:15:00','Announcement content for Zach\'s Group',3);
 /*!40000 ALTER TABLE `announcement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,9 +89,12 @@ CREATE TABLE `event` (
   `LeaderID` int(11) NOT NULL,
   `Location` varchar(255) NOT NULL,
   `Description` text,
+  `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`EventID`),
   KEY `LeaderID` (`LeaderID`),
-  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`)
+  KEY `GroupID` (`GroupID`),
+  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`),
+  CONSTRAINT `event_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,7 +124,7 @@ CREATE TABLE `membership` (
   KEY `GroupID` (`GroupID`),
   CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
   CONSTRAINT `membership_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +133,6 @@ CREATE TABLE `membership` (
 
 LOCK TABLES `membership` WRITE;
 /*!40000 ALTER TABLE `membership` DISABLE KEYS */;
-INSERT INTO `membership` VALUES (1,1,2,1),(2,0,1,1),(3,1,1,2),(4,0,3,2),(5,1,3,3),(6,0,1,3),(7,0,2,3),(8,0,3,1);
 /*!40000 ALTER TABLE `membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,9 +149,12 @@ CREATE TABLE `poll repository` (
   `question` varchar(255) NOT NULL,
   `ResponseOptions` int(11) DEFAULT NULL,
   `PollDescription` text,
+  `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`PollID`),
   KEY `LeaderID` (`LeaderID`),
-  CONSTRAINT `poll repository_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `membership` (`MemberID`)
+  KEY `GroupID` (`GroupID`),
+  CONSTRAINT `poll repository_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`),
+  CONSTRAINT `poll repository_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -175,9 +179,15 @@ CREATE TABLE `poll response` (
   `memberID` int(11) NOT NULL,
   `userResponse` int(11) NOT NULL,
   `DateAndTime` datetime NOT NULL,
+  `GroupID` int(11) NOT NULL,
+  `PollID` int(11) NOT NULL,
   PRIMARY KEY (`ResponseID`),
   KEY `memberID` (`memberID`),
-  CONSTRAINT `poll response_ibfk_1` FOREIGN KEY (`memberID`) REFERENCES `membership` (`MemberID`)
+  KEY `GroupID` (`GroupID`),
+  KEY `PollID` (`PollID`),
+  CONSTRAINT `poll response_ibfk_1` FOREIGN KEY (`memberID`) REFERENCES `membership` (`MemberID`),
+  CONSTRAINT `poll response_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`),
+  CONSTRAINT `poll response_ibfk_3` FOREIGN KEY (`PollID`) REFERENCES `poll repository` (`PollID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -205,7 +215,7 @@ CREATE TABLE `record` (
   PRIMARY KEY (`GroupID`),
   KEY `LeaderID` (`LeaderID`),
   CONSTRAINT `record_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,7 +224,6 @@ CREATE TABLE `record` (
 
 LOCK TABLES `record` WRITE;
 /*!40000 ALTER TABLE `record` DISABLE KEYS */;
-INSERT INTO `record` VALUES (1,'Zach\'s Group',2,'Optional description for Zach\'s Group'),(2,'Stephen\'s Group',1,'Optional description for Stephen\'s Group'),(3,'Hannah\'s Group',3,'Optional description for Hannah\'s group');
 /*!40000 ALTER TABLE `record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,13 +266,14 @@ CREATE TABLE `user` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `FirstName` varchar(255) NOT NULL,
   `LastName` varchar(255) NOT NULL,
-  `EmailAddress` varchar(255) NOT NULL,
+  `EmailAddress` varchar(255) DEFAULT NULL,
   `Password` varchar(255) NOT NULL,
   `RegistrationDate` date NOT NULL,
   `ProfilePicURL` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`UserID`),
-  UNIQUE KEY `EmailAddress` (`EmailAddress`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `EmailAddress` (`EmailAddress`),
+  UNIQUE KEY `EmailAddress_2` (`EmailAddress`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -272,7 +282,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Stephen','Styffe','stephen.e.styffe@biola.edu','b@dp@$$w0rd','2019-02-22',NULL),(2,'Zach','Chester','zach.chester@biola.edu','h0rr1bl3p@$$w0rd','2019-02-18',NULL),(3,'Hannah','Kim','hannah.kim002@biola.edu','r1d1cul0u$p@$$w0rd','2019-02-23',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -285,4 +294,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-26 17:57:21
+-- Dump completed on 2019-03-01 19:45:46
