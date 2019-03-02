@@ -77,8 +77,10 @@ public class User {
 
 
     }
-    private void get() {
-
+    //was originaaly a private void method
+    //different classes may need to call get() method
+    public int get() {
+        return 0; //for now
     }
     private void set() {
 
