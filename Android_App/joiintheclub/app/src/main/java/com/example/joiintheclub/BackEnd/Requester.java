@@ -1,4 +1,4 @@
-package com.example.joiintheclub;
+package com.example.joiintheclub.BackEnd;
 
 import android.annotation.TargetApi;
 import android.os.Build;

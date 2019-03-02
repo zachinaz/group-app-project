@@ -1,4 +1,4 @@
-package com.example.joiintheclub;
+package com.example.joiintheclub.FrontEnd;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.joiintheclub.FrontEnd.LoginActivity;
 
 public class PrograssBarAnimation extends Animation {
 

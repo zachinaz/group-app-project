@@ -1,10 +1,12 @@
-package com.example.joiintheclub;
+package com.example.joiintheclub.FrontEnd;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.joiintheclub.R;
 
 public class LoadScreen extends AppCompatActivity {
 

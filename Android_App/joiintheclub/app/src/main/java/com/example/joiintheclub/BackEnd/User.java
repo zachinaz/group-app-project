@@ -1,4 +1,4 @@
-package com.example.joiintheclub;
+package com.example.joiintheclub.BackEnd;
 
 import org.json.JSONException;
 import org.json.JSONObject;

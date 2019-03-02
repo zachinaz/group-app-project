@@ -1,6 +1,4 @@
-package com.example.joiintheclub;
-import com.example.joiintheclub.Group;
-import com.example.joiintheclub.User;
+package com.example.joiintheclub.BackEnd;
 import com.example.joiintheclub.Membership;
 
 public class GroupRequest {
