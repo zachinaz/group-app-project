@@ -1,7 +1,5 @@
-package com.example.joiintheclub;
+package com.example.joiintheclub.BackEnd;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import com.example.joiintheclub.GroupRequest;
 
 public class Group {
 

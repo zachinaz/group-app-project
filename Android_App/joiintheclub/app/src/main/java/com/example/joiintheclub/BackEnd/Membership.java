@@ -1,9 +1,4 @@
-package test.myapplication;
-import java.lang.reflect.Method;
-
-import com.example.joiintheclub.Group;
-import com.example.joiintheclub.User;
-import java.lang.reflect.Method;
+package com.example.joiintheclub.BackEnd;
 
 public class Membership {
     private static int LeaderID;
