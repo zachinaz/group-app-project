@@ -31,8 +31,8 @@ CREATE TABLE `announcement` (
   PRIMARY KEY (`AnnouncementID`),
   KEY `GroupID` (`GroupID`),
   KEY `LeaderID` (`LeaderID`),
-  CONSTRAINT `announcement_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`),
-  CONSTRAINT `announcement_ibfk_3` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
+  CONSTRAINT `announcement_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `announcement_ibfk_3` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -61,8 +61,8 @@ CREATE TABLE `comment` (
   PRIMARY KEY (`CommentID`),
   KEY `MemberID` (`MemberID`),
   KEY `announcementID` (`announcementID`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`MemberID`) REFERENCES `membership` (`MemberID`),
-  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`announcementID`) REFERENCES `announcement` (`AnnouncementID`)
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`MemberID`) REFERENCES `membership` (`MemberID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`announcementID`) REFERENCES `announcement` (`AnnouncementID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -93,8 +93,8 @@ CREATE TABLE `event` (
   PRIMARY KEY (`EventID`),
   KEY `LeaderID` (`LeaderID`),
   KEY `GroupID` (`GroupID`),
-  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`),
-  CONSTRAINT `event_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
+  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `event_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,7 +122,7 @@ CREATE TABLE `membership` (
   PRIMARY KEY (`MemberID`),
   KEY `UserID` (`UserID`),
   KEY `GroupID` (`GroupID`),
-  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
+  CONSTRAINT `membership_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `membership_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -153,8 +153,8 @@ CREATE TABLE `poll repository` (
   PRIMARY KEY (`PollID`),
   KEY `LeaderID` (`LeaderID`),
   KEY `GroupID` (`GroupID`),
-  CONSTRAINT `poll repository_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`),
-  CONSTRAINT `poll repository_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
+  CONSTRAINT `poll repository_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `poll repository_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -185,9 +185,9 @@ CREATE TABLE `poll response` (
   KEY `memberID` (`memberID`),
   KEY `GroupID` (`GroupID`),
   KEY `PollID` (`PollID`),
-  CONSTRAINT `poll response_ibfk_1` FOREIGN KEY (`memberID`) REFERENCES `membership` (`MemberID`),
-  CONSTRAINT `poll response_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`),
-  CONSTRAINT `poll response_ibfk_3` FOREIGN KEY (`PollID`) REFERENCES `poll repository` (`PollID`)
+  CONSTRAINT `poll response_ibfk_1` FOREIGN KEY (`memberID`) REFERENCES `membership` (`MemberID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `poll response_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `poll response_ibfk_3` FOREIGN KEY (`PollID`) REFERENCES `poll repository` (`PollID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -214,7 +214,7 @@ CREATE TABLE `record` (
   `GroupDescription` text,
   PRIMARY KEY (`GroupID`),
   KEY `LeaderID` (`LeaderID`),
-  CONSTRAINT `record_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`)
+  CONSTRAINT `record_ibfk_1` FOREIGN KEY (`LeaderID`) REFERENCES `user` (`UserID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -241,8 +241,8 @@ CREATE TABLE `request` (
   PRIMARY KEY (`RequestID`),
   KEY `UserID` (`UserID`),
   KEY `GroupID` (`GroupID`),
-  CONSTRAINT `request_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`),
-  CONSTRAINT `request_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`)
+  CONSTRAINT `request_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `request_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `record` (`GroupID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -294,4 +294,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-01 19:45:46
+-- Dump completed on 2019-03-03 10:28:28
