@@ -1,13 +1,9 @@
 package com.example.joiintheclub.BackEnd;
-import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicReference;
-
-import test.myapplication.GroupRequest;
 
 public class Group {
 
@@ -20,10 +16,10 @@ public class Group {
     JSONObject requestGET = new JSONObject();
     AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
     JSONObject requestPOST = new JSONObject();
-    AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
+    private AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
 
 
-        public static void SearchGroup (String userInput){
+        public void SearchGroup(String userInput){
             Group n = new Group();
             if (n.VerifyGroup(userInput)==true){
             //get requester to return Group info based on

@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
 
-
     private String firstName;
     private String lastName;
     private String email;
@@ -16,7 +15,8 @@ public class User {
 
 
     //private String profilePicURL;
-    //private int userID;
+    private int userID;
+
     private static boolean isActive;
 
     public static boolean createUser(String firstName,
@@ -96,16 +96,14 @@ public class User {
         return false;
     }
 
-    public static boolean createGroup(
-            /*
-            String firstName,
-            String lastName,
-            String GroupName
-            */
+    public static boolean createGroup (
+            int userID,
+            String GroupName,
+            String description,
+            String color
     )
     {
-        /*
-        //idea1
+
         //User sends createGroup requests to requester
         //  Sends GroupName
         //  program sends Date
@@ -125,8 +123,7 @@ public class User {
                 userGroupRequestGET));
 
         //If the group already exists
-
-        //if (...)
+        if (Group.VerifyGroup() == true)
         {
             return false;
         }
@@ -135,23 +132,22 @@ public class User {
         else
         {
 
-          //  try {
+            try {
                 //Populate object with keys and values
                 //Keys (in_python), Values (inJava)
 
                 //below lines have errors when uncommented
                 //  put - unhandled exception JSON
-                /*
-                userGroupRequestPOST.put("first_name", firstName);
-                userGroupRequestPOST.put("last_name", lastName);
-                userGroupRequestPOST.put("group_name", GroupName);
-                */
+                userGroupRequestPOST.put("user_ID", userID);
+                userGroupRequestPOST.put("name", GroupName);
+                userGroupRequestPOST.put("description", description);
+                userGroupRequestPOST.put("color", color);
             //should I use something other than e
-            //} catch (JSONException e) {
+            } catch (JSONException e) {
                 //Prints error message to console via stacktrace
-             //   e.printStackTrace();
-           // }
-        /*
+                e.printStackTrace();
+            }
+
             userGroupResponsePOST.set(Requester.requester("/group", "POST",
                     userGroupRequestPOST));
             try {
@@ -161,16 +157,10 @@ public class User {
                 //Prints error message to console via stacktrace
                 e.printStackTrace();
             }
-          */
+
             return true;
-        //}
-       /*
-      private String GroupName;
-        public static int GroupID;
-        private int NumOfPeople;
-        private boolean verified;
-        Date DateCreated;
-        */
+        }
+
 
 
     }

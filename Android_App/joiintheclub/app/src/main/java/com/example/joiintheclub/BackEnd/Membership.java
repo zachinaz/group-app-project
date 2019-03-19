@@ -1,11 +1,6 @@
 package com.example.joiintheclub.BackEnd;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-
-import com.example.joiintheclub.User;
-import com.example.joiintheclub.Group;
-import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Membership {
