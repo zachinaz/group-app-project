@@ -96,6 +96,8 @@ public class User {
         return false;
     }
 
+
+    //THIS SHOULD PROBABLY BE IN THE GROUP CLASS
     public static boolean createGroup (
             int userID,
             String GroupName,
