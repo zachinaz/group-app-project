@@ -92,6 +92,79 @@ def user():
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/user--
 
+#--/api/user/membership--
+@app.route('/api/user/membership', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def membership():
+    resp = {}
+    status = 404
+
+    #--GET--
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            #SQL SELECT user_id --> group_id[]
+            group_id = "3" #Need to allow this variable to be a list
+            resp = {"request_type":"GET", "message":f"User {user_id} a member of Group {group_id}", "group_id": f"{group_id}"}
+            status = 200
+
+    #--POST--
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            group_id = json_data.get("group_id")
+            #SQL INSERT user_id, group_id in membership
+            resp = {"request_type":"POST", "message":f"Membership created of User {user_id} in Group {group_id}"}
+            status = 200
+
+    #--PUT--
+    if request.method == 'PUT':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            group_id = json_data.get("group_id")
+            #SQL UPDATE UserPrivileges on user_id, group_id
+            resp = {"request_type":"PUT", "message":f"User {user_id} in Group {group_id} privileges updated"}
+            status = 200
+
+    #--DELETE--
+    if request.method == 'DELETE':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            group_id = json_data.get("group_id")
+            #SQL DELETE membership on user_id, group_id
+            resp = {"request_type":"DELETE", "message":f"User {user_id}\'s membership in Group {group_id} has been deleted"}
+            status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/user/membership--
+
 #--/api/user/login--
 @app.route('/api/user/login', methods=['GET'])
 def login():
@@ -145,7 +218,8 @@ def group():
             name = "Test Group"
             description = "Four score and twenty years ago..."
             color = "Blue"
-            resp = {"request_type":"GET", "name": f"{name}", "description": f"{description}", "color": f"{color}"}
+            leader = "12"
+            resp = {"request_type":"GET", "name": f"{name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader}"}
             status = 200
 
     #--POST--
