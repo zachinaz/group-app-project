@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.joiintheclub">
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -14,7 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoadScreen">
+        <activity
+            android:name=".FrontEnd.UserProfile.UserProfileMain"
+            android:label="@string/title_activity_user_profile_main"></activity>
+        <activity
+            android:name=".FrontEnd.Setting.SettingMain"
+            android:label="@string/title_activity_setting_main" />
+        <activity
+            android:name=".FrontEnd.Group.GroupMain"
+            android:label="@string/title_activity_group_main" />
+        <activity
+            android:name=".FrontEnd.SearchGroup.SearchMain"
+            android:label="@string/title_activity_search_main" />
+        <activity
+            android:name=".FrontEnd.Init.CreateAcount"
+            android:label="@string/title_activity_create_acount" />
+        <activity android:name=".FrontEnd.Init.LoadScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".FrontEnd.Init.LoginActivity"
             android:label="@string/title_activity_login" />
     </application>
 

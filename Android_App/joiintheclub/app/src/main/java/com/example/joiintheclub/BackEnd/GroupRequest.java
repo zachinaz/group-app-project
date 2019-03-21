@@ -1,8 +1,8 @@
 package com.example.joiintheclub.BackEnd;
-import com.example.joiintheclub.Membership;
-import com.example.joiintheclub.Group;
-import com.example.joiintheclub.User;
-import com.example.joiintheclub.Membership;
+
+import org.json.JSONObject;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class GroupRequest {

@@ -3,7 +3,6 @@ package com.example.joiintheclub.BackEnd;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
@@ -79,7 +78,7 @@ public class User {
     }
     //was originaaly a private void method
     //different classes may need to call get() method
-    public int get() {
+    int get() {
         return 0; //for now
     }
     private void set() {
@@ -96,6 +95,8 @@ public class User {
         return false;
     }
 
+
+    //THIS SHOULD PROBABLY BE IN THE GROUP CLASS
     public static boolean createGroup (
             int userID,
             String GroupName,
@@ -123,7 +124,7 @@ public class User {
                 userGroupRequestGET));
 
         //If the group already exists
-        if (Group.VerifyGroup() == true)
+        if (Group.VerifyGroup("testing"))
         {
             return false;
         }
