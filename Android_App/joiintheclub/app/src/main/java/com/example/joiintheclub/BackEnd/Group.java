@@ -10,7 +10,7 @@ public class Group {
         public static String GroupName;
         public static int GroupID;
         private int NumOfPeople;
-        private boolean verified;
+        private static boolean verified;
         Date DateCreated;
 
     JSONObject requestGET = new JSONObject();
@@ -51,7 +51,7 @@ public class Group {
             return GroupID;
         }
 
-        private boolean VerifyGroup (String userInput){
+        static boolean VerifyGroup(String userInput){
 
             //call requester here to verify that userInput group exists
                 //if (userInput group exists in Database)

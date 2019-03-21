@@ -26,9 +26,9 @@
             android:name=".FrontEnd.SearchGroup.SearchMain"
             android:label="@string/title_activity_search_main" />
         <activity
-            android:name=".FrontEnd.CreateAcount"
+            android:name=".FrontEnd.Init.CreateAcount"
             android:label="@string/title_activity_create_acount" />
-        <activity android:name=".FrontEnd.LoadScreen">
+        <activity android:name=".FrontEnd.Init.LoadScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FrontEnd.LoginActivity"
+            android:name=".FrontEnd.Init.LoginActivity"
             android:label="@string/title_activity_login" />
     </application>
 

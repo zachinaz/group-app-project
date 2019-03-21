@@ -1,4 +1,4 @@
-package com.example.joiintheclub.FrontEnd;
+package com.example.joiintheclub.FrontEnd.Init;
 
 import android.os.Bundle;
 import android.app.Activity;
