@@ -142,7 +142,8 @@ def membership():
         else:
             user_id = json_data.get("user_id")
             group_id = json_data.get("group_id")
-            #SQL UPDATE UserPrivileges on user_id, group_id
+            privilege = json_data.get("privilege")
+            #SQL UPDATE privilege on user_id, group_id
             resp = {"request_type":"PUT", "message":f"User {user_id} in Group {group_id} privileges updated"}
             status = 200
 
@@ -218,8 +219,8 @@ def group():
             name = "Test Group"
             description = "Four score and twenty years ago..."
             color = "Blue"
-            leader = "12"
-            resp = {"request_type":"GET", "name": f"{name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader}"}
+            leader_id = "12"
+            resp = {"request_type":"GET", "name": f"{name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
             status = 200
 
     #--POST--
@@ -233,11 +234,11 @@ def group():
             resp = {"err": "Missing required fields"}
             status = 400
         else:
-            user_id = json_data.get("user_id")
+            leader_id = json_data.get("user_id")
             name = json_data.get("name")
             description = json_data.get("description")
             color = json_data.get("color")
-            #SQL INSERT user_id (leader_id), name, description, color
+            #SQL INSERT leader_id, name, description, color
             group_id = "3"
             resp = {"request_type":"POST", "message": f"Group {group_id} Successfully Created", "group_id": f"{group_id}"}
             status = 200
@@ -265,7 +266,7 @@ def group():
             status = 200
 
     #--DELETE--
-    # @json:
+    # @json: group_id
     if request.method == 'DELETE':
         json_data = request.get_json(force=True)
         if not json_data:
@@ -281,6 +282,67 @@ def group():
             status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/group--
+
+#--/api/group/request--
+@app.route('/api/group/request', methods=['GET', 'POST', 'DELETE'])
+def member_request():
+    resp = {}
+    status = 404
+
+    #--GET--
+    # @json: leader_id, returns {user_id, group_id, group_name}
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            leader_id = json_data.get("user_id")
+            #SQL SELECT leader_id --> user_id, group_id, group_name
+            user_id = "4"
+            group_id = "3"
+            group_name = "The Sluggers"
+            resp = {"request_type":"GET", "user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
+            status = 200
+
+    #--POST--
+    # @json: {user_id, group_id}
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            group_id = json_data.get("group_id")
+            #SQL insert group_id, user_id, group_name
+            resp = {"request_type":"POST", "message":"Successfully created Request"}
+            status = 200
+
+    #--DELETE--
+    # @json: {user_id, group_id}
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            group_id = json_data.get("group_id")
+            #SQL insert group_id, user_id, group_name
+            resp = {"request_type":"POST", "message":"Successfully created Request"}
+            status = 200
+
 #END OF --/api/group--
 
 if __name__ == '__main__':
