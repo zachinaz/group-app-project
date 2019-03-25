@@ -13,6 +13,7 @@ def getUser(user_id):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
 	
 	connection.close()
@@ -25,13 +26,14 @@ def postUser(first_name, last_name, email, password):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 	
-	postUserInsert = "insert into `user` values(default, %s, %s, %s, %s, sysdate(), null);"
+	postUserInsert = "insert into `user` values(default, %s, %s, %s, %s, curdate(), null);"
 	postUserSelect = "select `user`.userID as user_id from `user` where `user`.FirstName = %s and `user`.LastName = %s;"
 	try:
 		cursor.execute(postUserInsert, (first_name, last_name, email, password))
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
 	try:
 		cursor.execute(postUserSelect, (first_name, last_name))
@@ -39,6 +41,7 @@ def postUser(first_name, last_name, email, password):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
 	
 	connection.close()
@@ -54,8 +57,8 @@ def deleteUser(user_id):
 	deleteUserStatement = "delete from `user` where `user`.userID = %s;"
 	try:
 		cursor.execute(deleteUserStatement, (user_id))
-		connection.close()
 		connection.commit()
+		connection.close()
 		return 0
 	except:
 		connection.rollback()
@@ -75,6 +78,7 @@ def getMembership(user_id):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
 	
 	connection.close()
@@ -122,7 +126,6 @@ def deleteMembership(user_id, group_id):
 	deleteMembershipStatement = "delete from `membership` where `membership`.UserID = %s and `membership`.GroupID = %s;"
 	try:
 		cursor.execute(deleteMembershipStatement, (user_id, group_id))
-		connection.commit()
 		connection.close()
 		return 0
 	except:
@@ -202,11 +205,9 @@ def deleteGroup(group_id):
 	deleteGroupStatement = "delete from `record` where `record`.GroupID = %s;"
 	try:
 		cursor.execute(deleteGroupStatement, (group_id))
-		connection.commit()
 		connection.close()
 		return 0
 	except:
 		connection.rollback()
 		connection.close()
 		return 1
-
