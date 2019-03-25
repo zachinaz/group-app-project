@@ -7,21 +7,80 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String pwd;
+    //VARIABLES
+    //*********************************************
+
+    //Local storage of the userID used to talk with the DB
+    private static String userID;
+
+    //Local user information
+    private static String firstName;
+    private static String lastName;
+    private static String email;
+    private static String password;
+
+    //Local storage of the status of the user
+    private static boolean isLoggedIn = false;
+
+    //FUNCTIONS
+    //*********************************************
+
+    //Call login when needing to test a user's credentials and if successful, login a user
+    //    //  @param String email: the email of the attempted login
+    //    //  @param String pwd: the password of the attempted login
+    //    //  returns false (if login failed) and true (if login succeeded)
+    public static boolean login(String email, String pwd)
+    {
+        //Test cases for now
+        //email = "john@gmail.com";
+        //pwd = "1234";
 
 
-    //private String profilePicURL;
-    private int userID;
+        //Make sure user entered something for email and password
+        if (email.isEmpty() || pwd.isEmpty()) {
+            return false;
+        }
 
-    //Status - does it already exist or not
-    //default value is false ???
-    private static boolean isActive;
+        //Create a JSON object for request and response
+        JSONObject loginRequestGET = new JSONObject();
+        AtomicReference<JSONObject> loginResponseGET = new AtomicReference<> (new JSONObject());
 
-    private static boolean ActiveUserAccount;
+        //Populate JSON request object with values passed into function
+        try {
+            loginRequestGET.put("email", email);
+            loginRequestGET.put("password", pwd);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
 
+        //Verifies email and password with the DB. Keeps response in loginResponseGET JSON object
+        loginResponseGET.set(Requester.requester("/user/login", "GET", loginRequestGET));
+
+        //Unpacks the Response message sent by the requester
+        try {
+            String user_id = loginResponseGET.get().get("user_id").toString();
+            if (user_id.equals("0")) {
+                //credentials not found, returning false
+                return false;
+            }
+            else {
+                //credentials found, returning true
+                User.setUserID(user_id);
+                User.setIsLoggedIn(true);
+                return true;
+            }
+        } catch (JSONException e) {
+            //Prints error message to console via stacktrace
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //Call logout when needing to log a user our of the app
+    public static void logout() {
+        User.setIsLoggedIn(false);
+    }
 
     public static boolean createUser(String firstName,
                                      String lastName,
@@ -38,16 +97,6 @@ public class User {
 
         //Request info from requester to see if already exists
         responseGET.set(Requester.requester("/user", "GET", requestGET));
-        //            //if it returns something, then it already exists ???
-
-        //If it already exists
-        if (isActive)
-        {
-            return false;
-        }
-        //If it doesn't exist yet
-        else
-        {
 
             try {
                 //Populates the object with keys and values
@@ -80,9 +129,6 @@ public class User {
         }
 
 
-    }
-
-
 
     //was originally a private void method
     //different classes may need to call get() method
@@ -106,59 +152,22 @@ public class User {
         return false;
     }
 
-
-
-    private void set() {
-
+    public static String getUserID() {
+        return userID;
     }
 
-    public static boolean login(
-            String email,
-            String pwd)
-    {
-        //Test cases for now
-        email = "john@gmail.com";
-        pwd = "1234";
-
-    /*
-        //Make sure user entered something for email and password
-        if (email.isEmpty()) {
-            System.out.println("Please enter your email address");
-            return false;
-        }
-        if (pwd.isEmpty()) {
-            System.out.println("Please enter your password");
-            return false;
-        }
-*/
-        JSONObject loginRequestGET = new JSONObject();
-        AtomicReference<JSONObject> loginResponseGET = new AtomicReference<> (new JSONObject());
-        //really unsure if it should be .set
-        loginResponseGET.set(Requester.requester("/user", "GET", loginRequestGET));
-
-        //UNSURE IF IT ACTUALLY CHECKS
-        if (isActive)
-        {
-            //check if password matches up with this user (based on their email)
-            //UNSURE IF THIS IS HOW IT IS SUPPOSED TO BE
-            try {
-
-                loginRequestGET.get("email");
-                loginRequestGET.get("password");
-            } catch (JSONException e) {
-                //Prints error message to console via stacktrace
-                //unsure if this is correct in general or even the proper exception
-                e.printStackTrace();
-            }
-        }
-        ActiveUserAccount = true;
-
-        return true;
+    public static void setUserID(String userID) {
+        User.userID = userID;
     }
-    public static boolean logout() {
-        //fix later
-        return false;
+
+    public static boolean getIsLoggedIn() {
+        return isLoggedIn;
     }
+
+    public static void setIsLoggedIn(boolean isLoggedIn) {
+        User.isLoggedIn = isLoggedIn;
+    }
+
 
     //This should probably be in createGroup class
     public static boolean createGroup (
