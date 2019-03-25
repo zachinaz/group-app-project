@@ -5,7 +5,7 @@ import pymysql
 def getUser(user_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	getUserStatement = "select `user`.FirstName as first_name, `user`.LastName as last_name, `user`.EmailAddress as email, `user`.Password as password from `user` where `user`.UserID = %s;"
 	try:
 		cursor.execute(getUserStatement, (user_id))
@@ -14,8 +14,8 @@ def getUser(user_id):
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
-	
+		return 0
+
 	connection.close()
 	return result.values()
 
@@ -25,7 +25,7 @@ def getUser(user_id):
 def postUser(first_name, last_name, email, password):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	postUserInsert = "insert into `user` values(default, %s, %s, %s, %s, curdate(), null);"
 	postUserSelect = "select `user`.userID as user_id from `user` where `user`.FirstName = %s and `user`.LastName = %s;"
 	try:
@@ -34,7 +34,7 @@ def postUser(first_name, last_name, email, password):
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
+		return 0
 	try:
 		cursor.execute(postUserSelect, (first_name, last_name))
 		result = cursor.fetchone()
@@ -42,8 +42,8 @@ def postUser(first_name, last_name, email, password):
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
-	
+		return 0
+
 	connection.close()
 	return result.values()
 
@@ -59,18 +59,18 @@ def deleteUser(user_id):
 		cursor.execute(deleteUserStatement, (user_id))
 		connection.commit()
 		connection.close()
-		return 0
+		return 1
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
-	
+		return 0
+
 
 # for GET MEMBERSHIP
 def getMembership(user_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.userID = `user`.UserID and `membership`.UserID = %s;"
 	try:
 		cursor.execute(getMembershipStatement, (user_id))
@@ -79,8 +79,8 @@ def getMembership(user_id):
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
-	
+		return 0
+
 	connection.close()
 	return result.values()
 
@@ -88,57 +88,57 @@ def getMembership(user_id):
 def postMembership(user_id, group_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	postMembershipStatement = "insert into `membership` values(default,0, %s, %s);"
 	try:
 		cursor.execute(postMembershipStatement,(user_id, group_id))
 		connection.commit()
 		connection.close()
-		return 0
+		return 1
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
+		return 0
 
 
 # for PUT MEMBERSHIP
 def updateMembership(user_id, group_id, privilege):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	updateMembershipStatement = "update `membership` set UserPrivileges = privilege where `membership`.userID = %s and `membership`.GroupID = %s;"
 	try:
 		cursor.execute(updateMembershipStatement, (user_id, group_id))
 		connection.commit()
 		connection.close()
-		return 0
+		return 1
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
-	
-	
+		return 0
+
+
 # for DELETE MEMBERSHIP
 def deleteMembership(user_id, group_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	deleteMembershipStatement = "delete from `membership` where `membership`.UserID = %s and `membership`.GroupID = %s;"
 	try:
 		cursor.execute(deleteMembershipStatement, (user_id, group_id))
 		connection.close()
-		return 0
+		return 1
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
-	
+		return 0
+
 
 # for GET LOGIN
 def getLogin(email, password):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	selectUser = "select `user`.userID as user_id from `user` where `user`.EmailAddress = %s and `user`.Password = %s;"
 	try:
 		cursor.execute(selectUser, (email, password))
@@ -147,7 +147,8 @@ def getLogin(email, password):
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
+		return 0
+
 	
 	connection.close()
 	return result.values()
@@ -158,7 +159,7 @@ def getLogin(email, password):
 def getGroup(group_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	getGroupStatement = "select `record`.GroupName as name, `record`.GroupDescription as description, `record`.LeaderID as leader_id, `record`.GroupColor as color from `record` where `record`.GroupID = %s;"
 	try:
 		cursor.execute(getGroupStatement, (group_id))
@@ -166,10 +167,11 @@ def getGroup(group_id):
 		connection.commit()
 	except:
 		connection.rollback()
-		return 1
+		return 0
+
 	
 	connection.close()
-	return result.values()
+	return result
 
 
 # for POST GROUP
@@ -184,15 +186,15 @@ def postGroup(leader_id, name, description, color):
 		connection.commit()
 	except:
 		connection.rollback()
-		return 1
+		return 0
 	try:
 		cursor.execute(postGroupSelect, (name))
 		result = cursor.fetchone()
 		connection.commit()
 	except:
 		connection.rollback()
-		return 1
-	
+		return 0
+
 	connection.close()
 	return result.values()
 
@@ -201,13 +203,15 @@ def postGroup(leader_id, name, description, color):
 def deleteGroup(group_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-	
+
 	deleteGroupStatement = "delete from `record` where `record`.GroupID = %s;"
 	try:
 		cursor.execute(deleteGroupStatement, (group_id))
 		connection.close()
-		return 0
+		return 1
 	except:
 		connection.rollback()
 		connection.close()
-		return 1
+		return 0
+
+
