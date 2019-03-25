@@ -133,16 +133,16 @@ public class User {
     //was originally a private void method
     //different classes may need to call get() method
     // public int get() {
-    public static int get(
+    public static String get(
             int userID
     )
     {
         JSONObject userGetRequestGET = new JSONObject();
         AtomicReference<JSONObject> getResponseGET = new AtomicReference<>(new JSONObject());
-        getResponseGET.set(Requester.requester("/user", "GE", userGetRequestGET));
+        getResponseGET.set(Requester.requester("/user", "GET", userGetRequestGET));
 
 
-        return 0; //for now
+        return "1"; //for now
     }
 
     //this will check if the user exists or not
