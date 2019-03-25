@@ -9,11 +9,14 @@ def getUser(user_id):
 	getUserStatement = "select `user`.FirstName as first_name, `user`.LastName as last_name, `user`.EmailAddress as email, `user`.Password as password from `user` where `user`.UserID = %s;"
 	try:
 		cursor.execute(getUserStatement, (user_id))
+		result = cursor.fetchone()
 		connection.commit()
 	except:
 		connection.rollback()
 		return 1
+	
 	connection.close()
+	return result.values()
 
 
 
@@ -32,11 +35,14 @@ def postUser(first_name, last_name, email, password):
 		return 1
 	try:
 		cursor.execute(postUserSelect, (first_name, last_name))
+		result = cursor.fetchone()
 		connection.commit()
 	except:
 		connection.rollback()
 		return 1
+	
 	connection.close()
+	return result.values()
 
 
 
@@ -48,13 +54,14 @@ def deleteUser(user_id):
 	deleteUserStatement = "delete from `user` where `user`.userID = %s;"
 	try:
 		cursor.execute(deleteUserStatement, (user_id))
+		connection.close()
 		connection.commit()
+		return 0
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
-	connection.close()
-
-
+	
 
 # for GET MEMBERSHIP
 def getMembership(user_id):
@@ -64,13 +71,14 @@ def getMembership(user_id):
 	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.userID = `user`.UserID and `membership`.UserID = %s;"
 	try:
 		cursor.execute(getMembershipStatement, (user_id))
+		result = cursor.fetchone()
 		connection.commit()
 	except:
 		connection.rollback()
 		return 1
+	
 	connection.close()
-
-
+	return result.values()
 
 # for POST MEMBERSHIP
 def postMembership(user_id, group_id):
@@ -81,11 +89,12 @@ def postMembership(user_id, group_id):
 	try:
 		cursor.execute(postMembershipStatement,(user_id, group_id))
 		connection.commit()
+		connection.close()
+		return 0
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
-	connection.close()
-
 
 
 # for PUT MEMBERSHIP
@@ -97,13 +106,14 @@ def updateMembership(user_id, group_id, privilege):
 	try:
 		cursor.execute(updateMembershipStatement, (user_id, group_id))
 		connection.commit()
+		connection.close()
+		return 0
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
-	connection.close()
 	
 	
-
 # for DELETE MEMBERSHIP
 def deleteMembership(user_id, group_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
@@ -113,10 +123,12 @@ def deleteMembership(user_id, group_id):
 	try:
 		cursor.execute(deleteMembershipStatement, (user_id, group_id))
 		connection.commit()
+		connection.close()
+		return 0
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
-	connection.close()
 	
 
 # for GET LOGIN
@@ -127,11 +139,15 @@ def getLogin(email, password):
 	selectUser = "select `user`.userID as user_id from `user` where `user`.EmailAddress = %s and `user`.Password = %s;"
 	try:
 		cursor.execute(selectUser, (email, password))
+		result = cursor.fetchone()
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
+	
 	connection.close()
+	return result.values()
 
 
 
@@ -143,11 +159,14 @@ def getGroup(group_id):
 	getGroupStatement = "select `record`.GroupName as name, `record`.GroupDescription as description, `record`.LeaderID as leader_id, `record`.GroupColor as color from `record` where `record`.GroupID = %s;"
 	try:
 		cursor.execute(getGroupStatement, (group_id))
+		result = cursor.fetchone()
 		connection.commit()
 	except:
 		connection.rollback()
 		return 1
+	
 	connection.close()
+	return result.values()
 
 
 # for POST GROUP
@@ -165,11 +184,14 @@ def postGroup(leader_id, name, description, color):
 		return 1
 	try:
 		cursor.execute(postGroupSelect, (name))
+		result = cursor.fetchone()
 		connection.commit()
 	except:
 		connection.rollback()
 		return 1
+	
 	connection.close()
+	return result.values()
 
 
 # for DELETE GROUP
@@ -181,7 +203,10 @@ def deleteGroup(group_id):
 	try:
 		cursor.execute(deleteGroupStatement, (group_id))
 		connection.commit()
+		connection.close()
+		return 0
 	except:
 		connection.rollback()
+		connection.close()
 		return 1
-	connection.close()
+
