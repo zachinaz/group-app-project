@@ -1,5 +1,6 @@
 from flask import Flask, request, Response
 from json import dumps, loads
+from mysql import *
 
 app = Flask(__name__)
 
@@ -22,6 +23,8 @@ def user():
         else:
             user_id = json_data.get("user_id")
             #SQL SELECT user_id --> first_name, last_name, email, password, profile_pic
+            output = getUser(user_id)
+            print(output)
             first_name = "John"
             last_name = "Doe"
             email = "testemail@gmail.com"
@@ -346,4 +349,4 @@ def member_request():
 #END OF --/api/group--
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5050)
