@@ -170,6 +170,7 @@ public class User {
 
 
     //This should probably be in createGroup class
+    /*
     public static boolean createGroup (
             int userID,
             String GroupName,
@@ -223,6 +224,7 @@ public class User {
                 e.printStackTrace();
             }
 */
+    /*
             userGroupResponsePOST.set(Requester.requester("/group", "POST",
                     userGroupRequestPOST));
             try {
@@ -235,6 +237,88 @@ public class User {
 
             return true;
 //        }
+
+
+
+      }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+    //Allows a user to create a new group
+    public static boolean createGroup (
+            int userID,
+
+            String GroupName,
+            String description,
+            String color
+    )
+    {
+
+        //User sends createGroup requests to requester
+        //  Sends GroupName
+        //  program sends Date
+
+        //if it does not already exist, it becomes verified
+
+        //Create new JSON object to pass and receive from Requester.requester
+        JSONObject groupRequestGET = new JSONObject();
+        AtomicReference<JSONObject> groupResponseGET =
+                new AtomicReference<>(new JSONObject());
+        JSONObject groupRequestPOST = new JSONObject();
+        AtomicReference<JSONObject> groupResponsePOST =
+                new AtomicReference<>(new JSONObject());
+
+        //Request info from requester to see if already exists
+        groupResponseGET.set(Requester.requester("/group", "GET",
+                groupRequestGET));
+
+        /*
+        //If the group already exists
+        if (VerifyGroup() == true)
+        {
+            //Unable to make new group if already exists
+            return false;
+        }
+        //Else - does not exist yet
+        else {
+            try {
+                //Populate object with keys and values needed for group creation
+                //  Keys (in_python), Values (inJava)
+                groupRequestPOST.put("user_ID", userID);
+                groupRequestPOST.put("name", GroupName);
+                groupRequestPOST.put("description", description);
+                groupRequestPOST.put("color", color);
+                //should I use something other than e
+            } catch (JSONException e) {
+                //Prints error message to console via stacktrace
+                e.printStackTrace();
+            }
+
+            //Saves the output of Request.requester to a JSONObject responsePOST
+            groupResponsePOST.set(Requester.requester("/group", "POST",
+                    groupRequestPOST));
+
+            try {
+                //Searches for "group_id" as key in responsePOST
+                Object GroupID = groupResponsePOST.get().get("group_id");
+            } catch (JSONException e) { //catch needed since groupResopnsePOST.get can throw exception JSONException
+                //Prints error message to console via stacktrace
+                e.printStackTrace();
+            }
+        }
+        */
+        return true;
+
 
 
 
