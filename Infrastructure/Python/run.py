@@ -1,6 +1,6 @@
 from flask import Flask, request, Response
 from json import dumps, loads
-from mysql import *
+from mysql_run import *
 
 app = Flask(__name__)
 
@@ -24,11 +24,10 @@ def user():
             user_id = json_data.get("user_id")
             #SQL SELECT user_id --> first_name, last_name, email, password, profile_pic
             output = getUser(user_id)
-            print(output)
-            first_name = "John"
-            last_name = "Doe"
-            email = "testemail@gmail.com"
-            password = "P@ssword"
+            first_name = output["first_name"]
+            last_name = output["last_name"]
+            email = output["email"]
+            password = output["password"]
             resp = {"request_type":"GET", "first_name":f"{first_name}", "last_name":f"{last_name}", "email":f"{email}", "password":f"{password}"}
             status = 200
 
@@ -48,7 +47,8 @@ def user():
             email = json_data.get("email")
             password = json_data.get("password")
             #SQL INSERT first_name, last_name, email, password
-            user_id = "3"
+            output = postUser(first_name, last_name, email, password)
+            user_id = output["user_id"]
             resp = {"request_type":"POST","message":f"User {user_id} Successfully Created"}
             status = 200
 
@@ -190,7 +190,9 @@ def login():
             email = json_data.get("email")
             password = json_data.get("password")
             #SQL SELECT email, password --> user_id
-            user_id = "3"
+            output = getLogin(email, password)
+            print(output)
+            user_id = output["user_id"]
             if login:
                 resp = {"request_type":"GET", "message":f"User {user_id} Successfully Logged In", "user_id": f"{user_id}"}
                 status = 200
