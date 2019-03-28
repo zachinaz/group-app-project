@@ -168,6 +168,54 @@ public class User {
         User.isLoggedIn = isLoggedIn;
     }
 
+//implementation of updateUser depends on the UI
+//put user - only user_id is necessary
+    //3 digit response means just that it worked ???
+    //no data has to e returned
+
+    //update user does it as a package or now
+    public static boolean updateUser(int userID, String firstName, String lastName,
+                                     String email, String pwd)
+    {
+        if (verifyUser(userID))
+        {
+            //
+            //Create a JSON object for request and response
+            JSONObject updateRequestPUT = new JSONObject();
+            AtomicReference<JSONObject> updateResponsePUT = new AtomicReference<> (new JSONObject());
+
+            //Populate JSON request object with values passed into function
+            try {
+                updateRequestPUT.put("first_name", firstName);
+                updateRequestPUT.put("last_name", lastName);
+                updateRequestPUT.put("email", email);
+                updateRequestPUT.put("password", pwd);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
+
+        }
+        else
+        {
+            //unable to verify
+            return false;
+        }
+
+    }
+
+    /*maybe do this later, since need email functionality
+    public static void forgotPassword(int userID)
+    {
+        verifyUser(userID);
+        updateUser(userID);
+
+
+    }
+    */
+
 
     //This should probably be in createGroup class
     /*
@@ -253,11 +301,10 @@ public class User {
 
 
 
-
+/*
     //Allows a user to create a new group
     public static boolean createGroup (
             int userID,
-
             String GroupName,
             String description,
             String color
@@ -282,15 +329,10 @@ public class User {
         groupResponseGET.set(Requester.requester("/group", "GET",
                 groupRequestGET));
 
-        /*
-        //If the group already exists
-        if (VerifyGroup() == true)
-        {
-            //Unable to make new group if already exists
-            return false;
-        }
-        //Else - does not exist yet
-        else {
+
+        //SHOULD VERIFY IF GROUP ALREADY EXISTS (BASED ON ITS NAME)
+
+
             try {
                 //Populate object with keys and values needed for group creation
                 //  Keys (in_python), Values (inJava)
@@ -298,7 +340,7 @@ public class User {
                 groupRequestPOST.put("name", GroupName);
                 groupRequestPOST.put("description", description);
                 groupRequestPOST.put("color", color);
-                //should I use something other than e
+
             } catch (JSONException e) {
                 //Prints error message to console via stacktrace
                 e.printStackTrace();
@@ -315,13 +357,14 @@ public class User {
                 //Prints error message to console via stacktrace
                 e.printStackTrace();
             }
-        }
-        */
+
         return true;
 
 
 
 
     }
-
+*/
 }
+
+
