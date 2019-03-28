@@ -2,26 +2,90 @@ package com.example.joiintheclub.BackEnd;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String pwd;
+    //VARIABLES
+    //*********************************************
+
+    //Local storage of the userID used to talk with the DB
+    private static String userID;
+
+    //Local user information
+    private static String firstName;
+    private static String lastName;
+    private static String email;
+    private static String password;
+
+    //Local storage of the status of the user
+    private static boolean isLoggedIn = false;
+
+    //FUNCTIONS
+    //*********************************************
+
+    //Call login when needing to test a user's credentials and if successful, login a user
+    //    //  @param String email: the email of the attempted login
+    //    //  @param String pwd: the password of the attempted login
+    //    //  returns false (if login failed) and true (if login succeeded)
+    public static boolean login(String email, String pwd)
+    {
+        //Test cases for now
+        //email = "john@gmail.com";
+        //pwd = "1234";
 
 
-    //private String profilePicURL;
-    private int userID;
+        //Make sure user entered something for email and password
+        if (email.isEmpty() || pwd.isEmpty()) {
+            return false;
+        }
 
-    private static boolean isActive;
+        //Create a JSON object for request and response
+        JSONObject loginRequestGET = new JSONObject();
+        AtomicReference<JSONObject> loginResponseGET = new AtomicReference<> (new JSONObject());
+
+        //Populate JSON request object with values passed into function
+        try {
+            loginRequestGET.put("email", email);
+            loginRequestGET.put("password", pwd);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        //Verifies email and password with the DB. Keeps response in loginResponseGET JSON object
+        loginResponseGET.set(Requester.requester("/user/login", "GET", loginRequestGET));
+
+        //Unpacks the Response message sent by the requester
+        try {
+            String user_id = loginResponseGET.get().get("user_id").toString();
+            if (user_id.equals("0")) {
+                //credentials not found, returning false
+                return false;
+            }
+            else {
+                //credentials found, returning true
+                User.setUserID(user_id);
+                User.setIsLoggedIn(true);
+                return true;
+            }
+        } catch (JSONException e) {
+            //Prints error message to console via stacktrace
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //Call logout when needing to log a user our of the app
+    public static void logout() {
+        User.setIsLoggedIn(false);
+    }
 
     public static boolean createUser(String firstName,
-                              String lastName,
-                              String email,
-                              String pwd)
+                                     String lastName,
+                                     String email,
+                                     String pwd)
     {
         //Creates new JSONObjects to pass to and receive from Requester.requester
         //  Note: responses need to be in Atomic Reference since the requester works on a different thread.
@@ -33,16 +97,6 @@ public class User {
 
         //Request info from requester to see if already exists
         responseGET.set(Requester.requester("/user", "GET", requestGET));
-            //if it returns something, then it already exists ???
-
-        //If it already exists
-        if (isActive)
-        {
-            return false;
-        }
-        //If it doesn't exist yet
-        else
-        {
 
             try {
                 //Populates the object with keys and values
@@ -67,36 +121,55 @@ public class User {
                 //Searches for "user_id" as a key in the responsePOST.
                 Object userID = responsePOST.get().get("user_id");
             } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
-            //Prints the error message to the console via stacktrace
-            e.printStackTrace();
+                //Prints the error message to the console via stacktrace
+                e.printStackTrace();
             }
 
             return true;
         }
 
 
-    }
-    //was originaaly a private void method
+
+    //was originally a private void method
     //different classes may need to call get() method
-    int get() {
+    // public int get() {
+    public static int get(
+            int userID
+    )
+    {
+        JSONObject userGetRequestGET = new JSONObject();
+        AtomicReference<JSONObject> getResponseGET = new AtomicReference<>(new JSONObject());
+        getResponseGET.set(Requester.requester("/user", "GE", userGetRequestGET));
+
+
         return 0; //for now
     }
-    private void set() {
 
-    }
-
-    public static boolean login() {
-        //fix later
-
-        return false;
-    }
-    public static boolean logout() {
-        //fix later
+    //this will check if the user exists or not
+    public static boolean verifyUser(int userID)
+    {
+        get(userID);
         return false;
     }
 
+    public static String getUserID() {
+        return userID;
+    }
 
-    //THIS SHOULD PROBABLY BE IN THE GROUP CLASS
+    public static void setUserID(String userID) {
+        User.userID = userID;
+    }
+
+    public static boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public static void setIsLoggedIn(boolean isLoggedIn) {
+        User.isLoggedIn = isLoggedIn;
+    }
+
+
+    //This should probably be in createGroup class
     public static boolean createGroup (
             int userID,
             String GroupName,
@@ -123,8 +196,9 @@ public class User {
         userGroupResponseGET.set(Requester.requester("/group", "GET",
                 userGroupRequestGET));
 
+        /*
         //If the group already exists
-        if (Group.VerifyGroup("testing"))
+        if (Group.VerifyGroup() == true)
         {
             return false;
         }
@@ -143,12 +217,12 @@ public class User {
                 userGroupRequestPOST.put("name", GroupName);
                 userGroupRequestPOST.put("description", description);
                 userGroupRequestPOST.put("color", color);
-            //should I use something other than e
+                //should I use something other than e
             } catch (JSONException e) {
                 //Prints error message to console via stacktrace
                 e.printStackTrace();
             }
-
+*/
             userGroupResponsePOST.set(Requester.requester("/group", "POST",
                     userGroupRequestPOST));
             try {
@@ -160,7 +234,7 @@ public class User {
             }
 
             return true;
-        }
+//        }
 
 
 
