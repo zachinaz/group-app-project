@@ -31,7 +31,10 @@ public class GroupRequest {
         Group currentGroup=new Group();
         Membership x = new Membership();
         User requester=new User();
-        x.PromoteMember(currentGroup.Get(), requester.get());
+
+
+        //***needs to solve datatype problem***
+        //x.PromoteMember(currentGroup.Get(), requester.get(userID));
 
         //update pending status
         //user requester to post "pending_status" to complete
@@ -40,9 +43,8 @@ public class GroupRequest {
         Group currentGroup=new Group();
         Membership x = new Membership();
         User requester=new User();
-        x.DemoteMember(currentGroup.Get(), requester.get());
+        //x.DemoteMember(currentGroup.Get(), requester.get(1));
 
         //user requester to delete group request
     }
 }
-
