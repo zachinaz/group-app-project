@@ -168,8 +168,57 @@ public class User {
         User.isLoggedIn = isLoggedIn;
     }
 
+//implementation of updateUser depends on the UI
+//put user - only user_id is necessary
+    //3 digit response means just that it worked ???
+    //no data has to e returned
+
+    //update user does it as a package or now
+    public static boolean updateUser(int userID, String firstName, String lastName,
+                                     String email, String pwd)
+    {
+        if (verifyUser(userID))
+        {
+            //
+            //Create a JSON object for request and response
+            JSONObject updateRequestPUT = new JSONObject();
+            AtomicReference<JSONObject> updateResponsePUT = new AtomicReference<> (new JSONObject());
+
+            //Populate JSON request object with values passed into function
+            try {
+                updateRequestPUT.put("first_name", firstName);
+                updateRequestPUT.put("last_name", lastName);
+                updateRequestPUT.put("email", email);
+                updateRequestPUT.put("password", pwd);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
+
+        }
+        else
+        {
+            //unable to verify
+            return false;
+        }
+
+    }
+
+    /*maybe do this later, since need email functionality
+    public static void forgotPassword(int userID)
+    {
+        verifyUser(userID);
+        updateUser(userID);
+
+
+    }
+    */
+
 
     //This should probably be in createGroup class
+    /*
     public static boolean createGroup (
             int userID,
             String GroupName,
@@ -223,6 +272,7 @@ public class User {
                 e.printStackTrace();
             }
 */
+    /*
             userGroupResponsePOST.set(Requester.requester("/group", "POST",
                     userGroupRequestPOST));
             try {
@@ -238,6 +288,83 @@ public class User {
 
 
 
-    }
+      }
+*/
 
+
+
+
+
+
+
+
+
+
+
+/*
+    //Allows a user to create a new group
+    public static boolean createGroup (
+            int userID,
+            String GroupName,
+            String description,
+            String color
+    )
+    {
+
+        //User sends createGroup requests to requester
+        //  Sends GroupName
+        //  program sends Date
+
+        //if it does not already exist, it becomes verified
+
+        //Create new JSON object to pass and receive from Requester.requester
+        JSONObject groupRequestGET = new JSONObject();
+        AtomicReference<JSONObject> groupResponseGET =
+                new AtomicReference<>(new JSONObject());
+        JSONObject groupRequestPOST = new JSONObject();
+        AtomicReference<JSONObject> groupResponsePOST =
+                new AtomicReference<>(new JSONObject());
+
+        //Request info from requester to see if already exists
+        groupResponseGET.set(Requester.requester("/group", "GET",
+                groupRequestGET));
+
+
+        //SHOULD VERIFY IF GROUP ALREADY EXISTS (BASED ON ITS NAME)
+
+
+            try {
+                //Populate object with keys and values needed for group creation
+                //  Keys (in_python), Values (inJava)
+                groupRequestPOST.put("user_ID", userID);
+                groupRequestPOST.put("name", GroupName);
+                groupRequestPOST.put("description", description);
+                groupRequestPOST.put("color", color);
+
+            } catch (JSONException e) {
+                //Prints error message to console via stacktrace
+                e.printStackTrace();
+            }
+
+            //Saves the output of Request.requester to a JSONObject responsePOST
+            groupResponsePOST.set(Requester.requester("/group", "POST",
+                    groupRequestPOST));
+
+            try {
+                //Searches for "group_id" as key in responsePOST
+                Object GroupID = groupResponsePOST.get().get("group_id");
+            } catch (JSONException e) { //catch needed since groupResopnsePOST.get can throw exception JSONException
+                //Prints error message to console via stacktrace
+                e.printStackTrace();
+            }
+
+        return true;
+
+
+
+
+    }
+*/
 }
+
+
