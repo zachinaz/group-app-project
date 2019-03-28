@@ -17,7 +17,7 @@ def getUser(user_id):
 		return 0
 
 	connection.close()
-	return list(result)
+	return result
 
 
 
@@ -45,7 +45,7 @@ def postUser(first_name, last_name, email, password):
 		return 0
 
 	connection.close()
-	return list(result)
+	return result
 
 
 
@@ -82,7 +82,7 @@ def getMembership(user_id):
 		return 0
 
 	connection.close()
-	return list(result)
+	return result
 
 # for POST MEMBERSHIP
 def postMembership(user_id, group_id):
@@ -149,9 +149,9 @@ def getLogin(email, password):
 		connection.close()
 		return 0
 
-	
+
 	connection.close()
-	return list(result)
+	return result
 
 
 # for GET GROUP
@@ -168,7 +168,7 @@ def getGroup(group_id):
 		connection.rollback()
 		return 0
 
-	
+
 	connection.close()
 	return result
 
@@ -195,7 +195,7 @@ def postGroup(leader_id, name, description, color):
 		return 0
 
 	connection.close()
-	return result.values()
+	return result
 
 
 # for DELETE GROUP
@@ -212,5 +212,3 @@ def deleteGroup(group_id):
 		connection.rollback()
 		connection.close()
 		return 0
-
-

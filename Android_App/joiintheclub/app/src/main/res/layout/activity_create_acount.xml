@@ -22,18 +22,18 @@ tools:context=".FrontEnd.Init.CreateAcount">
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/Login_Logo"
+            android:id="@+id/Log In Logo"
             android:layout_width="wrap_content"
             android:layout_height="142dp"
             android:layout_marginTop="30dp"
-            android:contentDescription="@string/log_in_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_new" />
+            app:srcCompat="@drawable/logo"
+            android:contentDescription="@string/log_in_logo" />
 
         <Button
-            android:id="@+id/sign_in_btn"
+            android:id="@+id/sign in btn"
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:layout_marginStart="50dp"
@@ -55,13 +55,13 @@ tools:context=".FrontEnd.Init.CreateAcount">
             android:layout_height="50dp"
             android:layout_marginStart="50dp"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp"
             android:gravity="bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Login_Logo">
+            app:layout_constraintTop_toBottomOf="@+id/Log In Logo">
 
             <AutoCompleteTextView
                 android:id="@+id/firstNameInput"

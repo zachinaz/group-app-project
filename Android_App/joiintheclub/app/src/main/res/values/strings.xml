@@ -21,7 +21,6 @@
     <string name="title_activity_group_main">GroupMain</string>
     <string name="title_activity_setting_main">SettingMain</string>
     <string name="title_activity_user_profile_main">UserProfileMain</string>
-    <string name="create_account">Create Account</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="create">Create</string>
