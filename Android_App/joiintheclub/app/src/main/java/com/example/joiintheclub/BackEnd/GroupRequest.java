@@ -31,7 +31,7 @@ public class GroupRequest {
         Group currentGroup=new Group();
         Membership x = new Membership();
         User requester=new User();
-        x.PromoteMember(currentGroup.Get(), requester.get());
+        //x.PromoteMember(currentGroup.Get(), requester.get());
 
         //update pending status
         //user requester to post "pending_status" to complete
@@ -40,7 +40,7 @@ public class GroupRequest {
         Group currentGroup=new Group();
         Membership x = new Membership();
         User requester=new User();
-        x.DemoteMember(currentGroup.Get(), requester.get());
+       // x.DemoteMember(currentGroup.Get(), requester.get());
 
         //user requester to delete group request
     }
