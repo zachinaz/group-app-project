@@ -17,7 +17,8 @@ def getUser(user_id):
 		return 0
 
 	connection.close()
-	return result.values()
+	finalResult = [list(i) for i in result]
+	return finalResult
 
 
 
@@ -45,7 +46,8 @@ def postUser(first_name, last_name, email, password):
 		return 0
 
 	connection.close()
-	return result.values()
+	finalResult = [list(i) for i in result]
+	return finalResult
 
 
 
@@ -151,8 +153,8 @@ def getLogin(email, password):
 
 	
 	connection.close()
-	return result
-
+	finalResult = [list(i) for i in result]
+	return finalResult
 
 
 # for GET GROUP
