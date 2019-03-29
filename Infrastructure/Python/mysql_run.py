@@ -82,7 +82,6 @@ def getMembership(user_id, member_id):
 		return 0
 
 	connection.close()
-	print("Type of return value for getMembership: ",type(result.values()))
 	return result
 
 # for POST MEMBERSHIP
@@ -107,7 +106,6 @@ def postMembership(user_id, group_id):
 	except:
 		connection.close()
 		return 0
-
 
 # for PUT MEMBERSHIP
 def updateMembership(user_id, group_id, privilege):
@@ -157,9 +155,10 @@ def getLogin(email, password):
 		connection.close()
 		return 0
 
-
+	
 	connection.close()
 	return result
+
 
 
 # for GET GROUP
@@ -174,9 +173,10 @@ def getGroup(group_id):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 0
 
-
+	
 	connection.close()
 	return result
 
@@ -193,6 +193,7 @@ def postGroup(leader_id, name, description, color):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 0
 	try:
 		cursor.execute(postGroupSelect, (name))
@@ -200,11 +201,12 @@ def postGroup(leader_id, name, description, color):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 0
 
 	connection.close()
 	return result
-
+ 
 
 # for DELETE GROUP
 def deleteGroup(group_id):
@@ -220,3 +222,119 @@ def deleteGroup(group_id):
 		connection.rollback()
 		connection.close()
 		return 0
+
+# for GET ANNOUNCEMENT
+def getAnnouncement(announcement_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select * from `announcement` where `announcement`.announcementID = %s "
+	try:
+		cursor.execute(selectStatement, (announcement_id))
+		result = cursor.fetchone()
+	except:
+		connection.close()
+		return 0
+
+	connection.close()
+	return result
+
+def postAnnouncement(user_id, content, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	postStatement = "insert into `announcement` values(default, %s, curdate(), %s, %s);"
+	selectStatement = "select `announcement`.announcementID from `announcement` where `announcement`.LeaderID = %s and `announcementID`.GroupID = %s and `announcement`.content = %s;"
+	try:
+		cursor.execute(postStatement, (user_id, content, group_id))
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement, (leader_id, group_id, content))
+		result = cursor.fetchone()
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	
+	connection.close()
+	return result
+	
+def deleteAnnouncement(announcement_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	deleteStatement = "delete from `announcement` where announcementID = %s;"
+	
+	try:
+		cursor.execute(deleteStatement, (announcement_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def getComment(comment_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select * from `comment` where `comment`.commentID = %s;"
+	try:
+		cursor.execute(selectStatement, (comment_id))
+		result = cursor.fetchone()
+	except:
+		connection.close()
+		return 0
+
+	connection.close()
+	return result 
+
+def postComment(member_id, announcement_id, content):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	postStatement = "insert into `comment` values(default, %s, curdate(), %s, %s);"
+	selectStatement = "select `comment`.commentID from `comment` where `comment`.memberID = %s and `comment`.announcementID = %s and `comment`.content = %s"
+	
+	try:
+		cursor.execute(postStatement, (member_id, content, announcement_id))
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement, (member_id, announcement_id, content))
+		result = cursor.fetchone()
+	except:
+		connection.close()
+		return 0
+	
+	connection.close()
+	return result
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
