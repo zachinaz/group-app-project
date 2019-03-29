@@ -349,14 +349,59 @@ def getMemberPrivilege(user_id, group_id):
 		connection.close()
 		return -1
 
+def getEvent(event_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	getStatement = "select DateAndTime, eventName, LeaderID, Location, Description, GroupID from `event` where EventID = %s"
+	try:
+		cursor.execute(getStatement, (event_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
 
-# def getEvent(event_id):
-	# connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
-	# cursor = connection.cursor()
+def postEvent(event_name, event_DateAndTime, leader_id, location, description, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
 	
+	postStatement = "insert into `event` values(default, %s, %s, %s, %s, %s, %s)"
+	selectStatement = "select EventID from `event` where DateAndTime = %s and Location = %s and GroupID = %s"
 	
+	try:
+		cursor.execute(postStatement,(event_DateAndTime, event_name, leader_id, location, description, group_id))
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement,(event_DateAndTime, location, group_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
 	
+def deleteEvent(event_id):	
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
 	
+	deleteStatement = "delete from `event` where EventID = %s"
+	
+	try:
+		cursor.execute(deleteStatement, (event_id))
+		connection.commit()
+		connction.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
 	
 	
 	
