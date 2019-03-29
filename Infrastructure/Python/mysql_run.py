@@ -67,13 +67,13 @@ def deleteUser(user_id):
 
 
 # for GET MEMBERSHIP
-def getMembership(user_id):
+def getMembership(user_id, member_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.userID = `user`.UserID and `membership`.UserID = %s;"
+	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.UserID = %s and `membership`.memberID = %s;"
 	try:
-		cursor.execute(getMembershipStatement, (user_id))
+		cursor.execute(getMembershipStatement, (user_id, member_id))
 		result = cursor.fetchone()
 		connection.commit()
 	except:
@@ -82,6 +82,7 @@ def getMembership(user_id):
 		return 0
 
 	connection.close()
+	print("Type of return value for getMembership: ",type(result.values()))
 	return result
 
 # for POST MEMBERSHIP
@@ -90,13 +91,20 @@ def postMembership(user_id, group_id):
 	cursor = connection.cursor()
 
 	postMembershipStatement = "insert into `membership` values(default,0, %s, %s);"
+	selectMembershipStatement = "select `membership`.memberID from `membership` where `membership`.userID = %s and `membership`.groupID = %s"
 	try:
 		cursor.execute(postMembershipStatement,(user_id, group_id))
 		connection.commit()
-		connection.close()
-		return 1
 	except:
 		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectMembershipStatement, (user_id, group_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
 		connection.close()
 		return 0
 
