@@ -318,9 +318,41 @@ def postComment(member_id, announcement_id, content):
 	
 	connection.close()
 	return result
+
+def deleteComment(comment_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
 	
+	deleteStatement = "delete from `comment` where `comment`.commentID = %s"
 	
+	try:
+		cursor.execute(deleteStatement, (comment_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def getMemberPrivilege(user_id, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
 	
+	getStatement = "select `membership`.UserPrivileges from `membership` where `membership`.userID = %s and `membership`.groupID = %s"
+	try:
+		cursor.execute(getStatement, (user_id, group_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return -1
+
+
+# def getEvent(event_id):
+	# connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	# cursor = connection.cursor()
 	
 	
 	
