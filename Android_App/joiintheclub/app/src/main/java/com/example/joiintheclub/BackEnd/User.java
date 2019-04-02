@@ -134,19 +134,19 @@ public class User {
     //different classes may need to call get() method
     // public int get() {
     public static int get(
-            int userID
+            String userID
     )
     {
         JSONObject userGetRequestGET = new JSONObject();
         AtomicReference<JSONObject> getResponseGET = new AtomicReference<>(new JSONObject());
-        getResponseGET.set(Requester.requester("/user", "GE", userGetRequestGET));
+        getResponseGET.set(Requester.requester("/user", "GET", userGetRequestGET));
 
 
         return 0; //for now
     }
 
     //this will check if the user exists or not
-    public static boolean verifyUser(int userID)
+    public static boolean verifyUser(String userID)
     {
         get(userID);
         return false;
@@ -174,7 +174,7 @@ public class User {
     //no data has to e returned
 
     //update user does it as a package or now
-    public static boolean updateUser(int userID, String firstName, String lastName,
+    public static boolean updateUser(String userID, String firstName, String lastName,
                                      String email, String pwd)
     {
         if (verifyUser(userID))
@@ -194,7 +194,8 @@ public class User {
                 e.printStackTrace();
                 return false;
             }
-
+            updateResponsePUT.set(Requester.requester("/user", "PUT",
+                    updateRequestPUT));
             return true;
 
         }
@@ -206,6 +207,47 @@ public class User {
 
     }
 
+    //rpobably not boolean
+    public static boolean getUserGroups(String userID, boolean isLoggedIn)
+    {
+        //Array for storing groupID s for groups this user is a member of
+        String userMemberGroup[];
+        //for now just 1d array containing int groupID
+        //maybe make a variable that specifies the max # of groups member can be part of
+
+        //maybe have varible specifiyng how many groups exist
+        int numExistGroups = 10;
+
+        //userID in checkMembership should be an int ???
+        //groupID in checkMembership should be int?
+        //note: groupID in group.java is also a string ??
+
+        //User is logged in
+        if (isLoggedIn == true)
+        {
+            //Get the groups of this logged in user
+            //store it in array
+            //Go through the groups ??
+            for (int checkUserM = 0; checkUserM < numExistGroups; checkUserM++)
+            {
+                //If the user is a member of a particular group
+                //change this later , just simpel code/test for now !!!!!!
+                if (Membership.CheckMembership("0001", userID) == true)
+                {
+                    //Store it in the array
+
+                }
+            }
+            return true;
+        }
+        //User is not logged in
+        else
+        {
+            return false;
+        }
+    }
+
+
     /*maybe do this later, since need email functionality
     public static void forgotPassword(int userID)
     {
@@ -216,92 +258,7 @@ public class User {
     }
     */
 
-
-    //This should probably be in createGroup class
     /*
-    public static boolean createGroup (
-            int userID,
-            String GroupName,
-            String description,
-            String color
-    )
-    {
-
-        //User sends createGroup requests to requester
-        //  Sends GroupName
-        //  program sends Date
-
-        //if it does not already exist, it becomes verified
-
-        //Create new JSON object to pass and receive from Requester.requester
-        JSONObject userGroupRequestGET = new JSONObject();
-        AtomicReference<JSONObject> userGroupResponseGET =
-                new AtomicReference<>(new JSONObject());
-        JSONObject userGroupRequestPOST = new JSONObject();
-        AtomicReference<JSONObject> userGroupResponsePOST =
-                new AtomicReference<>(new JSONObject());
-
-        //Request info from requester to see if already exists
-        userGroupResponseGET.set(Requester.requester("/group", "GET",
-                userGroupRequestGET));
-
-        /*
-        //If the group already exists
-        if (Group.VerifyGroup() == true)
-        {
-            return false;
-        }
-
-        //If it does not exist yet
-        else
-        {
-
-            try {
-                //Populate object with keys and values
-                //Keys (in_python), Values (inJava)
-
-                //below lines have errors when uncommented
-                //  put - unhandled exception JSON
-                userGroupRequestPOST.put("user_ID", userID);
-                userGroupRequestPOST.put("name", GroupName);
-                userGroupRequestPOST.put("description", description);
-                userGroupRequestPOST.put("color", color);
-                //should I use something other than e
-            } catch (JSONException e) {
-                //Prints error message to console via stacktrace
-                e.printStackTrace();
-            }
-*/
-    /*
-            userGroupResponsePOST.set(Requester.requester("/group", "POST",
-                    userGroupRequestPOST));
-            try {
-                //Searches for "group_id" as key in responsePOST
-                Object GroupID = userGroupResponsePOST.get().get("group_id");
-            } catch (JSONException e) { //catch needed since userGroupResopnsePOST.get can throw exception JSONException
-                //Prints error message to console via stacktrace
-                e.printStackTrace();
-            }
-
-            return true;
-//        }
-
-
-
-      }
-*/
-
-
-
-
-
-
-
-
-
-
-
-/*
     //Allows a user to create a new group
     public static boolean createGroup (
             int userID,
