@@ -402,6 +402,22 @@ def deleteEvent(event_id):
 		connection.close()
 		return 0
 
+def getPoll(poll_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select LeaderID, question, ResponseOptions, PollDescription, GroupID, DateAndTime from `poll repository` where PollID = %s"
+	
+	try:
+		cursor.execute(selectStatement, (poll_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+	
+
 def postPoll(leader_id, pollQuestion, pollResponseOptions, pollDescription, group_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
@@ -438,6 +454,21 @@ def deletePoll(poll_id);
 		return 1
 	except:
 		connection.rollback()
+		connection.close()
+		return 0
+
+def getPollResponse(response_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select memberID, userResponse, DateAndTime, groupID, pollID from `poll response` where ResponseID = %s"
+	
+	try:
+		cursor.execute(selectStatement, (response_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
 		connection.close()
 		return 0
 
