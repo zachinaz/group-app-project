@@ -187,6 +187,7 @@ def postGroup(leader_id, name, description, color):
 	cursor = connection.cursor()
 
 	postGroupInsert = "insert into `record` values(default, %s, %s, %s, %s);"
+	postGroupLeader = "insert into `membership` values(default, 1, %s, (select `record`.GroupID from `record` where `record`.GroupName = %s))"
 	postGroupSelect = "select `record`.GroupID from `record` where `record`.GroupName = %s;"
 	try:
 		cursor.execute(postGroupInsert, (name, leader_id, color, description))
@@ -196,11 +197,16 @@ def postGroup(leader_id, name, description, color):
 		connection.close()
 		return 0
 	try:
-		cursor.execute(postGroupSelect, (name))
-		result = cursor.fetchone()
+		cursor.execute(postGroupLeader, (leader_id, name))
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(postGroupSelect, (name))
+		result = cursor.fetchone()
+	except:
 		connection.close()
 		return 0
 
