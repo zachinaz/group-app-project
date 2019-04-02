@@ -15,22 +15,17 @@ tools:context=".FrontEnd.Init.CreateAcount">
 
 <!-- Login progress -->
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:src="@drawable/logo_new" />
+
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/email_login_form"
+        android:id="@+id/create_account_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/Login_Logo"
-            android:layout_width="wrap_content"
-            android:layout_height="142dp"
-            android:layout_marginTop="30dp"
-            android:contentDescription="@string/log_in_logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_new" />
 
         <Button
             android:id="@+id/sign_in_btn"
@@ -61,7 +56,7 @@ tools:context=".FrontEnd.Init.CreateAcount">
             android:gravity="bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Login_Logo">
+            app:layout_constraintTop_toTopOf="parent">
 
             <AutoCompleteTextView
                 android:id="@+id/firstNameInput"
@@ -173,19 +168,21 @@ tools:context=".FrontEnd.Init.CreateAcount">
             android:layout_height="match_parent"
             android:layout_marginStart="50dp"
             android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp"
             android:gravity="bottom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteY="522dp">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+            tools:ignore="MissingConstraints">
 
             <EditText
                 android:id="@+id/confirmPasswardInput"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:autoText="false"
                 android:hint="@string/prompt_password"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"

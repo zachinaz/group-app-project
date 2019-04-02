@@ -65,6 +65,9 @@ public class Requester {
                     System.out.println(con.getResponseMessage());
                     //Unsuccessful response
                     break;
+                case 500:
+                    //Internal Server Error response
+                    break;
                 case 200:
                     //Successful response
                     StringBuilder response = new StringBuilder();

@@ -17,7 +17,7 @@ def getUser(user_id):
 		return 0
 
 	connection.close()
-	return list(result)
+	return result
 
 
 
@@ -45,7 +45,7 @@ def postUser(first_name, last_name, email, password):
 		return 0
 
 	connection.close()
-	return list(result)
+	return result
 
 
 
@@ -67,13 +67,13 @@ def deleteUser(user_id):
 
 
 # for GET MEMBERSHIP
-def getMembership(user_id):
+def getMembership(user_id, member_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.userID = `user`.UserID and `membership`.UserID = %s;"
+	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.UserID = %s and `membership`.memberID = %s;"
 	try:
-		cursor.execute(getMembershipStatement, (user_id))
+		cursor.execute(getMembershipStatement, (user_id, member_id))
 		result = cursor.fetchone()
 		connection.commit()
 	except:
@@ -82,7 +82,7 @@ def getMembership(user_id):
 		return 0
 
 	connection.close()
-	return list(result)
+	return result
 
 # for POST MEMBERSHIP
 def postMembership(user_id, group_id):
@@ -90,16 +90,22 @@ def postMembership(user_id, group_id):
 	cursor = connection.cursor()
 
 	postMembershipStatement = "insert into `membership` values(default,0, %s, %s);"
+	selectMembershipStatement = "select `membership`.memberID from `membership` where `membership`.userID = %s and `membership`.groupID = %s"
 	try:
 		cursor.execute(postMembershipStatement,(user_id, group_id))
 		connection.commit()
-		connection.close()
-		return 1
 	except:
 		connection.rollback()
 		connection.close()
 		return 0
-
+	try:
+		cursor.execute(selectMembershipStatement, (user_id, group_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
 
 # for PUT MEMBERSHIP
 def updateMembership(user_id, group_id, privilege):
@@ -151,7 +157,8 @@ def getLogin(email, password):
 
 	
 	connection.close()
-	return list(result)
+	return result
+
 
 
 # for GET GROUP
@@ -166,6 +173,7 @@ def getGroup(group_id):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 0
 
 	
@@ -185,6 +193,7 @@ def postGroup(leader_id, name, description, color):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 0
 	try:
 		cursor.execute(postGroupSelect, (name))
@@ -192,11 +201,12 @@ def postGroup(leader_id, name, description, color):
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
 		return 0
 
 	connection.close()
-	return result.values()
-
+	return result
+ 
 
 # for DELETE GROUP
 def deleteGroup(group_id):
@@ -213,4 +223,292 @@ def deleteGroup(group_id):
 		connection.close()
 		return 0
 
+# for GET ANNOUNCEMENT
+def getAnnouncement(announcement_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select * from `announcement` where `announcement`.announcementID = %s "
+	try:
+		cursor.execute(selectStatement, (announcement_id))
+		result = cursor.fetchone()
+	except:
+		connection.close()
+		return 0
 
+	connection.close()
+	return result
+
+def postAnnouncement(user_id, content, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	postStatement = "insert into `announcement` values(default, %s, curdate(), %s, %s);"
+	selectStatement = "select `announcement`.announcementID from `announcement` where `announcement`.LeaderID = %s and `announcementID`.GroupID = %s and `announcement`.content = %s;"
+	try:
+		cursor.execute(postStatement, (user_id, content, group_id))
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement, (leader_id, group_id, content))
+		result = cursor.fetchone()
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	
+	connection.close()
+	return result
+	
+def deleteAnnouncement(announcement_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	deleteStatement = "delete from `announcement` where announcementID = %s;"
+	
+	try:
+		cursor.execute(deleteStatement, (announcement_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def getComment(comment_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select * from `comment` where `comment`.commentID = %s;"
+	try:
+		cursor.execute(selectStatement, (comment_id))
+		result = cursor.fetchone()
+	except:
+		connection.close()
+		return 0
+
+	connection.close()
+	return result 
+
+def postComment(member_id, announcement_id, content):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	postStatement = "insert into `comment` values(default, %s, curdate(), %s, %s);"
+	selectStatement = "select `comment`.commentID from `comment` where `comment`.memberID = %s and `comment`.announcementID = %s and `comment`.content = %s"
+	
+	try:
+		cursor.execute(postStatement, (member_id, content, announcement_id))
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement, (member_id, announcement_id, content))
+		result = cursor.fetchone()
+	except:
+		connection.close()
+		return 0
+	
+	connection.close()
+	return result
+
+def deleteComment(comment_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	deleteStatement = "delete from `comment` where `comment`.commentID = %s"
+	
+	try:
+		cursor.execute(deleteStatement, (comment_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def getMemberPrivilege(user_id, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	getStatement = "select `membership`.UserPrivileges from `membership` where `membership`.userID = %s and `membership`.groupID = %s"
+	try:
+		cursor.execute(getStatement, (user_id, group_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return -1
+
+def getEvent(event_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	getStatement = "select DateAndTime, eventName, LeaderID, Location, Description, GroupID from `event` where EventID = %s"
+	try:
+		cursor.execute(getStatement, (event_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+
+def postEvent(event_name, event_DateAndTime, leader_id, location, description, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	postStatement = "insert into `event` values(default, %s, %s, %s, %s, %s, %s)"
+	selectStatement = "select EventID from `event` where DateAndTime = %s and Location = %s and GroupID = %s"
+	
+	try:
+		cursor.execute(postStatement,(event_DateAndTime, event_name, leader_id, location, description, group_id))
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement,(event_DateAndTime, location, group_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+	
+def deleteEvent(event_id):	
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	deleteStatement = "delete from `event` where EventID = %s"
+	
+	try:
+		cursor.execute(deleteStatement, (event_id))
+		connection.commit()
+		connction.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def getPoll(poll_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select LeaderID, question, ResponseOptions, PollDescription, GroupID, DateAndTime from `poll repository` where PollID = %s"
+	
+	try:
+		cursor.execute(selectStatement, (poll_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+	
+
+def postPoll(leader_id, pollQuestion, pollResponseOptions, pollDescription, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	postStatement = "insert into `poll repository` values(default, %s, %s, %s, %s, %s, curdate());"
+	selectStatement = "select PollID from `poll repository` where LeaderID = %s and GroupID = %s and question = %s"
+	
+	try:
+		cursor.execute(postStatement,(leader_id, pollQuestion, pollResponseOptions, pollDescription, group_id))
+		connction.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement,(leader_id, group_id, pollQuestion))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+	
+def deletePoll(poll_id);
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	deleteStatement = "delete from `poll repository` where PollID = %s"
+	
+	try:
+		cursor.execute(deleteStatement,(poll_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def getPollResponse(response_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select memberID, userResponse, DateAndTime, groupID, pollID from `poll response` where ResponseID = %s"
+	
+	try:
+		cursor.execute(selectStatement, (response_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+
+def postPollResponse(member_id, userResponse, group_id, poll_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	postStatement = "insert into `poll response` values(default, %s, %s, curdate(), %s, %s);"
+	selectStatement = "select ResponseID from `poll repository` where PollID = %s and memberID = %s"
+	
+	try:
+		cursor.execute(postStatement,(member_id, userResponse, group_id, poll_id))
+		connection.commit()
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(selectStatement,(poll_id, member_id))
+		result = cursor.fetchone()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+	
+def deletePollResponse(response_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	deleteStatement = "delete from `poll response` where ResponseID = %s"
+	
+	try:
+		cursor.execute(deleteStatement, (response_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+	
+	

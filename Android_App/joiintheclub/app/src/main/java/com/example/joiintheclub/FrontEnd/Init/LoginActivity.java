@@ -28,7 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.joiintheclub.FrontEnd.SearchGroup.Search;
+import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
 import com.example.joiintheclub.R;
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
-                Intent intent = new Intent(LoginActivity.this, Search.class);
+                Intent intent = new Intent(LoginActivity.this, SearchMain.class);
                 startActivity(intent);
             }
         });
