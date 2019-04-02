@@ -25,12 +25,19 @@ def user():
             #SQL SELECT user_id --> first_name, last_name, email, password, profile_pic
             userGET = getUser(user_id)
             print(userGET)
-            first_name = userGET["first_name"]
-            last_name = userGET["last_name"]
-            email = userGET["email"]
-            password = userGET["password"]
-            resp = {"request_type":"GET", "first_name":f"{first_name}", "last_name":f"{last_name}", "email":f"{email}", "password":f"{password}"}
-            status = 200
+            if userGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif userGET == None:
+                resp = {"err": "User not found in database"}
+                status = 204
+            else:
+                first_name = userGET["first_name"]
+                last_name = userGET["last_name"]
+                email = userGET["email"]
+                password = userGET["password"]
+                resp = {"request_type":"GET", "first_name":f"{first_name}", "last_name":f"{last_name}", "email":f"{email}", "password":f"{password}"}
+                status = 200
 
     #--POST--
     # @json: {first_name, last_name, email, password}
@@ -50,9 +57,14 @@ def user():
             #SQL INSERT first_name, last_name, email, password
             userPOST= postUser(first_name, last_name, email, password)
             print(userPOST)
-            user_id = userPOST["user_id"]
-            resp = {"request_type":"POST","message":f"User {user_id} Successfully Created"}
-            status = 200
+            #If Database returned an error
+            if userPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                user_id = userPOST["user_id"]
+                resp = {"request_type":"POST","message":f"User {user_id} Successfully Created"}
+                status = 200
 
     #--PUT--
     # @json: {user_id, first_name, last_name, email, password} , returns: {first_name, last_name, email, password}
@@ -93,8 +105,13 @@ def user():
             #SQL DELETE USER on user_id
             userDEL = deleteUser(user_id)
             print(userDEL)
-            resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted"}
-            status = 200
+            #If Database returned an error
+            if userDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted"}
+                status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/user--
@@ -104,6 +121,8 @@ def user():
 def membership():
     resp = {}
     status = 404
+
+    group_id = []
 
     #--GET--
     if request.method == 'GET':
@@ -117,9 +136,15 @@ def membership():
         else:
             user_id = json_data.get("user_id")
             #SQL SELECT user_id --> group_id[]
-            group_id = "3" #Need to allow this variable to be a list
-            resp = {"request_type":"GET", "message":f"User {user_id} a member of Group {group_id}", "group_id": f"{group_id}"}
-            status = 200
+            membershipGET = getMembership(user_id)
+            print(membershipGET)
+            if membershipGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                group_id = membershipGET["group_id"] #Need to allow this variable to be a list
+                resp = {"request_type":"GET", "message":f"User {user_id} a member of Group {group_id}", "group_id": f"{group_id}"}
+                status = 200
 
     #--POST--
     if request.method == 'POST':
@@ -134,6 +159,8 @@ def membership():
             user_id = json_data.get("user_id")
             group_id = json_data.get("group_id")
             #SQL INSERT user_id, group_id in membership
+            membershipPOST = postMembership(user_id, group_id)
+            print(membershipPOST)
             resp = {"request_type":"POST", "message":f"Membership created of User {user_id} in Group {group_id}"}
             status = 200
 
@@ -151,6 +178,8 @@ def membership():
             group_id = json_data.get("group_id")
             privilege = json_data.get("privilege")
             #SQL UPDATE privilege on user_id, group_id
+            membershipPUT = updateMembership(user_id, group_id, privilege)
+            print(membershipPUT)
             resp = {"request_type":"PUT", "message":f"User {user_id} in Group {group_id} privileges updated"}
             status = 200
 
@@ -167,18 +196,54 @@ def membership():
             user_id = json_data.get("user_id")
             group_id = json_data.get("group_id")
             #SQL DELETE membership on user_id, group_id
+            membershipDEL = deleteMembership(user_id, group_id)
+            print(membershipDEL)
             resp = {"request_type":"DELETE", "message":f"User {user_id}\'s membership in Group {group_id} has been deleted"}
             status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/user/membership--
 
+#--/api/user/membership/privilege--
+@app.route('/api/user/membership/privilege', methods=['GET'])
+def privilege():
+    resp = {}
+    status = 404
+
+    #--GET--
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            group_id = json_data.get("group_id")
+            #SQL SELECT user_id, group_id --> return true or false or privilege level
+            privilegeGET = getMemberPrivilege(user_id, group_id)
+            print(privilegeGET)
+            if privilegeGET == -1:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif privilege == None:
+                resp = {"err": "Membership not found in Database"}
+                status = 204
+            else:
+                privilege = privilegeGET["privilege"]
+                resp = {"request_type":"GET", "message":f"User {user_id} is a member of Group {group_id}", "privilege": f"{privilege}"}
+                status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/user/membership/privilege--
+
 #--/api/user/login--
 @app.route('/api/user/login', methods=['GET'])
 def login():
     resp = {}
     status = 404
-    login = True #SHOULD BE FALSE ONCE SQL IS ADDED!!!!!!!!!!
 
     #--GET--
     # @json: {email, password} , returns user_id
@@ -196,13 +261,17 @@ def login():
             #SQL SELECT email, password --> user_id
             loginGET = getLogin(email, password)
             print(loginGET)
-            user_id = loginGET["user_id"]
-            if login:
+            if loginGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif loginGET == None:
+                resp = {"err": "Credentials not found in Database"}
+                status = 204
+            else:
+                user_id = loginGET["user_id"]
                 resp = {"request_type":"GET", "message":f"User {user_id} Successfully Logged In", "user_id": f"{user_id}"}
                 status = 200
-            else:
-                resp = {"err: Credentials are invalid"}
-                status = 401
+
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/user/login--
 
@@ -225,12 +294,21 @@ def group():
         else:
             group_id = json_data.get("group_id")
             #SQL SELECT group_id --> name, description, color
-            name = "Test Group"
-            description = "Four score and twenty years ago..."
-            color = "Blue"
-            leader_id = "12"
-            resp = {"request_type":"GET", "name": f"{name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
-            status = 200
+            groupGET = getGroup(group_id)
+            print(groupGET)
+            if groupGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif groupGET == None:
+                resp = {"err": "Group not found in Database"}
+                status = 204
+            else:
+                name = groupGET["name"]
+                description = groupGET["description"]
+                color = groupGET["color"]
+                leader_id = groupGET["leader_id"]
+                resp = {"request_type":"GET", "name": f"{name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
+                status = 200
 
     #--POST--
     # @json: {user_id, name, description, color} , returns group_id
@@ -248,9 +326,15 @@ def group():
             description = json_data.get("description")
             color = json_data.get("color")
             #SQL INSERT leader_id, name, description, color
-            group_id = "3"
-            resp = {"request_type":"POST", "message": f"Group {group_id} Successfully Created", "group_id": f"{group_id}"}
-            status = 200
+            groupPOST = postGroup(leader_id, name, description, color)
+            print(groupPOST)
+            if groupPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                group_id = groupPOST["group_id"]
+                resp = {"request_type":"POST", "message": f"Group {group_id} Successfully Created", "group_id": f"{group_id}"}
+                status = 200
 
     #--PUT--
     # @json: {group_id, name, description, color}
@@ -287,8 +371,14 @@ def group():
         else:
             group_id = json_data.get("group_id")
             #SQL DELETE GROUP on group_id
-            resp = {"request_type":"DELETE","message":f"Group {group_id} Successfully Deleted"}
-            status = 200
+            groupDEL = deleteGroup(group_id)
+            print(groupDEL)
+            if groupDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE","message":f"Group {group_id} Successfully Deleted"}
+                status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/group--
@@ -351,8 +441,7 @@ def member_request():
             #SQL insert group_id, user_id, group_name
             resp = {"request_type":"POST", "message":"Successfully created Request"}
             status = 200
-
-#END OF --/api/group--
+#END OF --/api/group/request--
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050)
