@@ -10,9 +10,7 @@ def getUser(user_id):
 	try:
 		cursor.execute(getUserStatement, (user_id))
 		result = cursor.fetchone()
-		connection.commit()
 	except:
-		connection.rollback()
 		connection.close()
 		return 0
 
