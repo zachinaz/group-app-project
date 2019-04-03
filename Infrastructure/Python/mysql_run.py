@@ -187,6 +187,7 @@ def postGroup(leader_id, name, description, color):
 	cursor = connection.cursor()
 
 	postGroupInsert = "insert into `record` values(default, %s, %s, %s, %s);"
+	postGroupLeader = "insert into `membership` values(default, 1, %s, (select `record`.GroupID from `record` where `record`.GroupName = %s))"
 	postGroupSelect = "select `record`.GroupID from `record` where `record`.GroupName = %s;"
 	try:
 		cursor.execute(postGroupInsert, (name, leader_id, color, description))
@@ -196,11 +197,16 @@ def postGroup(leader_id, name, description, color):
 		connection.close()
 		return 0
 	try:
-		cursor.execute(postGroupSelect, (name))
-		result = cursor.fetchone()
+		cursor.execute(postGroupLeader, (leader_id, name))
 		connection.commit()
 	except:
 		connection.rollback()
+		connection.close()
+		return 0
+	try:
+		cursor.execute(postGroupSelect, (name))
+		result = cursor.fetchone()
+	except:
 		connection.close()
 		return 0
 
@@ -213,7 +219,7 @@ def deleteGroup(group_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	deleteGroupStatement = "delete from `record` where `record`.GroupID = %s;"
+	deleteGroupStatement = "delete from `record` where GroupID = %s;"
 	try:
 		cursor.execute(deleteGroupStatement, (group_id))
 		connection.close()
@@ -515,11 +521,11 @@ def getRequest(leader_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	selectStatement = ""
+	selectStatement = "select `request`.RequestID, `request`.GroupID, `request`.UserID from `request`, `record` where `request`.GroupID = `record`.GroupID and `record`.LeaderID = %s;"
 
 	try:
-		cursor.execute(selectStatement, ())
-		result = cursor.fetchone()
+		cursor.execute(selectStatement, (leader_id))
+		result = cursor.fetchall()
 		connection.close()
 		return result
 	except:
