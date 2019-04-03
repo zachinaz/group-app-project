@@ -38,9 +38,7 @@ def postUser(first_name, last_name, email, password):
 	try:
 		cursor.execute(postUserSelect, (first_name, last_name))
 		result = cursor.fetchone()
-		connection.commit()
 	except:
-		connection.rollback()
 		connection.close()
 		return 0
 
@@ -149,9 +147,7 @@ def getLogin(email, password):
 	try:
 		cursor.execute(selectUser, (email, password))
 		result = cursor.fetchone()
-		connection.commit()
 	except:
-		connection.rollback()
 		connection.close()
 		return 0
 
@@ -170,9 +166,7 @@ def getGroup(group_id):
 	try:
 		cursor.execute(getGroupStatement, (group_id))
 		result = cursor.fetchone()
-		connection.commit()
 	except:
-		connection.rollback()
 		connection.close()
 		return 0
 
@@ -222,6 +216,7 @@ def deleteGroup(group_id):
 	deleteGroupStatement = "delete from `record` where GroupID = %s;"
 	try:
 		cursor.execute(deleteGroupStatement, (group_id))
+		connection.commit()
 		connection.close()
 		return 1
 	except:
@@ -261,9 +256,7 @@ def postAnnouncement(user_id, content, group_id):
 	try:
 		cursor.execute(selectStatement, (leader_id, group_id, content))
 		result = cursor.fetchone()
-		connection.commit()
 	except:
-		connection.rollback()
 		connection.close()
 		return 0
 
