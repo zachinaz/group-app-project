@@ -27,7 +27,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.joiintheclub.BackEnd.User;
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
 import com.example.joiintheclub.R;
 
@@ -95,14 +97,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        final Button logIn =  findViewById(R.id.sign_in_btn);
+        final Button logIn =  findViewById(R.id.createAccountBtn);
 
         logIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
-                Intent intent = new Intent(LoginActivity.this, SearchMain.class);
-                startActivity(intent);
+               // attemptLogin();
+                String email = "stephen.e.styffe@biola.edu";
+                String password ="b@dp@$$w0rd";
+
+                if(User.login(email,password)) {
+                    Intent intent = new Intent(LoginActivity.this, SearchMain.class);
+                    startActivity(intent);
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG);
             }
         });
 
@@ -206,12 +215,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    private boolean isEmailValid(String email) {
+    static boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
-    private boolean isPasswordValid(String password) {
+    static boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
     }

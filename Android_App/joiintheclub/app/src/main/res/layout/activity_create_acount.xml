@@ -28,7 +28,7 @@ tools:context=".FrontEnd.Init.CreateAcount">
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/sign_in_btn"
+            android:id="@+id/createAccountBtn"
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:layout_marginStart="50dp"
@@ -59,9 +59,9 @@ tools:context=".FrontEnd.Init.CreateAcount">
             app:layout_constraintTop_toTopOf="parent">
 
             <AutoCompleteTextView
-                android:id="@+id/firstNameInput"
+                android:id="@+id/createFirstName"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
 
                 android:gravity="center_vertical"
                 android:hint="@string/first_name"
@@ -87,17 +87,18 @@ tools:context=".FrontEnd.Init.CreateAcount">
             app:layout_constraintTop_toBottomOf="@+id/UserInputLayer1"
             tools:ignore="MissingConstraints">
 
-            <EditText
-                android:id="@+id/lastNameInput"
+            <AutoCompleteTextView
+                android:id="@+id/createLastName"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:hint="@string/last_name"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                tools:ignore="TextViewEdits" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -117,10 +118,10 @@ tools:context=".FrontEnd.Init.CreateAcount">
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
             tools:ignore="MissingConstraints">
 
-            <EditText
-                android:id="@+id/emailInput"
+            <AutoCompleteTextView
+                android:id="@+id/createEmail"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:hint="@string/email"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -128,7 +129,7 @@ tools:context=".FrontEnd.Init.CreateAcount">
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
-                tools:ignore="TextFields" />
+                tools:ignore="TextFields,TextViewEdits" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -148,10 +149,10 @@ tools:context=".FrontEnd.Init.CreateAcount">
             app:layout_constraintTop_toBottomOf="@+id/UserInputLayer3"
             tools:ignore="MissingConstraints">
 
-            <EditText
-                android:id="@+id/PasswardInput"
+            <AutoCompleteTextView
+                android:id="@+id/createPassward"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:hint="@string/prompt_password"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -178,10 +179,10 @@ tools:context=".FrontEnd.Init.CreateAcount">
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
             tools:ignore="MissingConstraints">
 
-            <EditText
-                android:id="@+id/confirmPasswardInput"
+            <AutoCompleteTextView
+                android:id="@+id/createConfirmPassward"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:autoText="false"
                 android:hint="@string/prompt_password"
                 android:imeActionId="6"

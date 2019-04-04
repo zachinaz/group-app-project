@@ -33,7 +33,7 @@
             app:srcCompat="@drawable/logo_new" />
 
         <Button
-            android:id="@+id/sign_in_btn"
+            android:id="@+id/createAccountBtn"
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:layout_marginStart="50dp"
@@ -111,7 +111,7 @@
             android:layout_marginBottom="20dp"
             android:background="@null"
             android:text="@string/title_activity_create_acount"
-            app:layout_constraintBottom_toTopOf="@+id/sign_in_btn"
+            app:layout_constraintBottom_toTopOf="@+id/createAccountBtn"
             app:layout_constraintEnd_toEndOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

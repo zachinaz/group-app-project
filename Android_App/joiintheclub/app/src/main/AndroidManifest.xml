@@ -13,13 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
+        <activity
+            android:name=".FrontEnd.Group.cardView"
+            android:label="@string/title_activity_card_view"></activity>
         <activity
             android:name=".FrontEnd.Init.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".FrontEnd.SearchGroup.SearchMain"
-
             android:label="@string/search" />
         <activity
             android:name=".FrontEnd.UserProfile.UserProfileMain"
@@ -31,12 +32,8 @@
             android:name=".FrontEnd.Group.GroupMain"
             android:label="@string/title_activity_group_main" />
         <activity
-            android:name=".FrontEnd.SearchGroup.SearchMain"
-            android:label="@string/title_activity_search_main" />
-        <activity
             android:name=".FrontEnd.Init.CreateAcount"
             android:label="@string/title_activity_create_acount" />
-
         <activity android:name=".FrontEnd.Init.LoadScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

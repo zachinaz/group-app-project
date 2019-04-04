@@ -44,4 +44,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_search_test">SearchTest</string>
     <string name="title_activity_m">activity_m</string>
+    <string name="edict">Edict</string>
+    <string name="title_activity_card_view">cardView</string>
 </resources>
