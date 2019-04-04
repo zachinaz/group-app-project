@@ -74,7 +74,7 @@ public class UserProfileMain extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.profileNav);
+        DrawerLayout drawer =  findViewById(R.id.profileNav);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

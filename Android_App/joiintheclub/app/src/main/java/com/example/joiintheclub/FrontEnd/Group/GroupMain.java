@@ -9,7 +9,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
@@ -21,10 +24,26 @@ import com.example.joiintheclub.R;
 public class GroupMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    RecyclerView.Adapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_main);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        adapter = new RecycleAdapter();
+        recyclerView.setAdapter(adapter);
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.Gbar);
         setSupportActionBar(toolbar);
 
@@ -38,6 +57,14 @@ public class GroupMain extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.groupNav);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.activity_main_drawer,menu);
+        return true;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -75,7 +102,7 @@ public class GroupMain extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.groupNav);
+        DrawerLayout drawer =  findViewById(R.id.groupNav);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

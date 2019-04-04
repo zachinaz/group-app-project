@@ -8,7 +8,8 @@
     android:layout_height="match_parent"
     tools:context=".FrontEnd.SearchGroup.SearchMain"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    tools:ignore="ExtraText">
 
 
 
@@ -49,27 +50,35 @@
         </android.support.design.widget.AppBarLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:paddingTop="16dp"
+            android:paddingRight="16dp"
             android:paddingBottom="16dp"
-            tools:context=".FrontEnd.Group.cardView">
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/group_icon"
+            tools:context=".FrontEnd.Group.GroupMain">
 
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                tools:context=".FrontEnd.Group.cardView" >
-            </android.support.design.widget.CoordinatorLayout>
+                tools:context=".FrontEnd.Group.GroupMain"></android.support.design.widget.CoordinatorLayout>
 
-            <view class="android.support.v7.app.AlertController$RecycleListView"
+            <view
                 android:id="@+id/recycle_view"
+                class="android.support.v7.widget.RecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-            </view>
+                android:layout_height="match_parent"></view>
 
         </RelativeLayout>
 

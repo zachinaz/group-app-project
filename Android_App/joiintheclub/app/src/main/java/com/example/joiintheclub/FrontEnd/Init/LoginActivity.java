@@ -106,12 +106,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 String email = "stephen.e.styffe@biola.edu";
                 String password ="b@dp@$$w0rd";
 
-                if(User.login(email,password)) {
-                    Intent intent = new Intent(LoginActivity.this, SearchMain.class);
-                    startActivity(intent);
+                Intent intent = new Intent(LoginActivity.this, SearchMain.class);
+                startActivity(intent);
+
+               /* if(User.login(email,password)) {
+
                 }
                 else
-                    Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG);*/
             }
         });
 

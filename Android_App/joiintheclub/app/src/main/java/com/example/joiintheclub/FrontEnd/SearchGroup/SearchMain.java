@@ -75,7 +75,7 @@ public class SearchMain extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.search_drawer);
+        DrawerLayout drawer = findViewById(R.id.search_drawer);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
