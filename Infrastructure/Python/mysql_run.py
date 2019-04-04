@@ -53,9 +53,10 @@ def deleteUser(user_id):
 	deleteUserStatement = "delete from `user` where `user`.userID = %s;"
 	try:
 		cursor.execute(deleteUserStatement, (user_id))
+		result = cursor.rowcount
 		connection.commit()
 		connection.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
@@ -128,8 +129,10 @@ def deleteMembership(user_id, group_id):
 	deleteMembershipStatement = "delete from `membership` where `membership`.UserID = %s and `membership`.GroupID = %s;"
 	try:
 		cursor.execute(deleteMembershipStatement, (user_id, group_id))
+		result = cursor.rowcount
+		connection.commit()
 		connection.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
@@ -214,9 +217,10 @@ def deleteGroup(group_id):
 	deleteGroupStatement = "delete from `record` where GroupID = %s;"
 	try:
 		cursor.execute(deleteGroupStatement, (group_id))
+		result = cursor.rowcount
 		connection.commit()
 		connection.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
@@ -269,9 +273,10 @@ def deleteAnnouncement(announcement_id):
 
 	try:
 		cursor.execute(deleteStatement, (announcement_id))
+		result = cursor.rowcount
 		connection.commit()
 		connection.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
@@ -324,9 +329,10 @@ def deleteComment(comment_id):
 
 	try:
 		cursor.execute(deleteStatement, (comment_id))
+		result = cursor.rowcount
 		connection.commit()
 		connection.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
@@ -391,9 +397,10 @@ def deleteEvent(event_id):
 
 	try:
 		cursor.execute(deleteStatement, (event_id))
+		result = cursor.rowcount
 		connection.commit()
 		connction.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
@@ -446,9 +453,10 @@ def deletePoll(poll_id):
 
 	try:
 		cursor.execute(deleteStatement,(poll_id))
+		result = cursor.rowcount
 		connection.commit()
 		connection.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
@@ -500,9 +508,10 @@ def deletePollResponse(response_id):
 
 	try:
 		cursor.execute(deleteStatement, (response_id))
+		result = cursor.rowcount
 		connection.commit()
 		connection.close()
-		return 1
+		return result
 	except:
 		connection.rollback()
 		connection.close()
