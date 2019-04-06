@@ -232,7 +232,7 @@ def privilege():
                 resp = {"err": "Membership not found in Database"}
                 status = 204
             else:
-                privilege = privilegeGET["privilege"]
+                privilege = privilegeGET["UserPrivileges"]
                 resp = {"request_type":"GET", "message":f"User {user_id} is a member of Group {group_id}", "privilege": f"{privilege}"}
                 status = 200
 
@@ -332,7 +332,7 @@ def group():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             else:
-                group_id = groupPOST["group_id"]
+                group_id = groupPOST["GroupID"]
                 resp = {"request_type":"POST", "message": f"Group {group_id} Successfully Created", "group_id": f"{group_id}"}
                 status = 200
 

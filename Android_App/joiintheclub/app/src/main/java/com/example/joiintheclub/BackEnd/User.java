@@ -95,9 +95,6 @@ public class User {
         AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
         //????? dict = <firstName,lastName>;
 
-        //Request info from requester to see if already exists
-        responseGET.set(Requester.requester("/user", "GET", requestGET));
-
             try {
                 //Populates the object with keys and values
                 //  e.g. "first_name": "Jim"
