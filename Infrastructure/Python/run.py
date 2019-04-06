@@ -142,7 +142,7 @@ def membership():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             else:
-                group_id = membershipGET["group_id"] #Need to allow this variable to be a list
+                group_id = [{membershipGET["group_id"]}] #Need to allow this variable to be a list
                 resp = {"request_type":"GET", "message":f"User {user_id} a member of Group {group_id}", "group_id": f"{group_id}"}
                 status = 200
 
@@ -228,7 +228,7 @@ def privilege():
             if privilegeGET == -1:
                 resp = {"err": "Database could not perform action"}
                 status = 418
-            elif privilege == None:
+            elif privilegeGET == None:
                 resp = {"err": "Membership not found in Database"}
                 status = 204
             else:

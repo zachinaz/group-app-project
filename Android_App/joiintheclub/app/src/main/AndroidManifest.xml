@@ -13,11 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".FrontEnd.Group.announcement"></activity>
-        <activity android:name=".FrontEnd.Group.GroupDetail" />
         <activity
-            android:name=".FrontEnd.Group.RecycleAdapter"
-            android:label="@string/title_activity_card_view" />
+            android:name=".FrontEnd.Group.cardView"
+            android:label="@string/title_activity_card_view"></activity>
         <activity
             android:name=".FrontEnd.Init.LoginActivity"
             android:label="@string/title_activity_login" />
