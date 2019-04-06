@@ -72,13 +72,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                tools:context=".FrontEnd.Group.GroupMain"></android.support.design.widget.CoordinatorLayout>
+                tools:context=".FrontEnd.Group.GroupMain" />
 
             <view
                 android:id="@+id/recycle_view"
                 class="android.support.v7.widget.RecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></view>
+                android:layout_height="match_parent" />
 
         </RelativeLayout>
 

@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
@@ -22,9 +22,10 @@ import com.example.joiintheclub.R;
 
 @SuppressLint("Registered")
 public class GroupMain extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, RecycleAdapter.OnNoteListener {
 
 
+    private static final String TAG = "";
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
@@ -34,12 +35,12 @@ public class GroupMain extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_main);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+        recyclerView =  findViewById(R.id.recycle_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        adapter = new RecycleAdapter();
+        adapter = new RecycleAdapter(this);
         recyclerView.setAdapter(adapter);
 
 
@@ -56,24 +57,6 @@ public class GroupMain extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.groupNav);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.activity_main_drawer,menu);
-        return true;
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.group_drawer);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
 
@@ -105,5 +88,12 @@ public class GroupMain extends AppCompatActivity
         DrawerLayout drawer =  findViewById(R.id.groupNav);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onNoteClick(int position) {
+        Log.d(TAG, "onNoteClick: "+position);
+    Intent intent = new Intent(this,GroupDetail.class);
+    startActivity(intent);
     }
 }

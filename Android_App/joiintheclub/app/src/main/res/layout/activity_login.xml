@@ -61,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/UserInputLayer1"
+            app:layout_constraintTop_toBottomOf="@+id/announcement_title"
             tools:ignore="MissingConstraints">
 
             <EditText
@@ -79,7 +79,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/UserInputLayer1"
+            android:id="@+id/announcement_title"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             android:layout_marginStart="50dp"
