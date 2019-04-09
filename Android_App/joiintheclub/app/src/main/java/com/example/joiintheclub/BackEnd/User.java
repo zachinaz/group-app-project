@@ -22,6 +22,9 @@ public class User {
     //Local storage of the status of the user
     private static boolean isLoggedIn = false;
 
+
+    private static String[] userGroupMembership;
+
     //FUNCTIONS
     //*********************************************
 
@@ -60,6 +63,7 @@ public class User {
         //Unpacks the Response message sent by the requester
         try {
             String user_id = loginResponseGET.get().get("user_id").toString();
+
             if (user_id.equals("0")) {
                 //credentials not found, returning false
                 return false;
@@ -94,6 +98,9 @@ public class User {
         JSONObject requestPOST = new JSONObject();
         AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
         //????? dict = <firstName,lastName>;
+
+        //Request info from requester to see if already exists
+        responseGET.set(Requester.requester("/user", "GET", requestGET));
 
             try {
                 //Populates the object with keys and values
@@ -130,7 +137,7 @@ public class User {
     //was originally a private void method
     //different classes may need to call get() method
     // public int get() {
-    public static int get(
+    public static String get(
             String userID
     )
     {
@@ -139,7 +146,8 @@ public class User {
         getResponseGET.set(Requester.requester("/user", "GET", userGetRequestGET));
 
 
-        return 0; //for now
+        //return 0; //for now
+        return "0";
     }
 
     //this will check if the user exists or not
@@ -204,46 +212,151 @@ public class User {
 
     }
 
-    //rpobably not boolean
-    public static boolean getUserGroups(String userID, boolean isLoggedIn)
-    {
-        //Array for storing groupID s for groups this user is a member of
-        String userMemberGroup[];
-        //for now just 1d array containing int groupID
-        //maybe make a variable that specifies the max # of groups member can be part of
 
-        //maybe have varible specifiyng how many groups exist
+    public static String[] getUserGroups(String userID, boolean isLoggedIn)
+    {
+        //Array for storing groupID for groups this user is a member of
+        String[] userMemberGroup = new String[10];
+
+
+
+        //maybe have variable specifiyng how many groups exist
         int numExistGroups = 10;
 
-        //userID in checkMembership should be an int ???
-        //groupID in checkMembership should be int?
-        //note: groupID in group.java is also a string ??
+        //test cases I guess??
+        //String testGroupID = "0001";
+        int numUserInvolvement = 0;
 
-        //User is logged in
+        //Make sure user is logged in
         if (isLoggedIn == true)
         {
             //Get the groups of this logged in user
             //store it in array
             //Go through the groups ??
-            for (int checkUserM = 0; checkUserM < numExistGroups; checkUserM++)
-            {
-                //If the user is a member of a particular group
-                //change this later , just simpel code/test for now !!!!!!
-                if (Membership.CheckMembership("0001", userID) == true)
-                {
-                    //Store it in the array
+            JSONObject userMemberRequestGET = new JSONObject();
+            AtomicReference<JSONObject> userMemberResponseGET =
+                    new AtomicReference<> (new JSONObject());
 
-                }
+            try {
+                userMemberRequestGET.put("user_id", userID);
             }
-            return true;
-        }
-        //User is not logged in
-        else
-        {
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+                //unsure about this!!!
+
+            }
+
+            userMemberResponseGET.set(Requester.requester("/user/membership",
+                    "GET", userMemberRequestGET));
+
+
+            //unsure especially about below
+
+            /*
+
+        //Unpacks the Response message sent by the requester
+        try {
+            String user_id = loginResponseGET.get().get("user_id").toString();
+
+            if (user_id.equals("0")) {
+                //credentials not found, returning false
+                return false;
+            }
+            else {
+                //credentials found, returning true
+                User.setUserID(user_id);
+                User.setIsLoggedIn(true);
+                return true;
+            }
+        } catch (JSONException e) {
+            //Prints error message to console via stacktrace
+            e.printStackTrace();
             return false;
         }
+
+             */
+            //get response of list of groups
+
+        }
+        return userMemberGroup;
+
     }
 
+//maybe not boolean since may have to return info
+    //public static boolean userInformation(String userID)
+    private static String[] userInformation(String userID)
+    {
+        //Array of strings containing user profile information
+        String[] userProfile = new String[6];
+
+        //User ID is in the first position for
+        userProfile[0] = userID;
+        //JSON object for requesting user information
+        JSONObject userInfoRequestGET = new JSONObject();
+        AtomicReference<JSONObject> userInfoResponseGET =
+                new AtomicReference<> (new JSONObject());
+
+        //Populate this json object with the user ID
+        try {
+            userInfoRequestGET.put("user_ID", userID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return userProfile;
+        }
+
+        //Verifies user ID with DB, keeps response in userInfoResponse
+        userInfoResponseGET.set(Requester.requester("/user", "GET", userInfoRequestGET));
+
+        //Unpacks response sent by requester
+        try {
+            String user_id = userInfoResponseGET.get().get("user_id").toString();
+
+            //Credentials found
+               //UNSURE IF THIS CORRECT!!!!
+            if (!user_id.equals("0")) {
+
+            /*
+            //Credentials not found
+            if (user_id.equals("0")) {
+                //return false;
+            }
+            */
+                //Credentials found
+                //else
+                // {
+                //Get the user information -????????
+
+                String first_name = userInfoResponseGET.get().get("first_name").toString();
+                String last_name = userInfoResponseGET.get().get("last_name").toString();
+                String email = userInfoResponseGET.get().get("email").toString();
+                String password = userInfoResponseGET.get().get("password").toString();
+                //stuff for profile picture here!!!!!
+
+                userProfile[1] = first_name;
+                userProfile[2] = last_name;
+                userProfile[3] = email;
+                userProfile[4] = password;
+                //PROFILE PICTURE HERE
+
+                /*
+                //Variables now have this information - ?????
+                User.firstName = first_name;
+                User.lastName = last_name;
+                User.email = email;
+                */
+                //profile picture!!!!!
+
+                //}
+            }
+
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+           // return false;
+        }
+        return userProfile;
+    }
 
     /*maybe do this later, since need email functionality
     public static void forgotPassword(int userID)
