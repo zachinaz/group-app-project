@@ -6,14 +6,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 
 public class HttpRequest extends AsyncTask<String, Void, String> {
-
-    public static int READ_TIMEOUT = 15000;
-    public static int CONNECTION_TIMEOUT = 15000;
 
     @Override
     protected String doInBackground(String... params) {
@@ -34,22 +32,23 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
             con.setRequestMethod(requestMethod);
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestProperty("Accept", "application/json");
+
+            int READ_TIMEOUT = 15000;
             con.setReadTimeout(READ_TIMEOUT);
+            int CONNECTION_TIMEOUT = 15000;
             con.setConnectTimeout(CONNECTION_TIMEOUT);
 
             //New OutputStream object
-            OutputStream out = con.getOutputStream();
+            OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream());
 
             //write on the output stream
-            out.write(requestBodyStr.getBytes());
+            out.write(requestBodyStr);
 
-            int status = con.getResponseCode();
-
-            switch(status) {
+            switch(con.getResponseCode()) {
                 case 400:
                 case 404:
                 case 418:
-                    responseBodyStr = "";
+                    //Handle 400 error set
                     break;
                 case 200:
                 case 204:
@@ -76,7 +75,6 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
         }
         catch(IOException e) {
             e.printStackTrace();
-            responseBodyStr = "";
         }
 
         return responseBodyStr;

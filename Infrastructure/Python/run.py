@@ -443,5 +443,117 @@ def member_request():
             status = 200
 #END OF --/api/group/request--
 
+#--/api/event--
+@app.route('/api/event', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def event():
+    resp = {}
+    status = 404
+
+    #--GET--
+    # @json: event_id , returns {DateAndTime, eventName, LeaderID, Location, Description, GroupID}
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("event_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            event_id = json_data.get("event_id")
+            #SQL SELECT event_id --> DateAndTime, eventName, LeaderID, Location, Description, GroupID
+            eventGET = getEvent(event_id)
+            print(eventGET)
+            if eventGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif eventGET == None:
+                resp = {"err": "Group not found in Database"}
+                status = 204
+            else:
+                date_time = eventGET["DateAndTime"]
+                name = eventGET["eventName"]
+                leader_id = eventGET["LeaderID"]
+                location = eventGET["Location"]
+                description = eventGET["Description"]
+                group_id = eventGET["GroupID"]
+                resp = {"request_type":"GET", "date_time": f"{date_time}", "name": f"{name}", "leader_id": f"{leader_id}", "location": f"{location}", "description": f"{description}", "group_id": f"{group_id}"}
+                status = 200
+
+    #--POST--
+    # @json: {event_name, event_DateAndTime, leader_id, location, description, group_id} , returns event_id
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("name" or "leader_id" or "location" or "description" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            name = json_data.get("name")
+            #may need date time set
+            leader_id = json_data.get("leader_id")
+            location = json_data.get("location")
+            description = json_data.get("description")
+            group_id = json_data.get("group_id")
+            #SQL INSERT event_name, event_DateAndTime, leader_id, location, description, group_id
+            eventPOST = postGroup(name, date_time, leader_id, location, description, group_id)
+            print(eventPOST)
+            if eventPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                event_id = eventPOST["EventID"]
+                resp = {"request_type":"POST", "message": f"Event {event_id} Successfully Created", "event_id": f"{event_id}"}
+                status = 200
+
+    #--PUT--
+    # @json: {group_id, name, description, color}
+    if request.method == 'PUT':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("event_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            event_id = json_data.get("event_id")
+            if "name" in json_data:
+                name = json_data.get("name")
+            if "description" in json_data:
+                description = json_data.get("description")
+            if "location" in json_data:
+                location = json_data.get("location")
+            #SQL UPDATE name, description, location
+            resp = {"request_type":"PUT","message":f"Event {event_id} Successfully Updated"}
+            status = 200
+
+    #--DELETE--
+    # @json: event_id
+    if request.method == 'DELETE':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("event_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            event_id = json_data.get("event_id")
+            #SQL DELETE EVENT on event_id
+            eventDEL = deleteEvent(event_id)
+            print(eventDEL)
+            if eventDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE","message":f"Event {event_id} Successfully Deleted"}
+                status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/group--
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050)
