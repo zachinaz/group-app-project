@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import static android.support.constraint.Constraints.TAG;
+
 
 public class HttpRequest extends AsyncTask<String, Void, String> {
 
@@ -26,6 +29,8 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
         String requestBodyStr = params[2];
         String responseBodyStr = "";
         String inputLine;
+
+        BufferedReader in = null;
 
         try {
             //Create a URL object holding our url
@@ -64,12 +69,20 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
                 case 404:
                 case 418:
                     //Handle 400 error set
+                    in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                     break;
                 case 200:
                 case 204:
                     //Handle success
+                    in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     break;
             }
+
+            while ((responseBodyStr = in.readLine()) != null) {
+                Log.i(TAG, responseBodyStr);
+            }
+            in.close();
+
             con.disconnect();
 
         }
