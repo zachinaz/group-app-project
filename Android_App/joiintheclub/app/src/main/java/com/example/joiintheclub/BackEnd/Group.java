@@ -3,6 +3,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -19,9 +20,11 @@ public class Group {
 
 
 
-    public static void SearchGroup ( ){
-        String userInput = "";
-        Group n = new Group();
+    public String[][] SearchGroup (){
+        String[][] displayInfo={{"1","XOPOC","Dance crew"},
+                {"2","Spanish Club","learn Spanish"},
+                {"3","Computer Science Club", "Explore Comp Sci"}};
+        /*Group n = new Group();
             JSONObject requestGET = new JSONObject();
             AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
             JSONObject requestPOST = new JSONObject();
@@ -54,9 +57,8 @@ public class Group {
                 }
             }
             else
-                System.out.println("Group not found");
-
-
+                System.out.println("Group not found");*/
+        return displayInfo;
         //hardcode for a test case
     }
 

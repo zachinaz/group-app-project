@@ -15,7 +15,9 @@ public class GroupRequest {
     JSONObject requestPOST = new JSONObject();
     AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
 
-    public static void sendRequest(){
+    //input user ID requesting
+    //input Group ID requested
+    public static void sendRequest(String UserID, String GroupID){
         Group x = new Group();
 
         Membership y = new Membership();
