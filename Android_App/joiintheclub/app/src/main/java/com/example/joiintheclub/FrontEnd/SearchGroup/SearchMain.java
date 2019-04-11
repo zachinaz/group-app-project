@@ -55,6 +55,11 @@ public class SearchMain extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.searchNav);
         navigationView.setNavigationItemSelectedListener(this);
+        
+   //     String GroupList[][];
+
+//        Group.SearchGroup();
+
     }
 
     @Override

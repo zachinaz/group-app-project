@@ -3,7 +3,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -20,7 +19,8 @@ public class Group {
 
 
 
-    public void SearchGroup (String userInput){
+    public static void SearchGroup ( ){
+        String userInput = "";
         Group n = new Group();
             JSONObject requestGET = new JSONObject();
             AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());

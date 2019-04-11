@@ -2,7 +2,7 @@ package com.example.joiintheclub.BackEnd;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.Date;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
@@ -160,7 +160,6 @@ public class User {
     public static String getUserID() {
         return userID;
     }
-
     public static void setUserID(String userID) {
         User.userID = userID;
     }
