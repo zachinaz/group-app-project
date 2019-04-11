@@ -2,13 +2,16 @@ package com.example.joiintheclub.BackEnd;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -43,20 +46,18 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
 
             con.setDoOutput(true);
             con.setDoInput(true);
-            con.setUseCaches(false);
-            con.connect();
 
             //New OutputStream object
-            OutputStream out = con.getOutputStream();
+            DataOutputStream os = new DataOutputStream(con.getOutputStream());
 
             //write on the output stream
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                out.write(requestBodyStr.getBytes(StandardCharsets.UTF_8));
-            }
+            os.writeBytes(requestBodyStr);
 
-            out.flush();
-            out.close();
-            System.out.println(con.getResponseCode());
+            os.flush();
+            os.close();
+
+            Log.i("STATUS", String.valueOf(con.getResponseCode()));
+            Log.i("MSG", con.getResponseMessage());
 
             switch(con.getResponseCode()) {
                 case 400:
@@ -66,33 +67,10 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
                     break;
                 case 200:
                 case 204:
-                    //Create a new InputStreamReader
-                    InputStream streamReader = con.getInputStream();
-
-                    //Create a new buffered reader and String Builder
-                    //BufferedReader reader = new BufferedReader(streamReader);
-                    //StringBuilder stringBuilder = new StringBuilder();
-
-                    try {
-                        byte[] data1 = new byte[streamReader.available()];
-                        streamReader.read(data1);
-                        responseBodyStr = new String(data1, "utf-8");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    //Check if the line we are reading is not null
-                    /*while((inputLine = reader.readLine()) != null) {
-                        stringBuilder.append(inputLine);
-                    }*/
-
-                    //Close our InputStream and Buffered reader
-                    /*reader.close();
-                    streamReader.close();*/
-
-                    //Set our responseBodyStr equal to our stringBuilder
-                    //responseBodyStr = stringBuilder.toString();
+                    //Handle success
+                    break;
             }
+            con.disconnect();
 
         }
         catch(IOException e) {
