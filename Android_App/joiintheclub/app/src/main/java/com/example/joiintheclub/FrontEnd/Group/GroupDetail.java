@@ -79,21 +79,22 @@ public class GroupDetail extends AppCompatActivity
         poll_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                openVoteDialog();
+
             }
         });
 
         event_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                openEventDialog();
             }
         });
 
         inbox_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                openInboxDialog();
             }
         });
 
@@ -130,10 +131,10 @@ public class GroupDetail extends AppCompatActivity
         mDialog.setContentView(R.layout.activity_announcement);
         mDialog.show();
 
-        title = mDialog.findViewById(R.id.Atitle);
-        announcement_content = mDialog.findViewById(R.id.Acontent);
-        close_btn = mDialog.findViewById(R.id.announce_close_icon);
-        announce = mDialog.findViewById(R.id.announce_publish);
+        title = mDialog.findViewById(R.id.Ititle);
+        announcement_content = mDialog.findViewById(R.id.Icontent);
+        close_btn = mDialog.findViewById(R.id.Inbox_close_icon);
+        announce = mDialog.findViewById(R.id.Inbox_publish);
 
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,9 +153,113 @@ public class GroupDetail extends AppCompatActivity
             }
         });
 
+    }
 
+    private void openVoteDialog() {
+
+        final AutoCompleteTextView title;
+        final AutoCompleteTextView vote_content;
+        ImageButton close_btn;
+        ImageView vote;
+
+
+        mDialog.setContentView(R.layout.activity_vote);
+        mDialog.show();
+
+        title = mDialog.findViewById(R.id.Vtitle);
+        vote_content = mDialog.findViewById(R.id.Vcontent);
+        close_btn = mDialog.findViewById(R.id.vote_close_icon);
+        vote = mDialog.findViewById(R.id.Inbox_publish);
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        vote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String stitle = title.getText().toString();
+                String Content = vote_content.getText().toString();
+                String n;
+            }
+        });
 
     }
+
+    private void openEventDialog() {
+
+        final AutoCompleteTextView title;
+        final AutoCompleteTextView event_content;
+        ImageButton close_btn;
+        ImageView event;
+
+
+        mDialog.setContentView(R.layout.activity_event);
+        mDialog.show();
+
+        title = mDialog.findViewById(R.id.Ititle);
+        event_content = mDialog.findViewById(R.id.Icontent);
+        close_btn = mDialog.findViewById(R.id.Inbox_close_icon);
+        event = mDialog.findViewById(R.id.Inbox_publish);
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String stitle = title.getText().toString();
+                String Content = event_content.getText().toString();
+                String n;
+            }
+        });
+
+    }
+
+    private void openInboxDialog() {
+
+        final AutoCompleteTextView title;
+        final AutoCompleteTextView inbox_content;
+        ImageButton close_btn;
+        ImageView inbox;
+
+
+        mDialog.setContentView(R.layout.activity_inbox);
+        mDialog.show();
+
+        title = mDialog.findViewById(R.id.Ititle);
+        inbox_content = mDialog.findViewById(R.id.Icontent);
+        close_btn = mDialog.findViewById(R.id.Inbox_close_icon);
+        inbox = mDialog.findViewById(R.id.Inbox_publish);
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        inbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String stitle = title.getText().toString();
+                String Content = inbox_content.getText().toString();
+                String n;
+            }
+        });
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -165,6 +270,8 @@ public class GroupDetail extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+
 
 
     //@SuppressWarnings("StatementWithEmptyBody")

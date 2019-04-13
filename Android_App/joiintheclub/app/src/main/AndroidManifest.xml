@@ -25,6 +25,7 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".FrontEnd.SearchGroup.SearchMain"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:label="@string/search" />
         <activity
             android:name=".FrontEnd.UserProfile.UserProfileMain"

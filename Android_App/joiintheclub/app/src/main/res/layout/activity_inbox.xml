@@ -11,18 +11,18 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/vote_title"
+        android:id="@+id/inbox_title"
         android:layout_width="204dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginLeft="9dp"
-        android:layout_marginTop="52dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/boarder_line"
-        app:layout_constraintStart_toEndOf="@+id/VtitleHint"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
-            android:id="@+id/Vtitle"
+            android:id="@+id/Ititle"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginLeft="10dp"
@@ -36,21 +36,21 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/vote_content"
+        android:id="@+id/inbox_content"
         android:layout_width="204dp"
         android:layout_height="177dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@drawable/boarder_line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/inbox_title">
 
         <AutoCompleteTextView
-            android:id="@+id/Vcontent"
+            android:id="@+id/Icontent"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginLeft="10dp"
@@ -64,7 +64,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <ImageButton
-        android:id="@+id/vote_close_icon"
+        android:id="@+id/Inbox_close_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:clickable="true"
@@ -78,12 +78,12 @@
         android:focusable="true" />
 
     <TextView
-        android:id="@+id/VtitleHint"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="55dp"
         android:text="Title:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -94,15 +94,15 @@
         android:layout_height="51dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:clickable="true"
-        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vote_content"
-        app:srcCompat="@drawable/vote_icon" />
+        app:layout_constraintTop_toBottomOf="@+id/inbox_content"
+        app:srcCompat="@drawable/inbox_icon"
+        android:focusable="true" />
 
 </android.support.constraint.ConstraintLayout>

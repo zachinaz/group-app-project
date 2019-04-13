@@ -9,42 +9,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.joiintheclub.BackEnd.Group;
 import com.example.joiintheclub.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SearchRecycleAdapter extends RecyclerView.Adapter<SearchRecycleAdapter.ViewHolder> {
 
 
-    private String[] groupNames =
-            {
-                    "Group 1",
-                    "Group 2",
-                    "Group 3",
-                    "Group 4",
-                    "Group 5",
-                    "Group 6",
-                    "Group 7",
-                    "Group 8",
-                    "Group 9",
-            };
-
-    private String[] details =
-            {
-                    "Group 1 details",
-                    "Group 2 details",
-                    "Group 3 details",
-                    "Group 4 details",
-                    "Group 5 details",
-                    "Group 6 details",
-                    "Group 7 details",
-                    "Group 8 details",
-                    "Group 9 details",
-            };
+    private static List<String> groupNames;
+    private List<String> groupDetail;
 
     private int[] groupIcon =
             {
+                    R.drawable.search_icon,
                     R.drawable.profile_icon,
-                    R.drawable.profile_icon,
-                    R.drawable.profile_icon,
+                    R.drawable.close_icon,
                     R.drawable.profile_icon,
                     R.drawable.profile_icon,
                     R.drawable.profile_icon,
@@ -53,12 +35,19 @@ public class SearchRecycleAdapter extends RecyclerView.Adapter<SearchRecycleAdap
                     R.drawable.profile_icon,
             };
 
+
+    SearchRecycleAdapter(List<String> groupNames) {
+        SearchRecycleAdapter.groupNames = groupNames;
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.activity_search_card_view,viewGroup,false);
+
+
+
         return new ViewHolder(v);
     }
 
@@ -66,18 +55,35 @@ public class SearchRecycleAdapter extends RecyclerView.Adapter<SearchRecycleAdap
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
 
-        viewHolder.groupName.setText(groupNames[i]);
-        viewHolder.groupDetail.setText(details[i]);
+        viewHolder.groupName.setText(groupNames.get(i));
+        viewHolder.groupDetail.setText(groupDetail.get(i));
         viewHolder.groupIcon.setImageResource(groupIcon[i]);
 
     }
 
     @Override
     public int getItemCount() {
-        return groupNames.length;
+
+        String[][] groupInfo = Group.SearchGroup();
+        String [] groupDetailBuf = new String[groupInfo.length];
+
+
+        for(int a = 0; a < groupInfo.length; a++)
+        {
+            groupDetailBuf[a] = groupInfo[a][2];
+        }
+        groupDetail = Arrays.asList(groupDetailBuf);
+
+
+        return groupNames.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static void filterList(ArrayList<String> newList)
+    {
+        groupNames = newList;
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView groupIcon;
         TextView groupName;
@@ -103,4 +109,5 @@ public class SearchRecycleAdapter extends RecyclerView.Adapter<SearchRecycleAdap
 
 
     }
+
 }

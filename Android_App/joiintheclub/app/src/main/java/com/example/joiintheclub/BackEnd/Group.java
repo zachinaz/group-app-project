@@ -3,7 +3,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -20,7 +19,7 @@ public class Group {
 
 
 
-    public String[][] SearchGroup (){
+    public static String[][] SearchGroup (){
         String[][] displayInfo={{"1","XOPOC","Dance crew"},
                 {"2","Spanish Club","learn Spanish"},
                 {"3","Computer Science Club", "Explore Comp Sci"}};
