@@ -2,16 +2,22 @@ package com.example.joiintheclub.BackEnd;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+
+import static android.support.constraint.Constraints.TAG;
 
 
 public class HttpRequest extends AsyncTask<String, Void, String> {
@@ -23,6 +29,8 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
         String requestBodyStr = params[2];
         String responseBodyStr = "";
         String inputLine;
+
+        BufferedReader in = null;
 
         try {
             //Create a URL object holding our url
@@ -43,56 +51,39 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
 
             con.setDoOutput(true);
             con.setDoInput(true);
-            con.setUseCaches(false);
-            con.connect();
 
             //New OutputStream object
-            OutputStream out = con.getOutputStream();
+            DataOutputStream os = new DataOutputStream(con.getOutputStream());
 
             //write on the output stream
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                out.write(requestBodyStr.getBytes(StandardCharsets.UTF_8));
-            }
+            os.writeBytes(requestBodyStr);
 
-            out.flush();
-            out.close();
-            System.out.println(con.getResponseCode());
+            os.flush();
+            os.close();
+
+            Log.i("STATUS", String.valueOf(con.getResponseCode()));
+            Log.i("MSG", con.getResponseMessage());
 
             switch(con.getResponseCode()) {
                 case 400:
                 case 404:
                 case 418:
                     //Handle 400 error set
+                    in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                     break;
                 case 200:
                 case 204:
-                    //Create a new InputStreamReader
-                    InputStream streamReader = con.getInputStream();
-
-                    //Create a new buffered reader and String Builder
-                    //BufferedReader reader = new BufferedReader(streamReader);
-                    //StringBuilder stringBuilder = new StringBuilder();
-
-                    try {
-                        byte[] data1 = new byte[streamReader.available()];
-                        streamReader.read(data1);
-                        responseBodyStr = new String(data1, "utf-8");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    //Check if the line we are reading is not null
-                    /*while((inputLine = reader.readLine()) != null) {
-                        stringBuilder.append(inputLine);
-                    }*/
-
-                    //Close our InputStream and Buffered reader
-                    /*reader.close();
-                    streamReader.close();*/
-
-                    //Set our responseBodyStr equal to our stringBuilder
-                    //responseBodyStr = stringBuilder.toString();
+                    //Handle success
+                    in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    break;
             }
+
+            while ((responseBodyStr = in.readLine()) != null) {
+                Log.i(TAG, responseBodyStr);
+            }
+            in.close();
+
+            con.disconnect();
 
         }
         catch(IOException e) {
