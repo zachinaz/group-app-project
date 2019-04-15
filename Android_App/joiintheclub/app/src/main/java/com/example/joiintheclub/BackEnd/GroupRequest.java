@@ -21,7 +21,7 @@ public class GroupRequest {
         Group x = new Group();
 
         Membership y = new Membership();
-        y.GetLeader(x.Get());
+        //y.GetLeader(x.Get());
 
         //use Requester to store Leader's ID to notify the leader
         //push to requester a new request and its status
