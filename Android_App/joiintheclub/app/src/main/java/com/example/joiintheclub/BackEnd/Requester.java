@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
-public class Requester {
+class Requester {
 
     //Call requester to interface when needing to interface with the api
     //  @param String targetUrl : the specific api resource that the information is stored on.
@@ -15,7 +15,7 @@ public class Requester {
     //  @param JSONObject requestBody : a map of keys (e.g. "first_name") and values (e.g. "Bob") needed for the api request
     //      e.g. {"first_name", "last_name"} when wanting to update the first name and last name of a user on the api
     //  returns null (if failed) or (if success) JSONObject requestBody : a json object of keys and values (see above) of information from the api
-    public static JSONObject requester(String targetUrl, String method, JSONObject requestBody) {
+    static JSONObject requester(String targetUrl, String method, JSONObject requestBody) {
 
         //Url of api
         String baseUrl = "http://35.185.248.192:5050/api";
@@ -36,8 +36,7 @@ public class Requester {
 
 
         try {
-            JSONObject responseBody = new JSONObject(responseStr);
-            return responseBody;
+            return new JSONObject(responseStr);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

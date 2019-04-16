@@ -2,7 +2,7 @@ package com.example.joiintheclub.BackEnd;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.Date;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
@@ -97,10 +97,6 @@ public class User {
         AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
         JSONObject requestPOST = new JSONObject();
         AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
-        //????? dict = <firstName,lastName>;
-
-        //Request info from requester to see if already exists
-        responseGET.set(Requester.requester("/user", "GET", requestGET));
 
             try {
                 //Populates the object with keys and values
@@ -160,7 +156,6 @@ public class User {
     public static String getUserID() {
         return userID;
     }
-
     public static void setUserID(String userID) {
         User.userID = userID;
     }

@@ -1,6 +1,7 @@
 package com.example.joiintheclub.FrontEnd.SearchGroup;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,34 +13,77 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
+import com.example.joiintheclub.BackEnd.Group;
 import com.example.joiintheclub.FrontEnd.Group.GroupMain;
 import com.example.joiintheclub.FrontEnd.Setting.SettingMain;
 import com.example.joiintheclub.FrontEnd.UserProfile.UserProfileMain;
 import com.example.joiintheclub.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @SuppressLint("Registered")
 public class SearchMain extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener
+{
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter adapter;
+    RecyclerView.Adapter<SearchRecycleAdapter.ViewHolder> adapter;
+    EditText searchInput;
+
+    private List<String> groupNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_main);
 
+
+        String[][] groupInfo = Group.SearchGroup();
+        String [] groupNameBuf = new String[groupInfo.length];
+
+        for(int a = 0; a < groupInfo.length; a++)
+        {
+            groupNameBuf[a]= groupInfo[a][1];
+        }
+        groupNames = Arrays.asList(groupNameBuf);
+
+
         recyclerView = (RecyclerView) findViewById(R.id.search_recycle_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-
-        adapter = new SearchRecycleAdapter();
+        adapter = new SearchRecycleAdapter(groupNames);
         recyclerView.setAdapter(adapter);
 
+
+        searchInput = findViewById(R.id.search_Input);
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                filter(s.toString());
+            }
+        });
 
 
 
@@ -55,6 +99,26 @@ public class SearchMain extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.searchNav);
         navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    private void filter(String searchText)
+    {
+
+        String userInput = searchText.toLowerCase();
+        ArrayList<String> newList = new ArrayList<>();
+
+        for(String name : groupNames)
+        {
+            if(name.toLowerCase().contains(userInput))
+            {
+                newList.add(name);
+            }
+        }
+
+        SearchRecycleAdapter.filterList(newList);
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -96,6 +160,13 @@ public class SearchMain extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.search_drawer);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+
     }
 }
 

@@ -48,4 +48,5 @@
     <string name="title_activity_card_view">cardView</string>
     <string name="group_profile_pic">group profile pic</string>
     <string name="close_icon">close icon</string>
+    <string name="group_name">Group Name</string>
 </resources>

@@ -15,11 +15,13 @@ public class GroupRequest {
     JSONObject requestPOST = new JSONObject();
     AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
 
-    public static void sendRequest(){
+    //input user ID requesting
+    //input Group ID requested
+    public static void sendRequest(String UserID, String GroupID){
         Group x = new Group();
 
         Membership y = new Membership();
-        y.GetLeader(x.Get());
+        //y.GetLeader(x.Get());
 
         //use Requester to store Leader's ID to notify the leader
         //push to requester a new request and its status

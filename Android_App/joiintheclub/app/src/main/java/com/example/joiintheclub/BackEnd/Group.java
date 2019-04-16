@@ -3,7 +3,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -20,8 +19,12 @@ public class Group {
 
 
 
-    public void SearchGroup (String userInput){
-        Group n = new Group();
+    public static String[][] SearchGroup (){
+        String[][] displayInfo={{"1","XOPOC","Dance crew"},
+                {"2","Spanish Club","learn Spanish"},
+                {"3","Computer Science Club", "Explore Comp Sci"}};
+        //commented out until requester works
+        /*Group n = new Group();
             JSONObject requestGET = new JSONObject();
             AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
             JSONObject requestPOST = new JSONObject();
@@ -54,9 +57,8 @@ public class Group {
                 }
             }
             else
-                System.out.println("Group not found");
-
-
+                System.out.println("Group not found");*/
+        return displayInfo;
         //hardcode for a test case
     }
 
@@ -117,16 +119,21 @@ public class Group {
 
     }
 
-    public static  String Get(){
+    public static String[][] Get(){
         //use requester to get Group iD
-        JSONObject requestGET = new JSONObject();
-        AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
+        //JSONObject requestGET = new JSONObject();
+       // AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
 
         //Verifies email and password with the DB. Keeps response in loginResponseGET JSON object
-        responseGET.set(Requester.requester("/group", "GET", requestGET));
+        //responseGET.set(Requester.requester("/group", "GET", requestGET));
         //test case
         //GroupID = 1424;
-        return GroupID;
+
+
+
+        String[][] displayGroups={{"1","XOPOC","Dance crew"},
+                {"3","Computer Science Club", "Explore Comp Sci"}};
+        return displayGroups;
     }
 
     public static void setGroupName(String groupName) {
