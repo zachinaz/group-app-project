@@ -1,34 +1,26 @@
 package com.example.joiintheclub.BackEnd;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
-import static android.support.constraint.Constraints.TAG;
 
 
 public class HttpRequest extends AsyncTask<String, Void, String> {
 
+    //ON BACKGROUND Thread
     @Override
     protected String doInBackground(String... params) {
         String stringUrl = params[0];
         String requestMethod = params[1].toUpperCase();
         String requestBodyStr = params[2];
         String responseBodyStr = "";
-        String inputLine;
 
         BufferedReader in = null;
 
@@ -78,10 +70,12 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
                     break;
             }
 
-            while ((responseBodyStr = in.readLine()) != null) {
-                Log.i(TAG, responseBodyStr);
-            }
+            responseBodyStr = in.readLine();
+
             in.close();
+
+            System.out.println("ON BACKGROUND THREAD:");
+            System.out.println(responseBodyStr);
 
             con.disconnect();
 
@@ -93,8 +87,11 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
         return responseBodyStr;
     }
 
+    //ON UI Thread
     @Override
     protected void onPostExecute(String result) {
+        System.out.println("ON MAIN THREAD:");
+        System.out.println(result);
         super.onPostExecute(result);
     }
 }

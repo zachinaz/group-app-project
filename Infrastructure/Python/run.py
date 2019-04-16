@@ -63,7 +63,7 @@ def user():
                 status = 418
             else:
                 user_id = userPOST["user_id"]
-                resp = {"request_type":"POST","message":f"User {user_id} Successfully Created"}
+                resp = {"request_type":"POST","message":f"User {user_id} Successfully Created","user_id":f"{user_id}"}
                 status = 200
 
     #--PUT--
@@ -87,7 +87,7 @@ def user():
             if "password" in json_data:
                 password = json_data.get("password")
             #SQL UPDATE first_name, last_name, email, password on user_id
-            resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated"}
+            resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated","user_id":f"{user_id}"}
             status = 200
 
     #--DELETE--
@@ -110,7 +110,7 @@ def user():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             else:
-                resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted"}
+                resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted","user_id":f"{user_id}"}
                 status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')

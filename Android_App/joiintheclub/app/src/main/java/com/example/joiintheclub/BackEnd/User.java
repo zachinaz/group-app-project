@@ -93,8 +93,6 @@ public class User {
     {
         //Creates new JSONObjects to pass to and receive from Requester.requester
         //  Note: responses need to be in Atomic Reference since the requester works on a different thread.
-        JSONObject requestGET = new JSONObject();
-        AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
         JSONObject requestPOST = new JSONObject();
         AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
 
