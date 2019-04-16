@@ -237,6 +237,11 @@ public class User {
             AtomicReference<JSONObject> userMemberResponseGET =
                     new AtomicReference<> (new JSONObject());
 
+            JSONObject userMemberGroupRequestGET = new JSONObject();
+            AtomicReference<JSONObject> userMemberGroupResponseGET =
+                    new AtomicReference<> (new JSONObject());
+
+
             try {
                 userMemberRequestGET.put("user_id", userID);
             }
@@ -250,7 +255,24 @@ public class User {
             userMemberResponseGET.set(Requester.requester("/user/membership",
                     "GET", userMemberRequestGET));
 
+            userMemberGroupResponseGET.set(Requester.requester("/group",
+                    "GET", userMemberGroupRequestGET));
 
+            String testGroupID = "0000";
+// public static boolean CheckMembership(String GroupID, String UserID){
+         //   if (Membership.IsMember == true)
+            try {
+                if (Membership.CheckMembership(testGroupID, userID))
+                {
+                    String group_id = userMemberGroupResponseGET.get().get("group_id").toString();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return userMemberGroup;
+            }
+
+
+                    //   String first_name = userInfoResponseGET.get().get("first_name").toString();
             //unsure especially about below
 
             /*
