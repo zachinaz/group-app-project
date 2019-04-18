@@ -554,3 +554,4 @@ def postRequest(user_id, group_id):
 	except:
 		connection.close()
 		return 0
+
