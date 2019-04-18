@@ -35,7 +35,7 @@ public class User {
         User.userID = userID;
     }
 
-    private static boolean getIsLoggedIn() {
+    public static boolean getIsLoggedIn() {
         return isLoggedIn;
     }
 
