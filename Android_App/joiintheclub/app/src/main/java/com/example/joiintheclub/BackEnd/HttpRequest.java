@@ -84,14 +84,9 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
 
-        return responseBodyStr;
-    }
+        //Sets the global responseStr from the BACKGROUND THREAD
+        Requester.responseStr = responseBodyStr;
 
-    //ON UI Thread
-    @Override
-    protected void onPostExecute(String result) {
-        System.out.println("ON MAIN THREAD:");
-        System.out.println(result);
-        super.onPostExecute(result);
+        return responseBodyStr;
     }
 }

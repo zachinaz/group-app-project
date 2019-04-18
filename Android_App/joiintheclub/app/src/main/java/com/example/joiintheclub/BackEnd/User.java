@@ -28,6 +28,21 @@ public class User {
     //FUNCTIONS
     //*********************************************
 
+    private static String getUserID() {
+        return userID;
+    }
+    private static void setUserID(String userID) {
+        User.userID = userID;
+    }
+
+    private static boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    private static void setIsLoggedIn(boolean isLoggedIn) {
+        User.isLoggedIn = isLoggedIn;
+    }
+
     //Call login when needing to test a user's credentials and if successful, login a user
     //    //  @param String email: the email of the attempted login
     //    //  @param String pwd: the password of the attempted login
@@ -41,6 +56,10 @@ public class User {
 
         //Make sure user entered something for email and password
         if (email.isEmpty() || pwd.isEmpty()) {
+            return false;
+        }
+        //Make sure user email contains a @. Simple email validation
+        else if (!email.contains("@")) {
             return false;
         }
 
@@ -62,18 +81,27 @@ public class User {
 
         //Unpacks the Response message sent by the requester
         try {
-            String user_id = loginResponseGET.get().get("user_id").toString();
+            if (Requester.handleJSON(loginResponseGET.get())) {
+                //Searches for "user_id" as a key in the responsePOST.
+                Object userID = loginResponseGET.get().get("user_id");
 
-            if (user_id.equals("0")) {
-                //credentials not found, returning false
-                return false;
+                if (userID.toString().equals("0")) {
+                    //credentials not found, returning false
+                    return false;
+                }
+                else {
+                    //Set the "user_id" from DB, login to true
+                    setUserID(userID.toString());
+                    setIsLoggedIn(true);
+                    System.out.println(getUserID());
+                    return true;
+                }
             }
             else {
-                //credentials found, returning true
-                User.setUserID(user_id);
-                User.setIsLoggedIn(true);
-                return true;
+                //Error returned from the DB
+                return false;
             }
+
         } catch (JSONException e) {
             //Prints error message to console via stacktrace
             e.printStackTrace();
@@ -86,6 +114,7 @@ public class User {
         User.setIsLoggedIn(false);
     }
 
+    //Call createUser to create a User in the Database
     public static boolean createUser(String firstName,
                                      String lastName,
                                      String email,
@@ -109,62 +138,31 @@ public class User {
                 //Prints the error message to the console via stacktrace
                 e.printStackTrace();
             }
-            //Create it here
-            //  ...
-            //maybe this
+
             //Saves the output of Request.requester to a JSONObject responsePOST
             responsePOST.set(Requester.requester("/user", "POST", requestPOST));
 
             try {
-                //Searches for "user_id" as a key in the responsePOST.
-                Object userID = responsePOST.get().get("user_id");
+                if (Requester.handleJSON(responsePOST.get())) {
+                    //Searches for "user_id" as a key in the responsePOST.
+                    Object userID = responsePOST.get().get("user_id");
+                    setUserID(userID.toString());
+                    System.out.println(getUserID());
+                    return true;
+                }
+                else {
+                    //Error returned from the DB
+                    return false;
+                }
+
             } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
                 //Prints the error message to the console via stacktrace
                 e.printStackTrace();
+                return false;
             }
-
-            return true;
         }
 
 
-
-    //was originally a private void method
-    //different classes may need to call get() method
-    // public int get() {
-    public static String get(
-            String userID
-    )
-    {
-        JSONObject userGetRequestGET = new JSONObject();
-        AtomicReference<JSONObject> getResponseGET = new AtomicReference<>(new JSONObject());
-        getResponseGET.set(Requester.requester("/user", "GET", userGetRequestGET));
-
-
-        //return 0; //for now
-        return "0";
-    }
-
-    //this will check if the user exists or not
-    public static boolean verifyUser(String userID)
-    {
-        get(userID);
-        return false;
-    }
-
-    public static String getUserID() {
-        return userID;
-    }
-    public static void setUserID(String userID) {
-        User.userID = userID;
-    }
-
-    public static boolean getIsLoggedIn() {
-        return isLoggedIn;
-    }
-
-    public static void setIsLoggedIn(boolean isLoggedIn) {
-        User.isLoggedIn = isLoggedIn;
-    }
 
 //implementation of updateUser depends on the UI
 //put user - only user_id is necessary
@@ -175,31 +173,43 @@ public class User {
     public static boolean updateUser(String userID, String firstName, String lastName,
                                      String email, String pwd)
     {
-        if (verifyUser(userID))
-        {
-            //
-            //Create a JSON object for request and response
-            JSONObject updateRequestPUT = new JSONObject();
-            AtomicReference<JSONObject> updateResponsePUT = new AtomicReference<> (new JSONObject());
+        //
+        //Create a JSON object for request and response
+        JSONObject updateRequestPUT = new JSONObject();
+        AtomicReference<JSONObject> updateResponsePUT = new AtomicReference<> (new JSONObject());
 
-            //Populate JSON request object with values passed into function
-            try {
-                updateRequestPUT.put("first_name", firstName);
-                updateRequestPUT.put("last_name", lastName);
-                updateRequestPUT.put("email", email);
-                updateRequestPUT.put("password", pwd);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        //Populate JSON request object with values passed into function
+        try {
+            updateRequestPUT.put("user_id", userID);
+            updateRequestPUT.put("first_name", firstName);
+            updateRequestPUT.put("last_name", lastName);
+            updateRequestPUT.put("email", email);
+            updateRequestPUT.put("password", pwd);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        updateResponsePUT.set(Requester.requester("/user", "PUT",
+                updateRequestPUT));
+
+        try {
+            if (Requester.handleJSON(updateResponsePUT.get())) {
+                //Searches for "user_id" as a key in the responsePOST.
+                Object userID_response = updateResponsePUT.get().get("user_id");
+
+                //Ensures that the correct user was edited
+                if (userID != userID_response)
+                    return false;
+
+                setUserID(userID_response.toString());
+                System.out.println(getUserID());
+                return true;
+            } else {
+                //Error returned from the DB
                 return false;
             }
-            updateResponsePUT.set(Requester.requester("/user", "PUT",
-                    updateRequestPUT));
-            return true;
-
-        }
-        else
-        {
-            //unable to verify
+        } catch(JSONException e) {
+            e.printStackTrace();
             return false;
         }
 
@@ -213,7 +223,7 @@ public class User {
 
 
 
-        //maybe have variable specifiyng how many groups exist
+        //maybe have variable specifying how many groups exist
         int numExistGroups = 10;
 
         //test cases I guess??
@@ -221,7 +231,7 @@ public class User {
         int numUserInvolvement = 0;
 
         //Make sure user is logged in
-        if (isLoggedIn == true)
+        if (isLoggedIn)
         {
             //Get the groups of this logged in user
             //store it in array
