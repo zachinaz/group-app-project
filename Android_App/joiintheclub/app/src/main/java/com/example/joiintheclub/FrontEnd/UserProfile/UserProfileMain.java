@@ -10,7 +10,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.example.joiintheclub.BackEnd.User;
 import com.example.joiintheclub.FrontEnd.Group.GroupMain;
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
 import com.example.joiintheclub.FrontEnd.Setting.SettingMain;
@@ -20,12 +22,26 @@ import com.example.joiintheclub.R;
 public class UserProfileMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    TextView profileEmail;
+    TextView profileFirstName;
+    TextView profileLastName;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.PTbar);
         setSupportActionBar(toolbar);
+
+
+        profileEmail = findViewById(R.id.profileEmail);
+        profileFirstName = findViewById(R.id.profileFirstName);
+        profileLastName = findViewById(R.id.profileLastName);
+
+
+        setProfileData();
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.profile_drawer);
@@ -36,6 +52,18 @@ public class UserProfileMain extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.profileNav);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setProfileData() {
+
+        String[] UserData = new String[6];
+
+        UserData = User.userInformation("12321");
+
+        profileEmail.setText(UserData[3]);
+        profileLastName.setText(UserData[2]);
+        profileFirstName.setText(UserData[1]);
+
     }
 
     @Override

@@ -10,40 +10,19 @@ import android.widget.TextView;
 
 import com.example.joiintheclub.R;
 
+import java.util.List;
+
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHolder> {
 
     private OnNoteListener mOnNoteListener;
+    private static List<String> groupNames;
+    private List<String> groupDetail;
 
-    public RecycleAdapter(OnNoteListener mOnNoteListener) {
+    public RecycleAdapter(OnNoteListener mOnNoteListener, List<String> groupNames, List<String> groupDetail) {
         this.mOnNoteListener = mOnNoteListener;
+        RecycleAdapter.groupNames = groupNames;
+        this.groupDetail = groupDetail;
     }
-
-
-    private String[] groupNames =
-            {
-                    "Group one",
-                    "Group two",
-                    "Group three",
-                    "Group four",
-                    "Group five",
-                    "Group six",
-                    "Group seven",
-                    "Group eight",
-                    "Group nine",
-            };
-
-    private String[] details =
-            {
-                    "Group one details",
-                    "Group two details",
-                    "Group three details",
-                    "Group four details",
-                    "Group five details",
-                    "Group six details",
-                    "Group seven details",
-                    "Group eight details",
-                    "Group nine details",
-            };
 
     private int[] groupIcon =
             {
@@ -70,16 +49,16 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-
-        viewHolder.groupName.setText(groupNames[i]);
-        viewHolder.groupDetail.setText(details[i]);
+        viewHolder.groupName.setText(groupNames.get(i));
+        viewHolder.groupDetail.setText(groupDetail.get(i));
         viewHolder.groupIcon.setImageResource(groupIcon[i]);
 
     }
 
     @Override
     public int getItemCount() {
-        return groupNames.length;
+
+        return groupNames.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

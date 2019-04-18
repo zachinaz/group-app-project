@@ -15,10 +15,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.example.joiintheclub.BackEnd.Group;
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
 import com.example.joiintheclub.FrontEnd.Setting.SettingMain;
 import com.example.joiintheclub.FrontEnd.UserProfile.UserProfileMain;
 import com.example.joiintheclub.R;
+
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressLint("Registered")
 public class GroupMain extends AppCompatActivity
@@ -40,8 +44,26 @@ public class GroupMain extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        adapter = new RecycleAdapter(this);
+
+        String[][] groupInfo = Group.Get();
+        String [] groupNameBuf = new String[groupInfo.length];
+        String [] groupDetailBuf = new String[groupInfo.length];
+
+        for(int a = 0; a < groupInfo.length; a++)
+        {
+            groupNameBuf[a]= groupInfo[a][1];
+            groupDetailBuf[a] = groupInfo[a][2];
+        }
+        List<String> groupNames = Arrays.asList(groupNameBuf);
+
+        List<String> groupDetail = Arrays.asList(groupDetailBuf);
+
+
+        adapter = new RecycleAdapter(this, groupNames, groupDetail);
         recyclerView.setAdapter(adapter);
+
+
+
 
 
 

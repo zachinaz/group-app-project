@@ -46,14 +46,11 @@ public class SearchRecycleAdapter extends RecyclerView.Adapter<SearchRecycleAdap
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.activity_search_card_view,viewGroup,false);
 
-
-
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-
 
         viewHolder.groupName.setText(groupNames.get(i));
         viewHolder.groupDetail.setText(groupDetail.get(i));
@@ -106,8 +103,5 @@ public class SearchRecycleAdapter extends RecyclerView.Adapter<SearchRecycleAdap
                 }
             });
         }
-
-
     }
-
 }
