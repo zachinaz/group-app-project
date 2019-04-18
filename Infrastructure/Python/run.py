@@ -63,7 +63,7 @@ def user():
                 status = 418
             else:
                 user_id = userPOST["user_id"]
-                resp = {"request_type":"POST","message":f"User {user_id} Successfully Created"}
+                resp = {"request_type":"POST","message":f"User {user_id} Successfully Created","user_id":f"{user_id}"}
                 status = 200
 
     #--PUT--
@@ -87,7 +87,7 @@ def user():
             if "password" in json_data:
                 password = json_data.get("password")
             #SQL UPDATE first_name, last_name, email, password on user_id
-            resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated"}
+            resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated","user_id":f"{user_id}"}
             status = 200
 
     #--DELETE--
@@ -110,7 +110,7 @@ def user():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             else:
-                resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted"}
+                resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted","user_id":f"{user_id}"}
                 status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
@@ -383,6 +383,34 @@ def group():
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/group--
 
+#--/api/group/search--
+@app.route('/api/group/search', methods=['GET'])
+def group_search():
+    resp = {}
+    status = 404
+
+    #--GET--
+    # @json: leader_id, returns {user_id, group_id, group_name}
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("name") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            group_name = json_data.get("name")
+            #SQL SELECT name --> description, color, leader_id
+            description = groupGET["description"]
+            color = groupGET["color"]
+            leader_id = groupGET["leader_id"]
+            resp = {"request_type":"GET", "name": f"{group_name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
+            status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/group/search--
+
 #--/api/group/request--
 @app.route('/api/group/request', methods=['GET', 'POST', 'DELETE'])
 def member_request():
@@ -441,6 +469,8 @@ def member_request():
             #SQL insert group_id, user_id, group_name
             resp = {"request_type":"POST", "message":"Successfully created Request"}
             status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/group/request--
 
 #--/api/event--

@@ -1,5 +1,6 @@
 package com.example.joiintheclub.BackEnd;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -10,24 +11,70 @@ public class GroupRequest {
     public boolean isPending;
     private int RequestID;
 
-    JSONObject requestGET = new JSONObject();
-    AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
-    JSONObject requestPOST = new JSONObject();
-    AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
+    //loadRequest called when a page needs to render any pending requests in the DB
+    public static boolean loadRequest(String leaderID) {
 
-    //input user ID requesting
-    //input Group ID requested
-    public static void sendRequest(String UserID, String GroupID){
-        Group x = new Group();
+        JSONObject requestGET = new JSONObject();
+        AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
 
-        Membership y = new Membership();
-        //y.GetLeader(x.Get());
+        try {
+            requestGET.put("user_id", leaderID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        responseGET.set(Requester.requester("/group/request", "GET", requestGET));
+        try {
+            if (Requester.handleJSON(responseGET.get())) {
+                //Searches for "user_id" as a key in the responsePOST.
+                Object userID = responseGET.get().get("user_id");
+
+                if (userID.toString().equals("0")) {
+                    //credentials not found, returning false
+                    return false;
+                } else {
+                    //Set the "user_id" from DB, login to true
+                    //setUserID(userID.toString());
+                    //setIsLoggedIn(true);
+                    //System.out.println(getUserID());
+                    return true;
+                }
+            } else {
+                //Error returned from the DB
+                return false;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //sendRequest called when a user submits a request to a group
+    public static boolean sendRequest(String userID, String groupID){
+
+        JSONObject requestPOST = new JSONObject();
+        AtomicReference<JSONObject> responsePOST = new AtomicReference<>(new JSONObject());
 
         //use Requester to store Leader's ID to notify the leader
         //push to requester a new request and its status
+        //Populate JSON request object with values passed into function
+        try {
+            requestPOST.put("user_id", userID);
+            requestPOST.put("group_id", groupID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
 
+        //Verifies email and password with the DB. Keeps response in loginResponseGET JSON object
+        responsePOST.set(Requester.requester("/group/request", "POST", requestPOST));
 
+        //Unpacks the Response message sent by the requester
+        //No expected response. If no error thrown, the request was created (returns true)
+        return Requester.handleJSON(responsePOST.get());
     }
+
     public static void acceptRequest(){
         //update membership status
         Group currentGroup=new Group();
