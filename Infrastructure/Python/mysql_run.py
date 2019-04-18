@@ -555,3 +555,18 @@ def postRequest(user_id, group_id):
 		connection.close()
 		return 0
 
+def searchGroup(name):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select LeaderID, GroupColor, GroupDescription from `record` where GroupName = %s;"
+	
+	try:
+		cursor.execute(selectStatement, (name))
+		result = cursor.fetchall()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+
