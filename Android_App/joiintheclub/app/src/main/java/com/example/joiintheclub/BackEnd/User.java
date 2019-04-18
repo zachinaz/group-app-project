@@ -28,14 +28,14 @@ public class User {
     //FUNCTIONS
     //*********************************************
 
-    private static String getUserID() {
+    public static String getUserID() {
         return userID;
     }
     private static void setUserID(String userID) {
         User.userID = userID;
     }
 
-    private static boolean getIsLoggedIn() {
+    public static boolean getIsLoggedIn() {
         return isLoggedIn;
     }
 
