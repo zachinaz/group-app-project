@@ -1,6 +1,7 @@
 package com.example.joiintheclub.FrontEnd.Setting;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.joiintheclub.FrontEnd.Group.GroupMain;
 import com.example.joiintheclub.FrontEnd.UserProfile.UserProfileMain;
@@ -20,12 +26,39 @@ import com.example.joiintheclub.R;
 public class SettingMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    Dialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.Sbar);
         setSupportActionBar(toolbar);
+        mDialog = new Dialog(this);
+
+        Button Feedbcak;
+        Button AboutUs;
+
+        Feedbcak = findViewById(R.id.FeedbackBtn);
+        AboutUs = findViewById(R.id.AboutUsBtn);
+
+
+        Feedbcak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                openFeedbackDlg();
+
+            }
+        });
+
+        AboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                openAboutDlg();
+            }
+        });
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.setting_drawer);
@@ -77,5 +110,58 @@ public class SettingMain extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.setting_drawer);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void openFeedbackDlg() {
+
+        final AutoCompleteTextView title;
+        final AutoCompleteTextView event_content;
+        ImageButton close_btn;
+        ImageView event;
+
+
+        mDialog.setContentView(R.layout.activity_feedbcak);
+        mDialog.show();
+
+        title = mDialog.findViewById(R.id.Btitle);
+        event_content = mDialog.findViewById(R.id.Bcontent);
+        close_btn = mDialog.findViewById(R.id.Feedback_close_icon);
+        event = mDialog.findViewById(R.id.Feedback_publish);
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String stitle = title.getText().toString();
+                String Content = event_content.getText().toString();
+                String n;
+            }
+        });
+
+    }
+
+    private void openAboutDlg() {
+
+        ImageButton close_btn;
+
+        mDialog.setContentView(R.layout.activity_about_us);
+        mDialog.show();
+
+        close_btn = mDialog.findViewById(R.id.Feedback_close_icon);
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
     }
 }

@@ -314,7 +314,7 @@ public class User {
         //User ID is in the first position for
         userProfile[0] = userID;
         //JSON object for requesting user information
-        /*
+
         JSONObject userInfoRequestGET = new JSONObject();
         AtomicReference<JSONObject> userInfoResponseGET =
                 new AtomicReference<> (new JSONObject());
@@ -336,19 +336,20 @@ public class User {
 
             //Credentials found
                //UNSURE IF THIS CORRECT!!!!
+            /*
             if (!user_id.equals("0")) {
 
-            /*
+            }
+            */
             //Credentials not found
             if (user_id.equals("0")) {
                 //return false;
             }
-            */
-                //Credentials found
-                //else
-                // {
+
+            //Credentials found
+            else {
                 //Get the user information -????????
-/*
+
                 String first_name = userInfoResponseGET.get().get("first_name").toString();
                 String last_name = userInfoResponseGET.get().get("last_name").toString();
                 String email = userInfoResponseGET.get().get("email").toString();
@@ -360,28 +361,25 @@ public class User {
                 userProfile[3] = email;
                 userProfile[4] = password;
 
+              }
 
-
-                //profile picture!!!!!
-
-                //}
-      //      }
-/*
         } catch (JSONException e)
         {
             e.printStackTrace();
            // return false;
         }
-        */
+
 
             //this is just for now - simply for hardcode testing
             //later uncomment above as appropriate
             //later comment out/remove below section
+        /*
             userProfile[0] = "123456";
             userProfile[1] = "Stephen";
             userProfile[2] = "Styffe";
             userProfile[3] = "sample@gmail.com";
             userProfile[4] = "password1";
+            */
         return userProfile;
     }
 

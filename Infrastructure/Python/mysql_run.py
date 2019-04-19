@@ -67,17 +67,32 @@ def deleteUser(user_id):
 def getMembership(user_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
-
+	
+	listGroupIDs = list()
+	UserGroupInfo = list()
+	
 	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.UserID = %s;"
 	try:
 		cursor.execute(getMembershipStatement, (user_id))
-		result = cursor.fetchall()
+		result1 = cursor.fetchall()
 	except:
 		connection.close()
 		return 0
-
+	
+	for x in result1:
+		listGroupIDs.append(x.get('group_id'))
+	
+		
+	returnGroupInfo = "select GroupName, LeaderID, GroupColor, GroupDescription from `record` where GroupID = %s;"
+	for i in listGroupIDs:
+		try:
+			cursor.execute(returnGroupInfo, (i))
+			UserGroupInfo.append(cursor.fetchone())
+		except:
+			return 0
+	
 	connection.close()
-	return result
+	return UserGroupInfo
 
 # for POST MEMBERSHIP
 def postMembership(user_id, group_id):
@@ -521,7 +536,7 @@ def getRequest(leader_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	selectStatement = "select `request`.RequestID, `request`.GroupID, `request`.UserID from `request`, `record` where `request`.GroupID = `record`.GroupID and `record`.LeaderID = %s;"
+	selectStatement = "select `request`.RequestID, `request`.GroupID, `request`.UserID, `record`.GroupName from `request`, `record` where `request`.GroupID = `record`.GroupID and `record`.LeaderID = %s;"
 
 	try:
 		cursor.execute(selectStatement, (leader_id))
@@ -552,5 +567,115 @@ def postRequest(user_id, group_id):
 		connection.close()
 		return result
 	except:
+		connection.close()
+		return 0
+
+def searchGroup(name):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select LeaderID, GroupColor, GroupDescription from `record` where GroupName = %s;"
+	
+	try:
+		cursor.execute(selectStatement, (name))
+		result = cursor.fetchall()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+
+def putUser(user_id, first_name, last_name, email, password):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	updateStatement = "update `user` set FirstName = %s, LastName = %s, email = %s, password = %s where UserID = %s;"
+	try:
+		cursor.execute(updateStatement, (first_name, last_name, email, password, user_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def putGroup(group_id, name, description, color):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	updateStatement = "update `record` set GroupName = %s, GroupDescription = %s, GroupColor = %s where GroupID = %s"
+	
+	try:
+		cursor.execute(updateStatement,(name, description, color, group_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def deleteRequest(user_id, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	deleteStatement = "delete from `request` where UserID = %s and GroupID = %s;"
+	
+	try:
+		cursor.execute(deleteStatement, (user_id, group_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def putAnnouncement(leader_id, content, group_id, announcement_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	updateStatement = "update `announcement` set LeaderID = %s, content = %s, GroupID = %s where AnnouncementID = %s;"
+	
+	try:
+		cursor.execute(updateStatement,(leader_id, content, group_id, announcement_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+		
+def putEvent(event_id, DateAndTime, event_name, leader_id, location, description, group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	updateStatement = "update `event` set DateAndTime = %s, eventName = %s, LeaderID = %s, location = %s, description = %s, GroupID = %s where EventID = %s"
+	
+	try:
+		cursor.execute(updateStatement,(DateAndTime, event_name, leader_id, location, description, group_id, event_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
+		connection.close()
+		return 0
+
+def putComment(content, announcement_id, comment_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	updateStatement = "update `comment` set content = %s, DateAndTime = curdate(), announcement_id = %s where CommentID = %s;"
+	
+	try:
+		cursor.execute(updateStatement,(content, announcement_id, comment_id))
+		connection.commit()
+		connection.close()
+		return 1
+	except:
+		connection.rollback()
 		connection.close()
 		return 0
