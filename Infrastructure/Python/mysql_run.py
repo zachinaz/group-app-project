@@ -69,6 +69,8 @@ def getMembership(user_id):
 	cursor = connection.cursor()
 	
 	listGroupIDs = list()
+	UserGroupInfo = list()
+	
 	getMembershipStatement = "select `membership`.GroupID as group_id from `membership` where `membership`.UserID = %s;"
 	try:
 		cursor.execute(getMembershipStatement, (user_id))
@@ -79,10 +81,18 @@ def getMembership(user_id):
 	
 	for x in result1:
 		listGroupIDs.append(x.get('group_id'))
+	
 		
 	returnGroupInfo = "select GroupName, LeaderID, GroupColor, GroupDescription from `record` where GroupID = %s;"
+	for i in listGroupIDs:
+		try:
+			cursor.execute(returnGroupInfo, (i))
+			UserGroupInfo.append(cursor.fetchone())
+		except:
+			return 0
+	
 	connection.close()
-	return 1 # need to change this!
+	return UserGroupInfo
 
 # for POST MEMBERSHIP
 def postMembership(user_id, group_id):
