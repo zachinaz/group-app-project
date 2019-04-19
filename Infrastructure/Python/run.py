@@ -432,9 +432,11 @@ def member_request():
             else:
                 resp = {"request_type":"GET"}
                 for req in requestGET:
+                    request_id = req["RequestID"]
                     user_id = req["UserID"]
                     group_id = req["GroupID"]
-                resp += {"user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
+                    group_name = req["GroupName"]
+                resp += {"request_id":f"{request_id}", "user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
                 status = 200
 
     #--POST--
@@ -458,7 +460,8 @@ def member_request():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             else:
-                resp = {"request_type":"POST", "message":"Successfully created Request"}
+                request_id = req["RequestID"]
+                resp = {"request_type":"POST", "message":"Successfully created Request", "request_id":f"{request_id}"}
                 status = 200
 
     #--DELETE--
