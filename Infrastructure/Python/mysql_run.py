@@ -536,7 +536,7 @@ def getRequest(leader_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	selectStatement = "select `request`.RequestID, `request`.GroupID, `request`.UserID from `request`, `record` where `request`.GroupID = `record`.GroupID and `record`.LeaderID = %s;"
+	selectStatement = "select `request`.RequestID, `request`.GroupID, `request`.UserID, `record`.GroupName from `request`, `record` where `request`.GroupID = `record`.GroupID and `record`.LeaderID = %s;"
 
 	try:
 		cursor.execute(selectStatement, (leader_id))
