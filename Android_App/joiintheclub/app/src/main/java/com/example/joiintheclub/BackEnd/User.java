@@ -49,10 +49,6 @@ public class User {
     //    //  returns false (if login failed) and true (if login succeeded)
     public static boolean login(String email, String pwd)
     {
-        //Test cases for now
-        //email = "john@gmail.com";
-        //pwd = "1234";
-
 
         //Make sure user entered something for email and password
         if (email.isEmpty() || pwd.isEmpty()) {
