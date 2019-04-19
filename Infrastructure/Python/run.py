@@ -78,14 +78,10 @@ def user():
             status = 400
         else:
             user_id = json_data.get("user_id")
-            if "first_name" in json_data:
-                first_name = json_data.get("first_name")
-            if "last_name" in json_data:
-                last_name = json_data.get("last_name")
-            if "email" in json_data:
-                email = json_data.get("email")
-            if "password" in json_data:
-                password = json_data.get("password")
+            first_name = json_data.get("first_name")
+            last_name = json_data.get("last_name")
+            email = json_data.get("email")
+            password = json_data.get("password")
             #SQL UPDATE first_name, last_name, email, password on user_id
             resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated","user_id":f"{user_id}"}
             status = 200
@@ -348,12 +344,9 @@ def group():
             status = 400
         else:
             group_id = json_data.get("group_id")
-            if "name" in json_data:
-                name = json_data.get("name")
-            if "description" in json_data:
-                description = json_data.get("description")
-            if "color" in json_data:
-                color = json_data.get("color")
+            name = json_data.get("name")
+            description = json_data.get("description")
+            color = json_data.get("color")
             #SQL UPDATE name, description, color
             resp = {"request_type":"PUT","message":f"Group {group_id} Successfully Updated"}
             status = 200
@@ -430,11 +423,19 @@ def member_request():
         else:
             leader_id = json_data.get("user_id")
             #SQL SELECT leader_id --> user_id, group_id, group_name
-            user_id = "4"
-            group_id = "3"
-            group_name = "The Sluggers"
-            resp = {"request_type":"GET", "user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
-            status = 200
+            requestGET = getRequest(leader_id)
+            print(requestGET)
+
+            if requestGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"GET"}
+                for req in requestGET:
+                    user_id = req["UserID"]
+                    group_id = req["GroupID"]
+                resp += {"user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
+                status = 200
 
     #--POST--
     # @json: {user_id, group_id}
@@ -450,12 +451,19 @@ def member_request():
             user_id = json_data.get("user_id")
             group_id = json_data.get("group_id")
             #SQL insert group_id, user_id, group_name
-            resp = {"request_type":"POST", "message":"Successfully created Request"}
-            status = 200
+            requestPOST = postRequest(user_id, group_id)
+            print(requestPOST)
+
+            if requestPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"POST", "message":"Successfully created Request"}
+                status = 200
 
     #--DELETE--
     # @json: {user_id, group_id}
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         json_data = request.get_json(force=True)
         if not json_data:
             resp = {"err": "No data provided"}
@@ -467,7 +475,7 @@ def member_request():
             user_id = json_data.get("user_id")
             group_id = json_data.get("group_id")
             #SQL insert group_id, user_id, group_name
-            resp = {"request_type":"POST", "message":"Successfully created Request"}
+            resp = {"request_type":"POST", "message":"Successfully deleted Request"}
             status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
@@ -522,7 +530,6 @@ def event():
             status = 400
         else:
             name = json_data.get("name")
-            #may need date time set
             leader_id = json_data.get("leader_id")
             location = json_data.get("location")
             description = json_data.get("description")
@@ -550,12 +557,9 @@ def event():
             status = 400
         else:
             event_id = json_data.get("event_id")
-            if "name" in json_data:
-                name = json_data.get("name")
-            if "description" in json_data:
-                description = json_data.get("description")
-            if "location" in json_data:
-                location = json_data.get("location")
+            name = json_data.get("name")
+            description = json_data.get("description")
+            location = json_data.get("location")
             #SQL UPDATE name, description, location
             resp = {"request_type":"PUT","message":f"Event {event_id} Successfully Updated"}
             status = 200
