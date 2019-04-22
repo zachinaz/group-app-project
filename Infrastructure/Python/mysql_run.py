@@ -640,14 +640,14 @@ def deletePoll(poll_id):
 		return 0
 
 # for GET RESPONSE
-def getPollResponse(response_id):
+def getPollResponse(poll_id):
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	selectStatement = "select memberID, userResponse, DateAndTime, groupID, pollID from `poll response` where ResponseID = %s"
+	selectStatement = "select memberID, userResponse, DateAndTime from `poll response` where PollID = %s"
 
 	try:
-		cursor.execute(selectStatement, (response_id))
+		cursor.execute(selectStatement, (poll_id))
 		result = cursor.fetchone()
 		connection.close()
 		return result
