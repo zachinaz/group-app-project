@@ -121,6 +121,7 @@ def user():
 @app.route('/api/user/membership', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def membership():
     resp = {}
+    cnt = 0
     status = 404
 
     group_id = []
@@ -142,9 +143,19 @@ def membership():
             if membershipGET == 0:
                 resp = {"err": "Database could not perform action"}
                 status = 418
+            elif membershipGET == None:
+                resp = {"err": "Membership not found in Database"}
+                status = 204
             else:
-                group_id = [{membershipGET["group_id"]}] #Need to allow this variable to be a list
-                resp = {"request_type":"GET", "message":f"User {user_id} a member of Group {group_id}", "group_id": f"{group_id}"}
+                resp = {"request_type":"GET"}
+                for membership in membershipGET:
+                    cnt += 1
+                    resp[f"membership{cnt}"] = {}
+                    resp[f"membership{cnt}"]["name"] = membership["GroupName"]
+                    resp[f"membership{cnt}"]["leader_id"] = membership["LeaderID"]
+                    resp[f"membership{cnt}"]["color"] = membership["GroupColor"]
+                    resp[f"membership{cnt}"]["description"] = membership["GroupDescription"]
+
                 status = 200
 
     #--POST--
@@ -419,6 +430,7 @@ def group_search():
             group_name = json_data.get("name")
             #SQL SELECT name --> description, color, leader_id
             searchGET = searchGroup(group_name)
+            print(searchGET)
             if searchGET == 0:
                 resp = {"err": "Database could not perform action"}
                 status = 418
@@ -426,9 +438,9 @@ def group_search():
                 resp = {"err": "Group not found in Database"}
                 status = 204
             else:
-                description = searchGET["description"]
-                color = searchGET["color"]
-                leader_id = searchGET["leader_id"]
+                description = searchGET[0]["GroupDescription"]
+                color = searchGET[0]["GroupColor"]
+                leader_id = searchGET[0]["LeaderID"]
                 resp = {"request_type":"GET", "name": f"{group_name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
                 status = 200
 
@@ -439,6 +451,7 @@ def group_search():
 @app.route('/api/group/request', methods=['GET', 'POST', 'DELETE'])
 def member_request():
     resp = {}
+    cnt = 0
     status = 404
 
     #--GET--
@@ -465,11 +478,12 @@ def member_request():
             else:
                 resp = {"request_type":"GET"}
                 for req in requestGET:
-                    request_id = req["RequestID"]
-                    user_id = req["UserID"]
-                    group_id = req["GroupID"]
-                    group_name = req["GroupName"]
-                resp = {**resp, "request_id":f"{request_id}", "user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
+                    cnt += 1
+                    resp[f"request{cnt}"] = {}
+                    resp[f"request{cnt}"]["request_id"] = req["RequestID"]
+                    resp[f"request{cnt}"]["user_id"] = req["UserID"]
+                    resp[f"request{cnt}"]["group_id"] = req["GroupID"]
+                    resp[f"request{cnt}"]["group_name"] = req["GroupName"]
                 status = 200
 
     #--POST--
@@ -492,7 +506,7 @@ def member_request():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             else:
-                request_id = req["RequestID"]
+                request_id = requestPOST["RequestID"]
                 resp = {"request_type":"POST", "message":"Successfully created Request", "request_id":f"{request_id}"}
                 status = 200
 
@@ -880,8 +894,7 @@ def poll():
             else:
                 leader_id = pollGET["LeaderID"]
                 poll_question = pollGET["pollQuestion"]
-                for option in pollGET["pollResponseOptions"]:
-                    options.append(option)
+                poll_response_options = pollGET["pollResponseOptions"]
                 poll_description = pollGET["pollDescription"]
                 resp = {"request_type":"GET", "leader_id": f"{leader_id}", "poll_question": f"{announcement_id}", "poll_description": f"{poll_description}"}
                 status = 200
@@ -899,8 +912,7 @@ def poll():
         else:
             leader_id = json_data.get("user_id")
             poll_question = json_data.get("poll_question")
-            for option in json_data.get("poll_response_options"):
-                options.append(option)
+            poll_response_options = json_data.get("poll_response_options")
             poll_description = json_data.get("poll_description")
             group_id = json_data.get("group_id")
             #SQL INSERT leader_id, poll_question, poll_response_options, poll_description, group_id
@@ -938,6 +950,94 @@ def poll():
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/poll--
+
+#--/api/poll/response--
+@app.route('/api/poll/response', methods=['GET', 'POST', 'DELETE'])
+def poll_response():
+    resp = {}
+    status = 404
+
+    #--GET--
+    # @json: poll_id , returns {MemberID, userResponse, groupID}
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("poll_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            poll_id = json_data.get("poll_id")
+            #SQL SELECT poll_id -> [member_id, userResponse, group_id, poll_response_id]
+            pollResponseGET = getPollResponse(poll_id)
+            print(pollResponseGET)
+            if pollResponseGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif pollResponseGET == None:
+                resp = {"err": "Event not found in Database"}
+                status = 204
+            else:
+                resp = {"request_type":"GET"}
+                for response in pollResponseGET:
+                    cnt += 1
+                    resp[f"response{cnt}"] = {}
+                    resp[f"response{cnt}"]["user_id"] = response["MemberID"]
+                    resp[f"response{cnt}"]["response"] = req["userResponse"]
+                    resp[f"response{cnt}"]["date_time"] = req["DateAndTime"]
+                status = 200
+
+    #--POST--
+    # @json: {user_id, announcement_id, content}
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "poll_question" or "poll_response_options" or "poll_description" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            member_id = json_data.get("user_id")
+            response = json_data.get("response")
+            group_id = json_data.get("group_id")
+            poll_id = json_data.get("poll_id")
+            #SQL INSERT member_id, response, group_id, poll_id
+            pollResponsePOST = postPollResponse(member_id, response, group_id, poll_id)
+            print(pollResponsePOST)
+            if pollResponsePOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                poll_response_id = pollResponsePOST["ReponseID"]
+                resp = {"request_type":"POST", "message": f"Poll Response {poll_response_id} Successfully Created", "poll_response_id": f"{poll_response_id}"}
+                status = 200
+
+    #--DELETE--
+    # @json: event_id
+    if request.method == 'DELETE':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("poll_response_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            poll_response_id = json_data.get("poll_response_id")
+            #SQL DELETE Poll Response on poll_response_id
+            pollResponseDEL = deletePollResponse(poll_response_id)
+            print(pollResponseDEL)
+            if pollResponseDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE","message":f"Poll Response {poll_response_id} Successfully Deleted"}
+                status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/poll/response--
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050)
