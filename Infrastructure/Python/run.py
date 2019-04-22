@@ -83,8 +83,13 @@ def user():
             email = json_data.get("email")
             password = json_data.get("password")
             #SQL UPDATE first_name, last_name, email, password on user_id
-            resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated","user_id":f"{user_id}"}
-            status = 200
+            userPUT = putUser(first_name, last_name, email, password, user_id)
+            if userPUT == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated","user_id":f"{user_id}"}
+                status = 200
 
     #--DELETE--
     # @json: user_id
@@ -157,8 +162,13 @@ def membership():
             #SQL INSERT user_id, group_id in membership
             membershipPOST = postMembership(user_id, group_id)
             print(membershipPOST)
-            resp = {"request_type":"POST", "message":f"Membership created of User {user_id} in Group {group_id}"}
-            status = 200
+            if membershipPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                member_id = membershipPOST["memberID"]
+                resp = {"request_type":"POST", "message":f"Membership created of User {user_id} in Group {group_id}", "member_id":f"{member_id}"}
+                status = 200
 
     #--PUT--
     if request.method == 'PUT':
@@ -176,8 +186,12 @@ def membership():
             #SQL UPDATE privilege on user_id, group_id
             membershipPUT = updateMembership(user_id, group_id, privilege)
             print(membershipPUT)
-            resp = {"request_type":"PUT", "message":f"User {user_id} in Group {group_id} privileges updated"}
-            status = 200
+            if membershipPUT == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"PUT", "message":f"User {user_id} in Group {group_id} privileges updated"}
+                status = 200
 
     #--DELETE--
     if request.method == 'DELETE':
@@ -194,8 +208,12 @@ def membership():
             #SQL DELETE membership on user_id, group_id
             membershipDEL = deleteMembership(user_id, group_id)
             print(membershipDEL)
-            resp = {"request_type":"DELETE", "message":f"User {user_id}\'s membership in Group {group_id} has been deleted"}
-            status = 200
+            if membershipDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE", "message":f"User {user_id}\'s membership in Group {group_id} has been deleted"}
+                status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/user/membership--
@@ -348,8 +366,13 @@ def group():
             description = json_data.get("description")
             color = json_data.get("color")
             #SQL UPDATE name, description, color
-            resp = {"request_type":"PUT","message":f"Group {group_id} Successfully Updated"}
-            status = 200
+            groupPUT = putGroup(group_id, name, description, color)
+            if groupPUT == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"PUT","message":f"Group {group_id} Successfully Updated"}
+                status = 200
 
     #--DELETE--
     # @json: group_id
@@ -395,11 +418,19 @@ def group_search():
         else:
             group_name = json_data.get("name")
             #SQL SELECT name --> description, color, leader_id
-            description = groupGET["description"]
-            color = groupGET["color"]
-            leader_id = groupGET["leader_id"]
-            resp = {"request_type":"GET", "name": f"{group_name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
-            status = 200
+            searchGET = searchGroup(group_name)
+            if searchGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif searchGET == None:
+                resp = {"err": "Group not found in Database"}
+                status = 204
+            else:
+                description = searchGET["description"]
+                color = searchGET["color"]
+                leader_id = searchGET["leader_id"]
+                resp = {"request_type":"GET", "name": f"{group_name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
+                status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/group/search--
@@ -425,10 +456,12 @@ def member_request():
             #SQL SELECT leader_id --> user_id, group_id, group_name
             requestGET = getRequest(leader_id)
             print(requestGET)
-
             if requestGET == 0:
                 resp = {"err": "Database could not perform action"}
                 status = 418
+            elif requestGET == None:
+                resp = {"err": "Request not found in Database"}
+                status = 204
             else:
                 resp = {"request_type":"GET"}
                 for req in requestGET:
@@ -436,7 +469,7 @@ def member_request():
                     user_id = req["UserID"]
                     group_id = req["GroupID"]
                     group_name = req["GroupName"]
-                resp += {"request_id":f"{request_id}", "user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
+                resp = {**resp, "request_id":f"{request_id}", "user_id":f"{user_id}", "group_id":f"{group_id}", "group_name":f"{group_name}"}
                 status = 200
 
     #--POST--
@@ -455,7 +488,6 @@ def member_request():
             #SQL insert group_id, user_id, group_name
             requestPOST = postRequest(user_id, group_id)
             print(requestPOST)
-
             if requestPOST == 0:
                 resp = {"err": "Database could not perform action"}
                 status = 418
@@ -477,9 +509,14 @@ def member_request():
         else:
             user_id = json_data.get("user_id")
             group_id = json_data.get("group_id")
-            #SQL insert group_id, user_id, group_name
-            resp = {"request_type":"POST", "message":"Successfully deleted Request"}
-            status = 200
+            #SQL delete on user_id, group_id
+            requestDEL = deleteRequest(user_id, group_id)
+            if requestDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE", "message":"Successfully deleted Request"}
+                status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/group/request--
@@ -509,7 +546,7 @@ def event():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             elif eventGET == None:
-                resp = {"err": "Group not found in Database"}
+                resp = {"err": "Event not found in Database"}
                 status = 204
             else:
                 date_time = eventGET["DateAndTime"]
@@ -538,7 +575,7 @@ def event():
             description = json_data.get("description")
             group_id = json_data.get("group_id")
             #SQL INSERT event_name, event_DateAndTime, leader_id, location, description, group_id
-            eventPOST = postGroup(name, date_time, leader_id, location, description, group_id)
+            eventPOST = postEvent(name, date_time, leader_id, location, description, group_id)
             print(eventPOST)
             if eventPOST == 0:
                 resp = {"err": "Database could not perform action"}
@@ -564,8 +601,13 @@ def event():
             description = json_data.get("description")
             location = json_data.get("location")
             #SQL UPDATE name, description, location
-            resp = {"request_type":"PUT","message":f"Event {event_id} Successfully Updated"}
-            status = 200
+            eventPUT = putEvent(event_id, name, )
+            if eventPUT == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"PUT","message":f"Event {event_id} Successfully Updated"}
+                status = 200
 
     #--DELETE--
     # @json: event_id
@@ -590,7 +632,316 @@ def event():
                 status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
-#END OF --/api/group--
+#END OF --/api/event--
+
+#--/api/announcement--
+@app.route('/api/announcement', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def announcement():
+    resp = {}
+    status = 404
+
+    #--GET--
+    # @json: announcement_id , returns {UserID, DateAndTime, Content, GroupID}
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("announcement_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            announcement_id = json_data.get("announcement_id")
+            #SQL SELECT announcement_id -> user_id, date_time, content, group_id
+            announcementGET = getAnnouncement(announcement_id)
+            print(announcementGET)
+            if announcementGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif announcementGET == None:
+                resp = {"err": "Event not found in Database"}
+                status = 204
+            else:
+                user_id = announcementGET["UserID"]
+                date_time = announcementGET["DateAndTime"]
+                content = announcementGET["Content"]
+                group_id = announcementGET["GroupID"]
+                resp = {"request_type":"GET", "user_id": f"{user_id}", "date_time": f"{date_time}", "content": f"{content}", "group_id": f"{group_id}"}
+                status = 200
+
+    #--POST--
+    # @json: {user_id, content, group_id}
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "content" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            content = json_data.get("content")
+            group_id = json_data.get("group_id")
+            #SQL INSERT user_id, content_id, content, group_id
+            announcementPOST = postAnnouncement(user_id, content, group_id)
+            print(announcementPOST)
+            if announcementPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                announcement_id = announcementPOST["AnnouncementID"]
+                resp = {"request_type":"POST", "message": f"Announcement {announcement_id} Successfully Created", "announcement_id": f"{announcement_id}"}
+                status = 200
+
+    #--PUT--
+    # @json: {leader_id, content, group_id, announcement_id}
+    if request.method == 'PUT':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("announcement_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            announcement_id = json_data.get("announcement_id")
+            leader_id = json_data.get("leader_id")
+            content = json_data.get("content")
+            group_id = json_data.get("group_id")
+            #SQL UPDATE leader_id, content, group_id, announcement_id
+            announcementPUT = putAnnouncement(leader_id, content, group_id, announcement_id)
+            if announcementPUT == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"PUT","message":f"Announcement {announcement_id} Successfully Updated"}
+                status = 200
+
+    #--DELETE--
+    # @json: event_id
+    if request.method == 'DELETE':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("announcement_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            announcement_id = json_data.get("announcement_id")
+            #SQL DELETE Announcement on announcement_id
+            announcementDEL = deleteAnnouncement(announcement_id)
+            print(announcementDEL)
+            if announcementDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE","message":f"Announcement {announcement_id} Successfully Deleted"}
+                status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/announcement--
+
+#--/api/comment--
+@app.route('/api/comment', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def comment():
+    resp = {}
+    status = 404
+
+    #--GET--
+    # @json: comment_id , returns {UserID, AnnouncementID, Content}
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("comment_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            comment_id = json_data.get("comment_id")
+            #SQL SELECT comment_id -> user_id, date_time, content, group_id
+            commentGET = getComment(comment_id)
+            print(commentGET)
+            if commentGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif commentGET == None:
+                resp = {"err": "Event not found in Database"}
+                status = 204
+            else:
+                user_id = commentGET["MemberID"]
+                announcement_id = commentGET["AnnouncementID"]
+                content = commentGET["Content"]
+                resp = {"request_type":"GET", "user_id": f"{user_id}", "announcement_id": f"{announcement_id}", "content": f"{content}"}
+                status = 200
+
+    #--POST--
+    # @json: {user_id, announcement_id, content}
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "content" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            user_id = json_data.get("user_id")
+            announcement_id = json_data.get("announcement_id")
+            content = json_data.get("content")
+            #SQL INSERT user_id, content_id, content, group_id
+            commentPOST = postComment(user_id, announcement_id, content)
+            print(commentPOST)
+            if commentPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                comment_id = commentPOST["CommentID"]
+                resp = {"request_type":"POST", "message": f"Comment {comment_id} Successfully Created", "comment_id": f"{comment_id}"}
+                status = 200
+
+    #--PUT--
+    # @json: {content, announcement_id, comment_id}
+    if request.method == 'PUT':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("comment_id" or "content") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            comment_id = json_data.get("comment_id")
+            announcement_id = json_data.get("announcement_id")
+            content = json_data.get("content")
+            #SQL UPDATE comment_id, announcement_id, content
+            commentPUT = putComment(content, announcement_id, comment_id)
+            if commentPUT == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"PUT","message":f"Comment {comment_id} Successfully Updated"}
+                status = 200
+
+    #--DELETE--
+    # @json: event_id
+    if request.method == 'DELETE':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("comment_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            comment_id = json_data.get("comment_id")
+            #SQL DELETE Comment on comment_id
+            commentDEL = deleteComment(comment_id)
+            print(commentDEL)
+            if commentDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE","message":f"Comment {comment_id} Successfully Deleted"}
+                status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/comment--
+
+#--/api/poll--
+@app.route('/api/poll', methods=['GET', 'POST', 'DELETE'])
+def poll():
+    resp = {}
+    status = 404
+
+    #--GET--
+    # @json: poll_id , returns {LeaderID, pollQuestion, pollResponseOptions, pollDescription, group_id}
+    if request.method == 'GET':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("poll_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            poll_id = json_data.get("poll_id")
+            #SQL SELECT poll_id -> leader_id, poll_question, poll_response_options[], poll_description, group_id
+            pollGET = getPoll(poll_id)
+            print(pollGET)
+            if pollGET == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            elif pollGET == None:
+                resp = {"err": "Event not found in Database"}
+                status = 204
+            else:
+                leader_id = pollGET["LeaderID"]
+                poll_question = pollGET["pollQuestion"]
+                for option in pollGET["pollResponseOptions"]:
+                    options.append(option)
+                poll_description = pollGET["pollDescription"]
+                resp = {"request_type":"GET", "leader_id": f"{leader_id}", "poll_question": f"{announcement_id}", "poll_description": f"{poll_description}"}
+                status = 200
+
+    #--POST--
+    # @json: {user_id, announcement_id, content}
+    if request.method == 'POST':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("user_id" or "poll_question" or "poll_response_options" or "poll_description" or "group_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            leader_id = json_data.get("user_id")
+            poll_question = json_data.get("poll_question")
+            for option in json_data.get("poll_response_options"):
+                options.append(option)
+            poll_description = json_data.get("poll_description")
+            group_id = json_data.get("group_id")
+            #SQL INSERT leader_id, poll_question, poll_response_options, poll_description, group_id
+            pollPOST = postPoll(leader_id, poll_question, poll_response_options, poll_description, group_id)
+            print(pollPOST)
+            if pollPOST == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                poll_id = pollPOST["PollID"]
+                resp = {"request_type":"POST", "message": f"Poll {poll_id} Successfully Created", "poll_id": f"{poll_id}"}
+                status = 200
+
+    #--DELETE--
+    # @json: event_id
+    if request.method == 'DELETE':
+        json_data = request.get_json(force=True)
+        if not json_data:
+            resp = {"err": "No data provided"}
+            status = 400
+        elif ("poll_id") not in json_data:
+            resp = {"err": "Missing required fields"}
+            status = 400
+        else:
+            poll_id = json_data.get("poll_id")
+            #SQL DELETE Poll on poll_id
+            pollDEL = deletePoll(poll_id)
+            print(pollDEL)
+            if pollDEL == 0:
+                resp = {"err": "Database could not perform action"}
+                status = 418
+            else:
+                resp = {"request_type":"DELETE","message":f"Poll {poll_id} Successfully Deleted"}
+                status = 200
+
+    return Response(dumps(resp),status=status,mimetype='application/json')
+#END OF --/api/poll--
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050)
+
+###------------###
+### END OF FILE - if this is missing, the file is truncated ###
+###------------###
