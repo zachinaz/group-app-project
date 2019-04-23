@@ -284,14 +284,14 @@ def deleteGroup(group_id):
 		return 0
 
 # for GET SEARCH
-def searchGroup(name):
+def searchGroup():
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	selectStatement = "select LeaderID, GroupColor, GroupDescription from `record` where GroupName = %s;"
+	selectStatement = "select LeaderID, GroupColor, GroupDescription from `record`;"
 
 	try:
-		cursor.execute(selectStatement, (name))
+		cursor.execute(selectStatement)
 		result = cursor.fetchall()
 		connection.close()
 		return result
