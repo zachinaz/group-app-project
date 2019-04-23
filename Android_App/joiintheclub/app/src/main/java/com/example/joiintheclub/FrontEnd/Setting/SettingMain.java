@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.joiintheclub.FrontEnd.Group.GroupMain;
+import com.example.joiintheclub.FrontEnd.Init.LoginActivity;
 import com.example.joiintheclub.FrontEnd.UserProfile.UserProfileMain;
 import com.example.joiintheclub.R;
 
@@ -105,6 +106,8 @@ public class SettingMain extends AppCompatActivity
 
         } else if (id == R.id.logout) {
 
+            Intent intent = new Intent(com.example.joiintheclub.FrontEnd.Setting.SettingMain.this, LoginActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.setting_drawer);

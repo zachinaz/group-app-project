@@ -311,6 +311,7 @@ public class User {
         //Array of strings containing user profile information
         String[] userProfile = new String[6];
 
+            /*
         //User ID is in the first position for
         userProfile[0] = userID;
         //JSON object for requesting user information
@@ -340,7 +341,7 @@ public class User {
             if (!user_id.equals("0")) {
 
             }
-            */
+
             //Credentials not found
             if (user_id.equals("0")) {
                 //return false;
@@ -367,19 +368,19 @@ public class User {
         {
             e.printStackTrace();
            // return false;
-        }
+        }*/
 
 
             //this is just for now - simply for hardcode testing
             //later uncomment above as appropriate
             //later comment out/remove below section
-        /*
+
             userProfile[0] = "123456";
             userProfile[1] = "Stephen";
             userProfile[2] = "Styffe";
             userProfile[3] = "sample@gmail.com";
             userProfile[4] = "password1";
-            */
+
         return userProfile;
     }
 

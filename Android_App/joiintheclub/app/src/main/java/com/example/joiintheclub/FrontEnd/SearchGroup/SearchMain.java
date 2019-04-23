@@ -22,6 +22,7 @@ import android.widget.EditText;
 
 import com.example.joiintheclub.BackEnd.Group;
 import com.example.joiintheclub.FrontEnd.Group.GroupMain;
+import com.example.joiintheclub.FrontEnd.Init.LoginActivity;
 import com.example.joiintheclub.FrontEnd.Setting.SettingMain;
 import com.example.joiintheclub.FrontEnd.UserProfile.UserProfileMain;
 import com.example.joiintheclub.R;
@@ -155,6 +156,8 @@ public class SearchMain extends AppCompatActivity
 
         } else if (id == R.id.logout) {
 
+            Intent intent = new Intent(SearchMain.this, LoginActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.search_drawer);

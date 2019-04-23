@@ -17,7 +17,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:contentDescription="profile picture"
-        android:src="@drawable/profile_icon"
+        android:src="@drawable/example_profile_pic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

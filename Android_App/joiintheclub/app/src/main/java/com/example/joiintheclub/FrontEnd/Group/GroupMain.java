@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.joiintheclub.BackEnd.Group;
+import com.example.joiintheclub.FrontEnd.Init.LoginActivity;
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
 import com.example.joiintheclub.FrontEnd.Setting.SettingMain;
 import com.example.joiintheclub.FrontEnd.UserProfile.UserProfileMain;
@@ -105,6 +106,8 @@ public class GroupMain extends AppCompatActivity
 
         } else if (id == R.id.logout) {
 
+            Intent intent = new Intent(com.example.joiintheclub.FrontEnd.Group.GroupMain.this, LoginActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer =  findViewById(R.id.groupNav);
