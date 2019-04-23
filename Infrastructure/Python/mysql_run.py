@@ -288,7 +288,7 @@ def searchGroup():
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
-	selectStatement = "select LeaderID, GroupColor, GroupDescription from `record`;"
+	selectStatement = "select LeaderID, GroupColor, GroupDescription, GroupName from `record`;"
 
 	try:
 		cursor.execute(selectStatement)
