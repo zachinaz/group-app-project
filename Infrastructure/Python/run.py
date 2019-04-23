@@ -155,7 +155,6 @@ def membership():
                     resp[f"membership{cnt}"]["leader_id"] = membership["LeaderID"]
                     resp[f"membership{cnt}"]["color"] = membership["GroupColor"]
                     resp[f"membership{cnt}"]["description"] = membership["GroupDescription"]
-
                 status = 200
 
     #--POST--
@@ -414,6 +413,7 @@ def group():
 @app.route('/api/group/search', methods=['GET'])
 def group_search():
     resp = {}
+    cnt = 0
     status = 404
 
     #--GET--
@@ -423,25 +423,23 @@ def group_search():
         if not json_data:
             resp = {"err": "No data provided"}
             status = 400
-        elif ("name") not in json_data:
-            resp = {"err": "Missing required fields"}
-            status = 400
         else:
-            group_name = json_data.get("name")
-            #SQL SELECT name --> description, color, leader_id
-            searchGET = searchGroup(group_name)
+            #SQL SELECT --> name, description, color, leader_id
+            searchGET = searchGroup()
             print(searchGET)
             if searchGET == 0:
                 resp = {"err": "Database could not perform action"}
                 status = 418
             elif searchGET == None:
-                resp = {"err": "Group not found in Database"}
+                resp = {"err": "No group found in Database"}
                 status = 204
             else:
-                description = searchGET[0]["GroupDescription"]
-                color = searchGET[0]["GroupColor"]
-                leader_id = searchGET[0]["LeaderID"]
-                resp = {"request_type":"GET", "name": f"{group_name}", "description": f"{description}", "color": f"{color}", "leader_id": f"{leader_id}"}
+                for group in searchGET:
+                    cnt += 1
+                    resp[f"group{cnt}"] = {}
+                    resp[f"group{cnt}"]["leader_id"] = group["LeaderID"]
+                    resp[f"group{cnt}"]["color"] = group["GroupColor"]
+                    resp[f"group{cnt}"]["description"] = group["GroupDescription"]
                 status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
@@ -584,6 +582,7 @@ def event():
             status = 400
         else:
             name = json_data.get("name")
+            date_time = json_data.get("date_time")
             leader_id = json_data.get("leader_id")
             location = json_data.get("location")
             description = json_data.get("description")
@@ -611,11 +610,14 @@ def event():
             status = 400
         else:
             event_id = json_data.get("event_id")
+            date_time = json_data.get("date_time")
             name = json_data.get("name")
+            leader_id = json_data.get("leader_id")
             description = json_data.get("description")
             location = json_data.get("location")
+            group_id = json_data.get("group_id")
             #SQL UPDATE name, description, location
-            eventPUT = putEvent(event_id, name, )
+            eventPUT = putEvent(event_id, date_time, name, leader_id, location, description, group_id)
             if eventPUT == 0:
                 resp = {"err": "Database could not perform action"}
                 status = 418
@@ -676,9 +678,9 @@ def announcement():
                 resp = {"err": "Event not found in Database"}
                 status = 204
             else:
-                user_id = announcementGET["UserID"]
+                user_id = announcementGET["LeaderID"]
                 date_time = announcementGET["DateAndTime"]
-                content = announcementGET["Content"]
+                content = announcementGET["content"]
                 group_id = announcementGET["GroupID"]
                 resp = {"request_type":"GET", "user_id": f"{user_id}", "date_time": f"{date_time}", "content": f"{content}", "group_id": f"{group_id}"}
                 status = 200
