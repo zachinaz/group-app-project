@@ -440,6 +440,7 @@ def group_search():
                     resp[f"group{cnt}"]["leader_id"] = group["LeaderID"]
                     resp[f"group{cnt}"]["color"] = group["GroupColor"]
                     resp[f"group{cnt}"]["description"] = group["GroupDescription"]
+                resp["count"] = str(cnt)
                 status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
