@@ -155,6 +155,7 @@ def membership():
                     resp[f"membership{cnt}"]["leader_id"] = membership["LeaderID"]
                     resp[f"membership{cnt}"]["color"] = membership["GroupColor"]
                     resp[f"membership{cnt}"]["description"] = membership["GroupDescription"]
+                resp["count"] = str(cnt)
                 status = 200
 
     #--POST--
@@ -440,6 +441,8 @@ def group_search():
                     resp[f"group{cnt}"]["leader_id"] = group["LeaderID"]
                     resp[f"group{cnt}"]["color"] = group["GroupColor"]
                     resp[f"group{cnt}"]["description"] = group["GroupDescription"]
+                    resp[f"group{cnt}"]["name"] = group["GroupName"]
+
                 resp["count"] = str(cnt)
                 status = 200
 
@@ -789,9 +792,10 @@ def comment():
                 status = 204
             else:
                 user_id = commentGET["MemberID"]
-                announcement_id = commentGET["AnnouncementID"]
-                content = commentGET["Content"]
-                resp = {"request_type":"GET", "user_id": f"{user_id}", "announcement_id": f"{announcement_id}", "content": f"{content}"}
+                date_time = commentGET["DateAndTime"]
+                announcement_id = commentGET["announcementID"]
+                content = commentGET["content"]
+                resp = {"request_type":"GET", "user_id": f"{user_id}", "date_time": f"{date_time}", "announcement_id": f"{announcement_id}", "content": f"{content}"}
                 status = 200
 
     #--POST--
@@ -815,7 +819,7 @@ def comment():
                 resp = {"err": "Database could not perform action"}
                 status = 418
             else:
-                comment_id = commentPOST["CommentID"]
+                comment_id = commentPOST["commentID"]
                 resp = {"request_type":"POST", "message": f"Comment {comment_id} Successfully Created", "comment_id": f"{comment_id}"}
                 status = 200
 
@@ -896,10 +900,11 @@ def poll():
                 status = 204
             else:
                 leader_id = pollGET["LeaderID"]
-                poll_question = pollGET["pollQuestion"]
-                poll_response_options = pollGET["pollResponseOptions"]
-                poll_description = pollGET["pollDescription"]
-                resp = {"request_type":"GET", "leader_id": f"{leader_id}", "poll_question": f"{announcement_id}", "poll_description": f"{poll_description}"}
+                poll_question = pollGET["question"]
+                poll_response_options = pollGET["ResponseOptions"]
+                poll_description = pollGET["PollDescription"]
+                date_time = pollGET["DateAndTime"]
+                resp = {"request_type":"GET", "leader_id": f"{leader_id}", "poll_question": f"{poll_question}", "poll_response_options": f"{poll_response_options}", "poll_description": f"{poll_description}", "date_time": f"{date_time}"}
                 status = 200
 
     #--POST--

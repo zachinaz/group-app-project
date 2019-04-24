@@ -14,9 +14,7 @@ class Requester {
     //Call handleJSON to check if API returned an error
     //  @param JSONObject response : the JSON response from the server
     //  returns false if API returned an error
-    static boolean handleJSON(JSONObject response) {
-        return !response.has("err");
-    }
+    static boolean handleJSON(JSONObject response) { return !response.has("err"); }
 
     //Call requester to interface when needing to interface with the api
     //  @param String targetUrl : the specific api resource that the information is stored on.
