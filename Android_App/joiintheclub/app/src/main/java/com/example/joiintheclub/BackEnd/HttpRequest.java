@@ -41,20 +41,17 @@ public class HttpRequest extends AsyncTask<String, Void, String> {
             int CONNECTION_TIMEOUT = 15000;
             con.setConnectTimeout(CONNECTION_TIMEOUT);
 
-            if (!requestMethod.equals("GET"))
-                con.setDoOutput(true);
+            con.setDoOutput(true);
             con.setDoInput(true);
 
-            if (!requestMethod.equals("GET")) {
-                //New OutputStream object
-                DataOutputStream os = new DataOutputStream(con.getOutputStream());
+            //New OutputStream object
+            DataOutputStream os = new DataOutputStream(con.getOutputStream());
 
-                //write on the output stream
-                os.writeBytes(requestBodyStr);
+            //write on the output stream
+            os.writeBytes(requestBodyStr);
 
-                os.flush();
-                os.close();
-            }
+            os.flush();
+            os.close();
 
             Log.i("STATUS", String.valueOf(con.getResponseCode()));
             Log.i("MSG", con.getResponseMessage());

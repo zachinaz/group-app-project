@@ -50,6 +50,8 @@ public class User {
     public static boolean login(String email, String pwd)
     {
 
+        String method = "GET";
+
         //Make sure user entered something for email and password
         if (email.isEmpty() || pwd.isEmpty()) {
             return false;
@@ -65,6 +67,7 @@ public class User {
 
         //Populate JSON request object with values passed into function
         try {
+            loginRequestGET.put("method", method);
             loginRequestGET.put("email", email);
             loginRequestGET.put("password", pwd);
         } catch (JSONException e) {
@@ -73,7 +76,7 @@ public class User {
         }
 
         //Verifies email and password with the DB. Keeps response in loginResponseGET JSON object
-        loginResponseGET.set(Requester.requester("/user/login", "GET", loginRequestGET));
+        loginResponseGET.set(Requester.requester("/user/login", method, loginRequestGET));
 
         //Unpacks the Response message sent by the requester
         try {

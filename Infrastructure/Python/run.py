@@ -5,114 +5,115 @@ from mysql_run import *
 app = Flask(__name__)
 
 #--/api/user--
-@app.route('/api/user', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/api/user', methods=['POST'])
 def user():
     resp = {}
     status = 404
 
-    #--GET--
-    # @json: user_id , return first_name, last_name, email, password, profile_pic
-    if request.method == 'GET':
+    if request.method == 'POST':
         json_data = request.get_json(force=True)
         if not json_data:
             resp = {"err": "No data provided"}
             status = 400
-        elif ("user_id") not in json_data:
+        elif ("method") not in json_data:
             resp = {"err": "Missing required fields"}
             status = 400
         else:
-            user_id = json_data.get("user_id")
-            #SQL SELECT user_id --> first_name, last_name, email, password, profile_pic
-            userGET = getUser(user_id)
-            print(userGET)
-            if userGET == 0:
-                resp = {"err": "Database could not perform action"}
-                status = 418
-            elif userGET == None:
-                resp = {"err": "User not found in database"}
-                status = 204
-            else:
-                first_name = userGET["first_name"]
-                last_name = userGET["last_name"]
-                email = userGET["email"]
-                password = userGET["password"]
-                resp = {"request_type":"GET", "first_name":f"{first_name}", "last_name":f"{last_name}", "email":f"{email}", "password":f"{password}"}
-                status = 200
 
-    #--POST--
-    # @json: {first_name, last_name, email, password}
-    elif request.method == 'POST':
-        json_data = request.get_json(force=True)
-        if not json_data:
-            resp = {"err": "No data provided"}
-            status = 400
-        elif ("first_name" or "last_name" or "email" or "password") not in json_data:
-            resp = {"err": "Missing required fields"}
-            status = 400
-        else:
-            first_name = json_data.get("first_name")
-            last_name = json_data.get("last_name")
-            email = json_data.get("email")
-            password = json_data.get("password")
-            #SQL INSERT first_name, last_name, email, password
-            userPOST= postUser(first_name, last_name, email, password)
-            print(userPOST)
-            #If Database returned an error
-            if userPOST == 0:
-                resp = {"err": "Database could not perform action"}
-                status = 418
-            else:
-                user_id = userPOST["user_id"]
-                resp = {"request_type":"POST","message":f"User {user_id} Successfully Created","user_id":f"{user_id}"}
-                status = 200
+            #--GET--
+            # @json: user_id , return first_name, last_name, email, password, profile_pic
 
-    #--PUT--
-    # @json: {user_id, first_name, last_name, email, password} , returns: {first_name, last_name, email, password}
-    elif request.method == 'PUT':
-        json_data = request.get_json(force=True)
-        if not json_data:
-            resp = {"err": "No data provided"}
-            status = 400
-        elif ("user_id") not in json_data:
-            resp = {"err": "Missing required fields"}
-            status = 400
-        else:
-            user_id = json_data.get("user_id")
-            first_name = json_data.get("first_name")
-            last_name = json_data.get("last_name")
-            email = json_data.get("email")
-            password = json_data.get("password")
-            #SQL UPDATE first_name, last_name, email, password on user_id
-            userPUT = putUser(first_name, last_name, email, password, user_id)
-            if userPUT == 0:
-                resp = {"err": "Database could not perform action"}
-                status = 418
-            else:
-                resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated","user_id":f"{user_id}"}
-                status = 200
+            if json_data.get("method") == "GET":
 
-    #--DELETE--
-    # @json: user_id
-    elif request.method == 'DELETE':
-        json_data = request.get_json(force=True)
-        if not json_data:
-            resp = {"err": "No data provided"}
-            status = 400
-        elif ("user_id") not in json_data:
-            resp = {"err": "Missing required fields"}
-            status = 400
-        else:
-            user_id = json_data.get("user_id")
-            #SQL DELETE USER on user_id
-            userDEL = deleteUser(user_id)
-            print(userDEL)
-            #If Database returned an error
-            if userDEL == 0:
-                resp = {"err": "Database could not perform action"}
-                status = 418
-            else:
-                resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted","user_id":f"{user_id}"}
-                status = 200
+                if ("user_id") not in json_data:
+                    resp = {"err": "Missing required fields"}
+                    status = 400
+                else:
+                    user_id = json_data.get("user_id")
+                    #SQL SELECT user_id --> first_name, last_name, email, password, profile_pic
+                    userGET = getUser(user_id)
+                    print(userGET)
+                    if userGET == 0:
+                        resp = {"err": "Database could not perform action"}
+                        status = 418
+                    elif userGET == None:
+                        resp = {"err": "User not found in database"}
+                        status = 204
+                    else:
+                        first_name = userGET["first_name"]
+                        last_name = userGET["last_name"]
+                        email = userGET["email"]
+                        password = userGET["password"]
+                        resp = {"request_type":"GET", "first_name":f"{first_name}", "last_name":f"{last_name}", "email":f"{email}", "password":f"{password}"}
+                        status = 200
+
+            #--POST--
+            # @json: {first_name, last_name, email, password}
+
+            elif json_data.get("method") == "POST":
+
+                if ("first_name" or "last_name" or "email" or "password") not in json_data:
+                    resp = {"err": "Missing required fields"}
+                    status = 400
+                else:
+                    first_name = json_data.get("first_name")
+                    last_name = json_data.get("last_name")
+                    email = json_data.get("email")
+                    password = json_data.get("password")
+                    #SQL INSERT first_name, last_name, email, password
+                    userPOST= postUser(first_name, last_name, email, password)
+                    print(userPOST)
+                    #If Database returned an error
+                    if userPOST == 0:
+                        resp = {"err": "Database could not perform action"}
+                        status = 418
+                    else:
+                        user_id = userPOST["user_id"]
+                        resp = {"request_type":"POST","message":f"User {user_id} Successfully Created","user_id":f"{user_id}"}
+                        status = 200
+
+            #--PUT--
+            # @json: {user_id, first_name, last_name, email, password} , returns: {first_name, last_name, email, password}
+
+            elif json_data.get("method") == "PUT":
+
+                if ("user_id") not in json_data:
+                    resp = {"err": "Missing required fields"}
+                    status = 400
+                else:
+                    user_id = json_data.get("user_id")
+                    first_name = json_data.get("first_name")
+                    last_name = json_data.get("last_name")
+                    email = json_data.get("email")
+                    password = json_data.get("password")
+                    #SQL UPDATE first_name, last_name, email, password on user_id
+                    userPUT = putUser(first_name, last_name, email, password, user_id)
+                    if userPUT == 0:
+                        resp = {"err": "Database could not perform action"}
+                        status = 418
+                    else:
+                        resp = {"request_type":"PUT","message":f"User {user_id} Successfully Updated","user_id":f"{user_id}"}
+                        status = 200
+
+            #--DELETE--
+            # @json: user_id
+
+            elif json_data.get("method") == "DELETE":
+                if ("user_id") not in json_data:
+                    resp = {"err": "Missing required fields"}
+                    status = 400
+                else:
+                    user_id = json_data.get("user_id")
+                    #SQL DELETE USER on user_id
+                    userDEL = deleteUser(user_id)
+                    print(userDEL)
+                    #If Database returned an error
+                    if userDEL == 0:
+                        resp = {"err": "Database could not perform action"}
+                        status = 418
+                    else:
+                        resp = {"request_type":"DELETE","message":f"User {user_id} Successfully Deleted","user_id":f"{user_id}"}
+                        status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/user--
@@ -265,37 +266,42 @@ def privilege():
 #END OF --/api/user/membership/privilege--
 
 #--/api/user/login--
-@app.route('/api/user/login', methods=['GET'])
+@app.route('/api/user/login', methods=['POST'])
 def login():
     resp = {}
     status = 404
 
     #--GET--
     # @json: {email, password} , returns user_id
-    if request.method == 'GET':
+    if request.method == 'POST':
         json_data = request.get_json(force=True)
         if not json_data:
             resp = {"err": "No data provided"}
             status = 400
-        elif ("email" or "password") not in json_data:
+        elif ("method") not in json_data:
             resp = {"err": "Missing required fields"}
             status = 400
         else:
-            email = json_data.get("email")
-            password = json_data.get("password")
-            #SQL SELECT email, password --> user_id
-            loginGET = getLogin(email, password)
-            print(loginGET)
-            if loginGET == 0:
-                resp = {"err": "Database could not perform action"}
-                status = 418
-            elif loginGET == None:
-                resp = {"err": "Credentials not found in Database"}
-                status = 204
-            else:
-                user_id = loginGET["user_id"]
-                resp = {"request_type":"GET", "message":f"User {user_id} Successfully Logged In", "user_id": f"{user_id}"}
-                status = 200
+            if json_data.get("method") == "GET":
+                if ("email" or "password") not in json_data:
+                    resp = {"err": "Missing required fields"}
+                    status = 400
+                else:
+                    email = json_data.get("email")
+                    password = json_data.get("password")
+                    #SQL SELECT email, password --> user_id
+                    loginGET = getLogin(email, password)
+                    print(loginGET)
+                    if loginGET == 0:
+                        resp = {"err": "Database could not perform action"}
+                        status = 418
+                    elif loginGET == None:
+                        resp = {"err": "Credentials not found in Database"}
+                        status = 204
+                    else:
+                        user_id = loginGET["user_id"]
+                        resp = {"request_type":"GET", "message":f"User {user_id} Successfully Logged In", "user_id": f"{user_id}"}
+                        status = 200
 
     return Response(dumps(resp),status=status,mimetype='application/json')
 #END OF --/api/user/login--
@@ -411,7 +417,7 @@ def group():
 #END OF --/api/group--
 
 #--/api/group/search--
-@app.route('/api/group/search', methods=['GET'])
+@app.route('/api/group/search', methods=['POST'])
 def group_search():
     resp = {}
     cnt = 0
@@ -419,7 +425,7 @@ def group_search():
 
     #--GET--
     # @json: leader_id, returns {user_id, group_id, group_name}
-    if request.method == 'GET':
+    if request.method == 'POST':
         json_data = request.get_json(force=True)
         if not json_data:
             resp = {"err": "No data provided"}

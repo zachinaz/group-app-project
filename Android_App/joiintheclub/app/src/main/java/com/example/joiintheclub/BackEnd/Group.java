@@ -20,7 +20,7 @@ public class Group {
 
 
     public static String[][] SearchGroup (){
-        String[][] displayInfo = {{}};
+        String[][] displayInfo;
         JSONObject requestGET = new JSONObject();
         AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
 
@@ -42,9 +42,13 @@ public class Group {
                 Object groupCount = responseGET.get().get("count");
                 int count = Integer.parseInt(groupCount.toString());
 
+                displayInfo = new String[count][];
+
                 //Iterates through every group returned
                 for (int i = 0; i < count; i++) {
-                    JSONObject group = responseGET.get().getJSONObject("group" + i);
+                    JSONObject group = responseGET.get().getJSONObject("group" + (i + 1));
+
+                    displayInfo[i] = new String[4];
 
                     System.out.println(group);
                     displayInfo[i][0] = group.get("name").toString();
@@ -52,7 +56,6 @@ public class Group {
                     displayInfo[i][2] = group.get("color").toString();
                     displayInfo[i][3] = group.get("description").toString();
                 }
-                System.out.println(displayInfo);
                 return displayInfo;
             }
             else {
