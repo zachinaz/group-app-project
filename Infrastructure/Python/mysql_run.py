@@ -681,6 +681,7 @@ def postPollResponse(member_id, userResponse, group_id, poll_id):
 
 # for DELETE RESPONSE
 def deletePollResponse(response_id):
+
 	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 	cursor = connection.cursor()
 
@@ -697,6 +698,35 @@ def deletePollResponse(response_id):
 		connection.close()
 		return 0
 
+def getAllPolls(group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select * from `poll repository` where GroupID = %s"
+	
+	try:
+		cursor.execute(selectStatement, (group_id))
+		result = cursor.fetchall()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
+
+def getAllAnnouncements(group_id):
+	connection = pymysql.connect(host='35.185.248.192', user='Stephen', password='StephenSEProject', db='app_db', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	cursor = connection.cursor()
+	
+	selectStatement = "select * from `announcement` where GroupID = %s"
+	
+	try:
+		cursor.execute(selectStatement, (group_id))
+		result = cursor.fetchall()
+		connection.close()
+		return result
+	except:
+		connection.close()
+		return 0
 ###------------###
 ### END OF FILE - if this is missing, the file is truncated ###
 ###------------###
