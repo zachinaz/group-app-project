@@ -70,7 +70,107 @@ public class Group {
         }
     }
 
+    public static String[][] GetPolls (String groupID) {
+        String[][] displayInfo;
+        JSONObject requestGET = new JSONObject();
+        AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
 
+        //Populate JSON request object with values passed into function
+        try {
+            requestGET.put("group_id", groupID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        //Saves the output of Request.requester to a JSONObject responsePOST
+        responseGET.set(Requester.requester("/poll/search", "GET", requestGET));
+
+        try {
+            if (Requester.handleJSON(responseGET.get())) {
+
+                //Parses the number of polls from the requester
+                Object pollCount = responseGET.get().get("count");
+                int count = Integer.parseInt(pollCount.toString());
+
+                displayInfo = new String[count][];
+
+                //Iterates through every poll returned
+                for (int i = 0; i < count; i++) {
+                    JSONObject poll = responseGET.get().getJSONObject("poll" + (i + 1));
+
+                    displayInfo[i] = new String[5];
+
+                    System.out.println(poll);
+                    displayInfo[i][0] = poll.get("leader_id").toString();
+                    displayInfo[i][1] = poll.get("question").toString();
+                    displayInfo[i][2] = poll.get("poll_response_options").toString();
+                    displayInfo[i][3] = poll.get("poll_description").toString();
+                    displayInfo[i][4] = poll.get("date_time").toString();
+                }
+                return displayInfo;
+            }
+            else {
+                //Error returned from the DB
+                return null;
+            }
+
+        } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
+            //Prints the error message to the console via stacktrace
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String[][] GetAnnouncements (String groupID) {
+        String[][] displayInfo;
+        JSONObject requestGET = new JSONObject();
+        AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
+
+        //Populate JSON request object with values passed into function
+        try {
+            requestGET.put("group_id", groupID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        //Saves the output of Request.requester to a JSONObject responsePOST
+        responseGET.set(Requester.requester("/announcement/search", "GET", requestGET));
+
+        try {
+            if (Requester.handleJSON(responseGET.get())) {
+
+                //Parses the number of announcements from the requester
+                Object announcementCount = responseGET.get().get("count");
+                int count = Integer.parseInt(announcementCount.toString());
+
+                displayInfo = new String[count][];
+
+                //Iterates through every announcement returned
+                for (int i = 0; i < count; i++) {
+                    JSONObject ann = responseGET.get().getJSONObject("poll" + (i + 1));
+
+                    displayInfo[i] = new String[3];
+
+                    System.out.println(ann);
+                    displayInfo[i][0] = ann.get("leader_id").toString();
+                    displayInfo[i][1] = ann.get("content").toString();
+                    displayInfo[i][2] = ann.get("date_time").toString();
+                }
+                return displayInfo;
+            }
+            else {
+                //Error returned from the DB
+                return null;
+            }
+
+        } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
+            //Prints the error message to the console via stacktrace
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public boolean VerifyGroup (String GroupID){
         verified=false;
