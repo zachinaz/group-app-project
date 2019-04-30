@@ -231,7 +231,7 @@ public class Group {
 
     public static String[][] Get(){
 
-        String[][] userGroups = {{}};
+        String[][] userGroups;
 
         //use requester to get Group iD
         JSONObject requestGET = new JSONObject();
