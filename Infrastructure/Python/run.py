@@ -148,7 +148,6 @@ def membership():
                     user_id = json_data.get("user_id")
                     #SQL SELECT user_id --> group_id[]
                     membershipGET = getMembership(user_id)
-                    print(membershipGET)
                     if membershipGET == 0:
                         resp = {"err": "Database could not perform action"}
                         status = 418
@@ -437,7 +436,6 @@ def group_search():
         else:
             #SQL SELECT --> name, description, color, leader_id
             searchGET = searchGroup()
-            print(searchGET)
             if searchGET == 0:
                 resp = {"err": "Database could not perform action"}
                 status = 418

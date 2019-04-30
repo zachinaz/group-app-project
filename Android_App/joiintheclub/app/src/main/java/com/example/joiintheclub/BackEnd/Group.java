@@ -77,6 +77,7 @@ public class Group {
 
         //Populate JSON request object with values passed into function
         try {
+            requestGET.put("method", "GET");
             requestGET.put("group_id", groupID);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -129,6 +130,7 @@ public class Group {
 
         //Populate JSON request object with values passed into function
         try {
+            requestGET.put("method", "GET");
             requestGET.put("group_id", groupID);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -236,6 +238,7 @@ public class Group {
         AtomicReference<JSONObject> responseGET = new AtomicReference<>(new JSONObject());
 
         try {
+            requestGET.put("method", "GET");
             requestGET.put("user_id", User.getUserID());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -243,7 +246,7 @@ public class Group {
         }
 
         //Verifies email and password with the DB. Keeps response in loginResponseGET JSON object
-        responseGET.set(Requester.requester("/group", "GET", requestGET));
+        responseGET.set(Requester.requester("/user/membership", "GET", requestGET));
         //test case
         //GroupID = 1424;
 
@@ -254,9 +257,13 @@ public class Group {
                 Object groupCount = responseGET.get().get("count");
                 int count = Integer.parseInt(groupCount.toString());
 
+                userGroups = new String[count][];
+
                 //Iterates through every group returned
                 for (int i = 0; i < count; i++) {
-                    JSONObject group = responseGET.get().getJSONObject("membership" + i);
+                    JSONObject group = responseGET.get().getJSONObject("membership" + (i + 1));
+
+                    userGroups[i] = new String[4];
 
                     System.out.println(group);
                     userGroups[i][0] = group.get("name").toString();
