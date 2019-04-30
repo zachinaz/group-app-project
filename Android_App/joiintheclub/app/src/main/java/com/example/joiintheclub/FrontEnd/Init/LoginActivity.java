@@ -27,9 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.joiintheclub.BackEnd.User;
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
 import com.example.joiintheclub.R;
 
@@ -113,11 +111,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                  email = "stephen.e.styffe@biola.edu";
                  password ="b@dp@$$w0rd";
 
-               if(User.login(email,password)) {
+             //  if(User.login(email,password)) {
 
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG);
+               // }
+              //  else
+                   // Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG);
             }
         });
 

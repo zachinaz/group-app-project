@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.joiintheclub.BackEnd.Group;
 import com.example.joiintheclub.FrontEnd.Init.LoginActivity;
 import com.example.joiintheclub.FrontEnd.SearchGroup.SearchMain;
 import com.example.joiintheclub.FrontEnd.Setting.SettingMain;
@@ -45,8 +44,13 @@ public class GroupMain extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
 
 
-        String[][] groupInfo = Group.Get();
-
+       // String[][] groupInfo = Group.Get();
+        String[][] groupInfo;
+        groupInfo = new String[1][5];
+        groupInfo[0][0]  = "Science Club";
+        groupInfo[0][1] = "question";
+        groupInfo[0][2] = "poll_response_options";
+        groupInfo[0][3] = "This is a fun club";
 
 
         String [] groupNameBuf = new String[groupInfo.length];

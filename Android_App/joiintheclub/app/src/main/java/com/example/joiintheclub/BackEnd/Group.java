@@ -60,21 +60,21 @@ public class Group {
             }
             else {
                 //Error returned from the DB
-                displayInfo = new String[1][];
-                displayInfo[1][0]  = "leader_id";
-                displayInfo[1][1] = "question";
-                displayInfo[1][2] = "poll_response_options";
-                displayInfo[1][3] = "poll_description";
+                displayInfo = new String[1][5];
+                displayInfo[0][0]  = "leader_id";
+                displayInfo[0][1] = "question";
+                displayInfo[0][2] = "poll_response_options";
+                displayInfo[0][3] = "poll_description";
                 return null;
             }
 
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
-            displayInfo = new String[1][];
-            displayInfo[1][0]  = "leader_id";
-            displayInfo[1][1] = "question";
-            displayInfo[1][2] = "poll_response_options";
-            displayInfo[1][3] = "poll_description";
+            displayInfo = new String[1][5];
+            displayInfo[0][0]  = "leader_id";
+            displayInfo[0][1] = "question";
+            displayInfo[0][2] = "poll_response_options";
+            displayInfo[0][3] = "poll_description";
             e.printStackTrace();
             return null;
         }
@@ -123,21 +123,21 @@ public class Group {
             }
             else {
                 //Error returned from the DB
-                displayInfo = new String[1][];
-                displayInfo[1][0]  = "leader_id";
-                displayInfo[1][1] = "question";
-                displayInfo[1][2] = "poll_response_options";
-                displayInfo[1][3] = "poll_description";
+                displayInfo = new String[1][5];
+                displayInfo[0][0]  = "leader_id";
+                displayInfo[0][1] = "question";
+                displayInfo[0][2] = "poll_response_options";
+                displayInfo[0][3] = "poll_description";
                 return null;
             }
 
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
-            displayInfo = new String[1][];
-            displayInfo[1][0]  = "leader_id";
-            displayInfo[1][1] = "question";
-            displayInfo[1][2] = "poll_response_options";
-            displayInfo[1][3] = "poll_description";
+            displayInfo = new String[1][5];
+            displayInfo[0][0]  = "leader_id";
+            displayInfo[0][1] = "question";
+            displayInfo[0][2] = "poll_response_options";
+            displayInfo[0][3] = "poll_description";
 
             e.printStackTrace();
             return null;
@@ -185,21 +185,21 @@ public class Group {
             }
             else {
                 //Error returned from the DB
-                displayInfo = new String[1][];
-                displayInfo[1][0]  = "leader_id";
-                displayInfo[1][1] = "question";
-                displayInfo[1][2] = "poll_response_options";
-                displayInfo[1][3] = "poll_description";
+                displayInfo = new String[1][5];
+                displayInfo[0][0]  = "leader_id";
+                displayInfo[0][1] = "question";
+                displayInfo[0][2] = "poll_response_options";
+                displayInfo[0][3] = "poll_description";
                 return null;
             }
 
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
-            displayInfo = new String[1][];
-            displayInfo[1][0]  = "leader_id";
-            displayInfo[1][1] = "question";
-            displayInfo[1][2] = "poll_response_options";
-            displayInfo[1][3] = "poll_description";
+            displayInfo = new String[1][5];
+            displayInfo[0][0]  = "leader_id";
+            displayInfo[0][1] = "question";
+            displayInfo[0][2] = "poll_response_options";
+            displayInfo[0][3] = "poll_description";
             e.printStackTrace();
             return null;
         }
@@ -307,20 +307,20 @@ public class Group {
             }
             else {
                 //Error returned from the DB
-                    userGroups = new String[1][];
-                    userGroups[1][0]  = "leader_id";
-                    userGroups[1][1] = "question";
-                    userGroups[1][2] = "poll_response_options";
-                    userGroups[1][3] = "poll_description";
+                    userGroups = new String[1][5];
+                    userGroups[0][0]  = "leader_id";
+                    userGroups[0][1] = "question";
+                    userGroups[0][2] = "poll_response_options";
+                    userGroups[0][3] = "poll_description";
                 return null;
             }
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
-            userGroups = new String[1][];
-            userGroups[1][0]  = "leader_id";
-            userGroups[1][1] = "question";
-            userGroups[1][2] = "poll_response_options";
-            userGroups[1][3] = "poll_description";
+            userGroups = new String[1][5];
+            userGroups[0][0]  = "leader_id";
+            userGroups[0][1] = "question";
+            userGroups[0][2] = "poll_response_options";
+            userGroups[0][3] = "poll_description";
             e.printStackTrace();
             return null;
         }
