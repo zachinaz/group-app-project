@@ -60,11 +60,21 @@ public class Group {
             }
             else {
                 //Error returned from the DB
+                displayInfo = new String[1][];
+                displayInfo[1][0]  = "leader_id";
+                displayInfo[1][1] = "question";
+                displayInfo[1][2] = "poll_response_options";
+                displayInfo[1][3] = "poll_description";
                 return null;
             }
 
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
+            displayInfo = new String[1][];
+            displayInfo[1][0]  = "leader_id";
+            displayInfo[1][1] = "question";
+            displayInfo[1][2] = "poll_response_options";
+            displayInfo[1][3] = "poll_description";
             e.printStackTrace();
             return null;
         }
@@ -113,11 +123,22 @@ public class Group {
             }
             else {
                 //Error returned from the DB
+                displayInfo = new String[1][];
+                displayInfo[1][0]  = "leader_id";
+                displayInfo[1][1] = "question";
+                displayInfo[1][2] = "poll_response_options";
+                displayInfo[1][3] = "poll_description";
                 return null;
             }
 
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
+            displayInfo = new String[1][];
+            displayInfo[1][0]  = "leader_id";
+            displayInfo[1][1] = "question";
+            displayInfo[1][2] = "poll_response_options";
+            displayInfo[1][3] = "poll_description";
+
             e.printStackTrace();
             return null;
         }
@@ -164,11 +185,21 @@ public class Group {
             }
             else {
                 //Error returned from the DB
+                displayInfo = new String[1][];
+                displayInfo[1][0]  = "leader_id";
+                displayInfo[1][1] = "question";
+                displayInfo[1][2] = "poll_response_options";
+                displayInfo[1][3] = "poll_description";
                 return null;
             }
 
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
+            displayInfo = new String[1][];
+            displayInfo[1][0]  = "leader_id";
+            displayInfo[1][1] = "question";
+            displayInfo[1][2] = "poll_response_options";
+            displayInfo[1][3] = "poll_description";
             e.printStackTrace();
             return null;
         }
@@ -251,7 +282,7 @@ public class Group {
         //GroupID = 1424;
 
         try {
-            if (Requester.handleJSON(responseGET.get())) {
+                if (Requester.handleJSON(responseGET.get())) {
 
                 //Parses the number of groups from the requester
                 Object groupCount = responseGET.get().get("count");
@@ -276,10 +307,20 @@ public class Group {
             }
             else {
                 //Error returned from the DB
+                    userGroups = new String[1][];
+                    userGroups[1][0]  = "leader_id";
+                    userGroups[1][1] = "question";
+                    userGroups[1][2] = "poll_response_options";
+                    userGroups[1][3] = "poll_description";
                 return null;
             }
         } catch (JSONException e){ //Catch necessary since responsePOST.get can throw the exception JSONException
             //Prints the error message to the console via stacktrace
+            userGroups = new String[1][];
+            userGroups[1][0]  = "leader_id";
+            userGroups[1][1] = "question";
+            userGroups[1][2] = "poll_response_options";
+            userGroups[1][3] = "poll_description";
             e.printStackTrace();
             return null;
         }

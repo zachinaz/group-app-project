@@ -110,8 +110,8 @@ public class SettingMain extends AppCompatActivity
             startActivity(intent);
         }
 
-        DrawerLayout drawer = findViewById(R.id.setting_drawer);
-        drawer.closeDrawer(GravityCompat.START);
+       // DrawerLayout drawer = findViewById(R.id.setting_drawer);
+       // drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

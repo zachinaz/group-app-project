@@ -25,6 +25,9 @@ import com.example.joiintheclub.FrontEnd.Setting.SettingMain;
 import com.example.joiintheclub.FrontEnd.UserProfile.UserProfileMain;
 import com.example.joiintheclub.R;
 
+import java.util.Arrays;
+import java.util.List;
+
 @SuppressLint("Registered")
 public class GroupDetail extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,7 +53,53 @@ public class GroupDetail extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        adapter = new GroupDetailRecycleAdapter();
+
+
+      //  String[][] pollInfo = Group.GetPolls("15");
+        String[][] pollInfo;
+        pollInfo = new String[1][5];
+
+            pollInfo[0][1] = "Favorite Color ?";
+            pollInfo[0][2] = "question";
+            pollInfo[0][3] = "poll_response_options";
+            pollInfo[0][4] = "poll_description";
+
+
+        String [] PollNameBuf = new String[pollInfo.length];
+
+        for(int a = 0; a < pollInfo.length; a++)
+        {
+
+            PollNameBuf[a]= pollInfo[a][1];
+
+        }
+        List<String> pollName = Arrays.asList(PollNameBuf);
+
+
+       // String[][] AnnInfo = Group.GetAnnouncements("15");
+        String[][] AnnInfo;
+        AnnInfo = new String[1][5];
+        AnnInfo[0][0]  = "leader_id";
+        AnnInfo[0][1] = "Meeting on Sunday";
+        AnnInfo[0][2] = "poll_response_options";
+        AnnInfo[0][3] = "poll_description";
+
+
+        String [] AnnNameBuf = new String[AnnInfo.length];
+        String sd;
+
+
+        for(int a = 0; a < pollInfo.length; a++)
+        {
+
+            AnnNameBuf[a]= AnnInfo[a][1];
+        }
+
+        List<String> AnnName = Arrays.asList(AnnNameBuf);
+
+
+
+        adapter = new GroupDetailRecycleAdapter(pollName,AnnName);
         recyclerView.setAdapter(adapter);
 
 

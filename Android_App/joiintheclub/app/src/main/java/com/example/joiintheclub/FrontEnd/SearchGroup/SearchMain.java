@@ -40,8 +40,11 @@ public class SearchMain extends AppCompatActivity
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter<SearchRecycleAdapter.ViewHolder> adapter;
     EditText searchInput;
+    boolean GetGroupList = false;
 
     private List<String> groupNames;
+    private List<String> groupDetails;
+    private List<String> groupColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +53,33 @@ public class SearchMain extends AppCompatActivity
 
 
         String[][] groupInfo = Group.SearchGroup();
+
+
         String [] groupNameBuf = new String[groupInfo.length];
+        String [] groupDetailBuf = new String[groupInfo.length];
+        String [] groupColorBuf = new String[groupInfo.length];
 
         for(int a = 0; a < groupInfo.length; a++)
         {
-            groupNameBuf[a]= groupInfo[a][1];
+            groupDetailBuf[a]= groupInfo[a][3];
+            groupNameBuf[a]= groupInfo[a][0];
+            groupColorBuf[a]= groupInfo[a][2];
         }
         groupNames = Arrays.asList(groupNameBuf);
+        groupDetails = Arrays.asList(groupDetailBuf);
+        groupColor = Arrays.asList(groupColorBuf);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.search_recycle_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        adapter = new SearchRecycleAdapter(groupNames);
+        adapter = new SearchRecycleAdapter(groupNames,groupDetails,groupColor);
         recyclerView.setAdapter(adapter);
 
 
         searchInput = findViewById(R.id.search_Input);
+
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -81,7 +93,6 @@ public class SearchMain extends AppCompatActivity
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 filter(s.toString());
             }
         });
@@ -160,8 +171,8 @@ public class SearchMain extends AppCompatActivity
             startActivity(intent);
         }
 
-        DrawerLayout drawer = findViewById(R.id.search_drawer);
-        drawer.closeDrawer(GravityCompat.START);
+        //DrawerLayout drawer = findViewById(R.id.search_drawer);
+       // drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

@@ -102,8 +102,8 @@ public class UserProfileMain extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer =  findViewById(R.id.profileNav);
-        drawer.closeDrawer(GravityCompat.START);
+       // DrawerLayout drawer =  findViewById(R.id.profileNav);
+       // drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

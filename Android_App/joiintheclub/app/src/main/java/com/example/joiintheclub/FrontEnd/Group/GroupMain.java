@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -47,13 +46,16 @@ public class GroupMain extends AppCompatActivity
 
 
         String[][] groupInfo = Group.Get();
+
+
+
         String [] groupNameBuf = new String[groupInfo.length];
         String [] groupDetailBuf = new String[groupInfo.length];
 
         for(int a = 0; a < groupInfo.length; a++)
         {
-            groupNameBuf[a]= groupInfo[a][1];
-            groupDetailBuf[a] = groupInfo[a][2];
+            groupNameBuf[a]= groupInfo[a][0];
+            groupDetailBuf[a] = groupInfo[a][3];
         }
         List<String> groupNames = Arrays.asList(groupNameBuf);
 
@@ -62,10 +64,6 @@ public class GroupMain extends AppCompatActivity
 
         adapter = new RecycleAdapter(this, groupNames, groupDetail);
         recyclerView.setAdapter(adapter);
-
-
-
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.Gbar);
@@ -110,8 +108,9 @@ public class GroupMain extends AppCompatActivity
             startActivity(intent);
         }
 
-        DrawerLayout drawer =  findViewById(R.id.groupNav);
-        drawer.closeDrawer(GravityCompat.START);
+       // DrawerLayout drawer =  findViewById(R.id.groupNav);
+
+     //   drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

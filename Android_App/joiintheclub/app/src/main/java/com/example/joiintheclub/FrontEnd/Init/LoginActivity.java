@@ -103,11 +103,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                // attemptLogin();
-                String email = "stephen.e.styffe@biola.edu";
-                String password ="b@dp@$$w0rd";
+                String email = mEmailView.getText().toString();
+                String password =mPasswordView.getText().toString();
+
 
                 Intent intent = new Intent(LoginActivity.this, SearchMain.class);
                 startActivity(intent);
+
+                 email = "stephen.e.styffe@biola.edu";
+                 password ="b@dp@$$w0rd";
 
                if(User.login(email,password)) {
 

@@ -11,23 +11,15 @@ import android.widget.TextView;
 
 import com.example.joiintheclub.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GroupDetailRecycleAdapter extends RecyclerView.Adapter<GroupDetailRecycleAdapter.ViewHolder> {
 
 
-
-    private String[] activityTitle =
-            {
-                    "activity 1",
-                    "activity 2",
-                    "activity 3",
-                    "activity 4",
-                    "activity 5",
-                    "activity 6",
-                    "activity 7",
-                    "activity 8",
-                    "activity 9",
-
-            };
+    private static List<String> AnnName;
+    private static List<String> pollName;
+    private static ArrayList<String> All = new ArrayList<String>();
 
 
     private int[] userProfile =
@@ -43,6 +35,14 @@ public class GroupDetailRecycleAdapter extends RecyclerView.Adapter<GroupDetailR
                     R.drawable.profile_icon,
             };
 
+    public GroupDetailRecycleAdapter(List<String> pollName, List<String> AnnName) {
+        GroupDetailRecycleAdapter.AnnName = AnnName;
+        GroupDetailRecycleAdapter.pollName = pollName;
+        All.addAll(pollName);
+        All.addAll(AnnName);
+        String s;
+    }
+
 
     @NonNull
     @Override
@@ -56,14 +56,14 @@ public class GroupDetailRecycleAdapter extends RecyclerView.Adapter<GroupDetailR
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
 
-        viewHolder.activity_Title.setText(activityTitle[i]);
+        viewHolder.activity_Title.setText(All.get(i));
         viewHolder.user_Profile.setImageResource(userProfile[i]);
 
     }
 
     @Override
     public int getItemCount() {
-        return activityTitle.length;
+        return All.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
